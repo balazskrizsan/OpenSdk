@@ -17,7 +17,7 @@ namespace OpenSdk.Services
 
         public void Parse()
         {
-            StringReader input = new StringReader(dataSourceService.GetYaml());
+            StringReader input = new StringReader(dataSourceService.Get());
             IDeserializer deserializer = new DeserializerBuilder()
                 .WithNamingConvention(CamelCaseNamingConvention.Instance)
                 .IgnoreUnmatchedProperties()

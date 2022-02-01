@@ -1,4 +1,5 @@
-﻿using OpenSdk.Services;
+﻿using System;
+using OpenSdk.Services;
 
 namespace OpenSdk
 {
@@ -6,7 +7,9 @@ namespace OpenSdk
     {
         static void Main(string[] args)
         {
-            Bootstrap bootstrap = new Bootstrap(args, new ParserService(new DataSourceService()));
+            Console.WriteLine("==================================================");
+            Console.WriteLine(args[0]);
+            Bootstrap bootstrap = new Bootstrap(args, new ParserService(new DataSourceService(args[0])));
             bootstrap.Start();
         }
     }
