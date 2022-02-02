@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using OpenSdk.ValueObjects;
+using OpenSdk.ValueObjects.Generator;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
+using Path = OpenSdk.ValueObjects.Generator.Path;
 
 namespace OpenSdk.Services
 {
@@ -29,14 +32,20 @@ namespace OpenSdk.Services
             Console.WriteLine(root.Info.Title);
 
             Console.WriteLine("+++++++++++++");
+
+            List<Path> generatorMethods = new List<Path>();
+            List<Schema> generatorSchemas = new List<Schema>();
+
             foreach (var path in root.Paths)
             {
                 Console.WriteLine("+++++++++++++ 1");
                 Console.WriteLine(path.Key);
+                string pathUri = path.Key;
                 foreach (var methods in path.Value)
                 {
                     Console.WriteLine("+++++++++++++ 2");
                     Console.WriteLine(methods.Key);
+                    string pathMethod = methods.Key;
                     foreach (var requestBody in methods.Value.requestBody)
                     {
                         Console.WriteLine("+++++++++++++ 3");
@@ -45,6 +54,7 @@ namespace OpenSdk.Services
                         {
                             Console.WriteLine("+++++++++++++ 4");
                             Console.WriteLine(content.Key);
+                            string pathContentType = content.Key;
                             foreach (var contentType in content.Value)
                             {
                                 Console.WriteLine("+++++++++++++ 5");
@@ -54,6 +64,13 @@ namespace OpenSdk.Services
                                     Console.WriteLine("+++++++++++++ 6");
                                     Console.WriteLine(schema.Key);
                                     Console.WriteLine(schema.Value);
+                                    generatorMethods.Add(new Path(
+                                        pathUri,
+                                        pathMethod,
+                                        pathContentType,
+                                        schema.Key,
+                                        schema.Value
+                                    ));
                                 }
                             }
                         }
@@ -70,13 +87,16 @@ namespace OpenSdk.Services
                     Console.WriteLine("------------- 2");
                     Console.WriteLine(schema.Key);
                     Console.WriteLine(schema.Value.Type);
-
+                    Dictionary<string, string> schemaParams = new Dictionary<string, string>();
                     foreach (var property in schema.Value.Properties)
                     {
                         Console.WriteLine("------------- 3");
                         Console.WriteLine(property.Key);
                         Console.WriteLine(property.Value.Type);
+                        schemaParams.Add(property.Key, property.Value.Type);
                     }
+
+                    generatorSchemas.Add(new Schema(schema.Key, schema.Value.Type, schemaParams));
                 }
             }
         }
