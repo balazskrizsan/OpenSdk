@@ -1,5 +1,6 @@
 ﻿using System;
 using OpenSdk.Services;
+using OpenSdk.Services.ParserServices;
 
 namespace OpenSdk
 {
@@ -7,9 +8,16 @@ namespace OpenSdk
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("==================================================");
-            Console.WriteLine(args[0]);
-            Bootstrap bootstrap = new Bootstrap(args, new ParserService(new DataSourceService(args[0])));
+            string dataSourcePath = args[0];
+
+            Bootstrap bootstrap = new Bootstrap(
+                args,
+                new ParserService(
+                    new DataSourceService(dataSourcePath),
+                    new PathsParserService(),
+                    new ComponentsParserService()
+                )
+            );
             bootstrap.Start();
         }
     }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using OpenSdk.Services.ParserServices;
 using OpenSdk.ValueObjects;
 using OpenSdk.ValueObjects.Generator;
 using YamlDotNet.Serialization;
@@ -12,93 +13,41 @@ namespace OpenSdk.Services
     public class ParserService
     {
         private DataSourceService dataSourceService;
+        private PathsParserService pathsParserService;
+        private ComponentsParserService componentsParserService;
 
-        public ParserService(DataSourceService dataSourceService)
+        public ParserService(
+            DataSourceService dataSourceService,
+            PathsParserService pathsParserService,
+            ComponentsParserService componentsParserService
+        )
         {
             this.dataSourceService = dataSourceService;
+            this.pathsParserService = pathsParserService;
+            this.componentsParserService = componentsParserService;
         }
 
         public void Parse()
         {
+            Console.WriteLine("====== Parser init");
             StringReader input = new StringReader(dataSourceService.Get());
             IDeserializer deserializer = new DeserializerBuilder()
                 .WithNamingConvention(CamelCaseNamingConvention.Instance)
                 .IgnoreUnmatchedProperties()
                 .Build();
+
+            Console.WriteLine("====== Deserializing");
             Root root = deserializer.Deserialize<Root>(input);
 
-            Console.WriteLine(root.Openapi);
-            Console.WriteLine(root.Info.Version);
-            Console.WriteLine(root.Info.Title);
+            Console.WriteLine("====== API info");
+            Console.WriteLine("    " + root.Openapi);
+            Console.WriteLine("    " + root.Info.Version);
+            Console.WriteLine("    " + root.Info.Title);
 
-            Console.WriteLine("+++++++++++++");
-
-            List<Path> generatorMethods = new List<Path>();
-            List<Schema> generatorSchemas = new List<Schema>();
-
-            foreach (var path in root.Paths)
-            {
-                Console.WriteLine("+++++++++++++ 1");
-                Console.WriteLine(path.Key);
-                string pathUri = path.Key;
-                foreach (var methods in path.Value)
-                {
-                    Console.WriteLine("+++++++++++++ 2");
-                    Console.WriteLine(methods.Key);
-                    string pathMethod = methods.Key;
-                    foreach (var requestBody in methods.Value.requestBody)
-                    {
-                        Console.WriteLine("+++++++++++++ 3");
-                        Console.WriteLine(requestBody.Key);
-                        foreach (var content in requestBody.Value)
-                        {
-                            Console.WriteLine("+++++++++++++ 4");
-                            Console.WriteLine(content.Key);
-                            string pathContentType = content.Key;
-                            foreach (var contentType in content.Value)
-                            {
-                                Console.WriteLine("+++++++++++++ 5");
-                                Console.WriteLine(contentType.Key);
-                                foreach (var schema in contentType.Value)
-                                {
-                                    Console.WriteLine("+++++++++++++ 6");
-                                    Console.WriteLine(schema.Key);
-                                    Console.WriteLine(schema.Value);
-                                    generatorMethods.Add(new Path(
-                                        pathUri,
-                                        pathMethod,
-                                        pathContentType,
-                                        schema.Key,
-                                        schema.Value
-                                    ));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            Console.WriteLine("------------- 1");
-            foreach (var component in root.Components)
-            {
-                Console.WriteLine(component.Key);
-                foreach (var schema in component.Value)
-                {
-                    Console.WriteLine("------------- 2");
-                    Console.WriteLine(schema.Key);
-                    Console.WriteLine(schema.Value.Type);
-                    Dictionary<string, string> schemaParams = new Dictionary<string, string>();
-                    foreach (var property in schema.Value.Properties)
-                    {
-                        Console.WriteLine("------------- 3");
-                        Console.WriteLine(property.Key);
-                        Console.WriteLine(property.Value.Type);
-                        schemaParams.Add(property.Key, property.Value.Type);
-                    }
-
-                    generatorSchemas.Add(new Schema(schema.Key, schema.Value.Type, schemaParams));
-                }
-            }
+            Console.WriteLine("====== Paths parsing");
+            List<Path> generatorMethods = pathsParserService.getParsedPaths(root.Paths);
+            Console.WriteLine("====== Components parsing");
+            List<Schema> generatorSchemas = componentsParserService.getParsedComponents(root.Components);
         }
     }
 }
