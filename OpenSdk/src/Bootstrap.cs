@@ -4,7 +4,7 @@ namespace OpenSdk
 {
     public class Bootstrap
     {
-        private ParserService parserService;
+        private readonly ParserService parserService;
 
         public Bootstrap(string[] args, ParserService parserService)
         {

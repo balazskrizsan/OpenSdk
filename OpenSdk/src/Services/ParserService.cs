@@ -12,9 +12,9 @@ namespace OpenSdk.Services
 {
     public class ParserService
     {
-        private DataSourceService dataSourceService;
-        private PathsParserService pathsParserService;
-        private ComponentsParserService componentsParserService;
+        private readonly DataSourceService dataSourceService;
+        private readonly PathsParserService pathsParserService;
+        private readonly ComponentsParserService componentsParserService;
 
         public ParserService(
             DataSourceService dataSourceService,
