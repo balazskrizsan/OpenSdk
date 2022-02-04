@@ -1,3 +1,4 @@
+using OpenSdk.Registries;
 using OpenSdk.Services;
 
 namespace OpenSdk
@@ -5,15 +6,17 @@ namespace OpenSdk
     public class Bootstrap : IBootstrap
     {
         private readonly IParserService parserService;
+        private readonly IApplicationArgumentRegistry applicationArgumentRegistry;
 
-        public Bootstrap(IParserService parserService)
+        public Bootstrap(IParserService parserService, IApplicationArgumentRegistry applicationArgumentRegistry)
         {
             this.parserService = parserService;
+            this.applicationArgumentRegistry = applicationArgumentRegistry;
         }
 
-        public void Start(string dataSourcePath)
+        public void Start()
         {
-            parserService.Parse(dataSourcePath);
+            parserService.Parse(applicationArgumentRegistry.GetDataSourcePath());
         }
     }
 }
