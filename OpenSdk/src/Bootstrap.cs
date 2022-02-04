@@ -6,17 +6,17 @@ namespace OpenSdk
     public class Bootstrap : IBootstrap
     {
         private readonly IParserService parserService;
-        private readonly IApplicationArgumentRegistry applicationArgumentRegistry;
+        private readonly ApplicationArgumentRegistry applicationArgumentRegistry;
 
         public Bootstrap(IParserService parserService, IApplicationArgumentRegistry applicationArgumentRegistry)
         {
             this.parserService = parserService;
-            this.applicationArgumentRegistry = applicationArgumentRegistry;
+            this.applicationArgumentRegistry = applicationArgumentRegistry as ApplicationArgumentRegistry;
         }
 
         public void Start()
         {
-            parserService.Parse(applicationArgumentRegistry.GetDataSourcePath());
+            parserService.Parse(applicationArgumentRegistry.DataSourcePath);
         }
     }
 }

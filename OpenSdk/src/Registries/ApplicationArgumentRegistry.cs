@@ -10,11 +10,5 @@ namespace OpenSdk.Registries
         {
             DataSourcePath = dataSourcePath;
         }
-
-        // @todo: find a way to accessible property by interface
-        public string GetDataSourcePath()
-        {
-            return DataSourcePath;
-        }
     }
 }
