@@ -2,18 +2,18 @@ using OpenSdk.Services;
 
 namespace OpenSdk
 {
-    public class Bootstrap
+    public class Bootstrap : IBootstrap
     {
-        private readonly ParserService parserService;
+        private readonly IParserService parserService;
 
-        public Bootstrap(string[] args, ParserService parserService)
+        public Bootstrap(IParserService parserService)
         {
             this.parserService = parserService;
         }
 
-        public void Start()
+        public void Start(string dataSourcePath)
         {
-            parserService.Parse();
+            parserService.Parse(dataSourcePath);
         }
     }
 }

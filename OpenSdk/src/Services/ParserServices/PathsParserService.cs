@@ -5,7 +5,7 @@ using OpenSdk.ValueObjects.Generator;
 
 namespace OpenSdk.Services.ParserServices
 {
-    public class PathsParserService
+    public class PathsParserService : IPathsParserService
     {
         public List<Path> getParsedPaths(Dictionary<string, Dictionary<string, PathUriMethodMethodDetails>> paths)
         {

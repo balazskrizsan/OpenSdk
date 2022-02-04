@@ -5,7 +5,7 @@ using OpenSdk.ValueObjects.Generator;
 
 namespace OpenSdk.Services.ParserServices
 {
-    public class ComponentsParserService
+    public class ComponentsParserService : IComponentsParserService
     {
         public List<Schema> getParsedComponents(Dictionary<string, Dictionary<string, ComponentsSchemaItem>> components)
         {

@@ -10,27 +10,24 @@ using Path = OpenSdk.ValueObjects.Generator.Path;
 
 namespace OpenSdk.Services
 {
-    public class ParserService
+    public class ParserService : IParserService
     {
-        private readonly DataSourceService dataSourceService;
-        private readonly PathsParserService pathsParserService;
-        private readonly ComponentsParserService componentsParserService;
+        private readonly IPathsParserService pathsParserService;
+        private readonly IComponentsParserService componentsParserService;
 
         public ParserService(
-            DataSourceService dataSourceService,
-            PathsParserService pathsParserService,
-            ComponentsParserService componentsParserService
+            IPathsParserService pathsParserService,
+            IComponentsParserService componentsParserService
         )
         {
-            this.dataSourceService = dataSourceService;
             this.pathsParserService = pathsParserService;
             this.componentsParserService = componentsParserService;
         }
 
-        public void Parse()
+        public void Parse(string dataSourcePath)
         {
-            Console.WriteLine("====== Parser init");
-            StringReader input = new StringReader(dataSourceService.Get());
+            Console.WriteLine("====== Parser init with: " + dataSourcePath);
+            StringReader input = new StringReader(File.ReadAllText(dataSourcePath));
             IDeserializer deserializer = new DeserializerBuilder()
                 .WithNamingConvention(CamelCaseNamingConvention.Instance)
                 .IgnoreUnmatchedProperties()

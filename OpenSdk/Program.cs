@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
 using OpenSdk.Services;
 using OpenSdk.Services.ParserServices;
 
@@ -10,15 +10,15 @@ namespace OpenSdk
         {
             string dataSourcePath = args[0];
 
-            Bootstrap bootstrap = new Bootstrap(
-                args,
-                new ParserService(
-                    new DataSourceService(dataSourcePath),
-                    new PathsParserService(),
-                    new ComponentsParserService()
-                )
-            );
-            bootstrap.Start();
+            ServiceProvider serviceProvider = new ServiceCollection()
+                .AddLogging()
+                .AddSingleton<IBootstrap, Bootstrap>()
+                .AddSingleton<IParserService, ParserService>()
+                .AddSingleton<IComponentsParserService, ComponentsParserService>()
+                .AddSingleton<IPathsParserService, PathsParserService>()
+                .BuildServiceProvider();
+
+            serviceProvider.GetService<IBootstrap>().Start(dataSourcePath);
         }
     }
 }
