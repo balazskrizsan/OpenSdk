@@ -6,8 +6,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Cottle" Version="2.0.7" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.2-mauipre.1.22054.8" />
       <PackageReference Include="YamlDotNet" Version="11.2.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="src\Services\Test" />
     </ItemGroup>
 
 </Project>

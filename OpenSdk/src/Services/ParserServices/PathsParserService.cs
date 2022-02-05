@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using OpenSdk.ValueObjects;
 using OpenSdk.ValueObjects.Generator;
 
@@ -7,9 +9,9 @@ namespace OpenSdk.Services.ParserServices
 {
     public class PathsParserService : IPathsParserService
     {
-        public List<Path> getParsedPaths(Dictionary<string, Dictionary<string, PathUriMethodMethodDetails>> paths)
+        public List<Method> getParsedPaths(Dictionary<string, Dictionary<string, PathUriMethodMethodDetails>> paths)
         {
-            List<Path> generatorMethods = new List<Path>();
+            List<Method> generatorMethods = new List<Method>();
 
             foreach (var path in paths)
             {
@@ -39,8 +41,9 @@ namespace OpenSdk.Services.ParserServices
                                     Console.WriteLine("                    #schema");
                                     Console.WriteLine("                      " + schema.Key);
                                     Console.WriteLine("                      " + schema.Value);
-                                    generatorMethods.Add(new Path(
+                                    generatorMethods.Add(new Method(
                                         pathUri,
+                                        generateMethodName(pathUri),
                                         pathMethod,
                                         pathContentType,
                                         schema.Key,
@@ -52,8 +55,38 @@ namespace OpenSdk.Services.ParserServices
                     }
                 }
             }
-            
+
             return generatorMethods;
+        }
+
+        private string generateMethodName(string path)
+        {
+            string[] pathParts = path.Split("/");
+            List<string> slashCleanPathParts = new List<string>();
+
+            foreach (string pathPart in pathParts)
+            {
+                string cleanPart = Regex.Replace(pathPart, "[^A-Za-z0-9]", "");
+                if (cleanPart.Length > 0)
+                {
+                    slashCleanPathParts.Add(cleanPart);
+                }
+            }
+
+            return slashCleanPathParts.Aggregate((x, y) => UppercaseFirst(x) + UppercaseFirst(y));
+        }
+
+        private string UppercaseFirst(string s)
+        {
+            if (string.IsNullOrEmpty(s))
+            {
+                return string.Empty;
+            }
+
+            char[] a = s.ToCharArray();
+            a[0] = char.ToUpper(a[0]);
+
+            return new string(a);
         }
     }
 }

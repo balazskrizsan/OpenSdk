@@ -6,7 +6,6 @@ using OpenSdk.ValueObjects;
 using OpenSdk.ValueObjects.Generator;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
-using Path = OpenSdk.ValueObjects.Generator.Path;
 
 namespace OpenSdk.Services
 {
@@ -24,7 +23,7 @@ namespace OpenSdk.Services
             this.componentsParserService = componentsParserService;
         }
 
-        public void Parse(string dataSourcePath)
+        public ParserResponse Parse(string dataSourcePath)
         {
             Console.WriteLine("====== Parser init with: " + dataSourcePath);
             StringReader input = new StringReader(File.ReadAllText(dataSourcePath));
@@ -42,9 +41,11 @@ namespace OpenSdk.Services
             Console.WriteLine("    " + root.Info.Title);
 
             Console.WriteLine("====== Paths parsing");
-            List<Path> generatorMethods = pathsParserService.getParsedPaths(root.Paths);
+            List<Method> generatorMethods = pathsParserService.getParsedPaths(root.Paths);
             Console.WriteLine("====== Components parsing");
             List<Schema> generatorSchemas = componentsParserService.getParsedComponents(root.Components);
+
+            return new ParserResponse(generatorMethods, generatorSchemas);
         }
     }
 }

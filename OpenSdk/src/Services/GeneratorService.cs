@@ -1,0 +1,39 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using Cottle;
+using OpenSdk.Factories;
+using OpenSdk.ValueObjects;
+using OpenSdk.ValueObjects.Generator;
+
+namespace OpenSdk.Services
+{
+    public class GeneratorService : IGeneratorService
+    {
+        private readonly ICottleFactory cottleFactory;
+
+        public GeneratorService(ICottleFactory cottleFactory)
+        {
+            this.cottleFactory = cottleFactory;
+        }
+
+        public void Generate(ParserResponse openapiValues)
+        {
+            string interfaceTemplate = File.ReadAllText(@"w:\\Interface.tpl");
+            string valueObjectTemplate = File.ReadAllText(@"w:\\ValueObject.tpl");
+
+
+            // Console.Write(cottleFactory.CreateDocument(valueObjectTemplate).Render(context));
+            Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
+            foreach (Method method in openapiValues.Methods)
+            {
+                var context = Context.CreateBuiltin(new Dictionary<Value, Value>
+                {
+                    ["interfaceName"] = method.MethodName
+                });
+                Console.Write(cottleFactory.CreateDocument(interfaceTemplate).Render(context));
+            }
+        }
+    }
+}

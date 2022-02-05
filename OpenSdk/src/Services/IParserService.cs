@@ -1,7 +1,9 @@
+using OpenSdk.ValueObjects;
+
 namespace OpenSdk.Services
 {
     public interface IParserService
     {
-        void Parse(string dataSourcePath);
+        ParserResponse Parse(string dataSourcePath);
     }
 }

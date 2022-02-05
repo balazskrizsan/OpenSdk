@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using OpenSdk.Factories;
 using OpenSdk.Registries;
 using OpenSdk.Services;
 using OpenSdk.Services.ParserServices;
@@ -18,6 +19,8 @@ namespace OpenSdk
                 .AddSingleton<IParserService, ParserService>()
                 .AddSingleton<IComponentsParserService, ComponentsParserService>()
                 .AddSingleton<IPathsParserService, PathsParserService>()
+                .AddSingleton<IGeneratorService, GeneratorService>()
+                .AddSingleton<ICottleFactory, CottleFactory>()
                 .BuildServiceProvider();
 
             serviceProvider.GetService<IBootstrap>().Start();
