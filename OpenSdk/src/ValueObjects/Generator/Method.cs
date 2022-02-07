@@ -10,8 +10,17 @@ namespace OpenSdk.ValueObjects.Generator
         [ReadOnly(true)] public string ContentType { get; }
         [ReadOnly(true)] public string ParamSchemaType { get; }
         [ReadOnly(true)] public string ParamSchemaValue { get; }
+        [ReadOnly(true)] public string ParamObjectName { get; }
 
-        public Method(string uri, string methodName, string methodType, string contentType, string paramSchemaType, string paramSchemaValue)
+        public Method(
+            string uri,
+            string methodName,
+            string methodType,
+            string contentType,
+            string paramSchemaType,
+            string paramSchemaValue,
+            string paramObjectName
+        )
         {
             Uri = uri;
             MethodName = methodName;
@@ -19,6 +28,7 @@ namespace OpenSdk.ValueObjects.Generator
             ContentType = contentType;
             ParamSchemaType = paramSchemaType;
             ParamSchemaValue = paramSchemaValue;
+            ParamObjectName = paramObjectName;
         }
     }
 }

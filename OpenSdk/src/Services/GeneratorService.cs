@@ -30,7 +30,9 @@ namespace OpenSdk.Services
             {
                 var context = Context.CreateBuiltin(new Dictionary<Value, Value>
                 {
-                    ["interfaceName"] = method.MethodName
+                    ["interfaceName"] = method.MethodName,
+                    ["paramObjectClassName"] = method.ParamObjectName,
+                    ["paramObjectVarName"] = StringService.LowercaseFirst(method.ParamObjectName),
                 });
                 Console.Write(cottleFactory.CreateDocument(interfaceTemplate).Render(context));
             }

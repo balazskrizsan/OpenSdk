@@ -43,11 +43,12 @@ namespace OpenSdk.Services.ParserServices
                                     Console.WriteLine("                      " + schema.Value);
                                     generatorMethods.Add(new Method(
                                         pathUri,
-                                        generateMethodName(pathUri),
+                                        GenerateMethodName(pathUri),
                                         pathMethod,
                                         pathContentType,
                                         schema.Key,
-                                        schema.Value
+                                        schema.Value,
+                                        GetParamObjectName(schema.Key, schema.Value)
                                     ));
                                 }
                             }
@@ -59,7 +60,17 @@ namespace OpenSdk.Services.ParserServices
             return generatorMethods;
         }
 
-        private string generateMethodName(string path)
+        private string GetParamObjectName(string type, string value)
+        {
+            if (type == "$ref")
+            {
+                return value.Split("/")[3];
+            }
+
+            return null;
+        }
+
+        private string GenerateMethodName(string path)
         {
             string[] pathParts = path.Split("/");
             List<string> slashCleanPathParts = new List<string>();
