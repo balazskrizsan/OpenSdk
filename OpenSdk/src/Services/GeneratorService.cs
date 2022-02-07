@@ -33,6 +33,7 @@ namespace OpenSdk.Services
                     ["interfaceName"] = method.MethodName,
                     ["paramObjectClassName"] = method.ParamObjectName,
                     ["paramObjectVarName"] = StringService.LowercaseFirst(method.ParamObjectName),
+                    ["methodUri"] = method.Uri,
                 });
                 Console.Write(cottleFactory.CreateDocument(interfaceTemplate).Render(context));
             }
