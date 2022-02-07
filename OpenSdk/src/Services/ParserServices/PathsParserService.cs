@@ -73,20 +73,9 @@ namespace OpenSdk.Services.ParserServices
                 }
             }
 
-            return slashCleanPathParts.Aggregate((x, y) => UppercaseFirst(x) + UppercaseFirst(y));
-        }
-
-        private string UppercaseFirst(string s)
-        {
-            if (string.IsNullOrEmpty(s))
-            {
-                return string.Empty;
-            }
-
-            char[] a = s.ToCharArray();
-            a[0] = char.ToUpper(a[0]);
-
-            return new string(a);
+            return slashCleanPathParts.Aggregate(
+                (x, y) => StringService.UppercaseFirst(x) + StringService.UppercaseFirst(y)
+            );
         }
     }
 }
