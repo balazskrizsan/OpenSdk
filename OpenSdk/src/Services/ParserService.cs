@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using OpenSdk.Services.ParserServices;
 using OpenSdk.ValueObjects;
-using OpenSdk.ValueObjects.Generator;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -26,14 +24,14 @@ namespace OpenSdk.Services
         public ParserResponse Parse(string dataSourcePath)
         {
             Console.WriteLine("====== Parser init with: " + dataSourcePath);
-            StringReader input = new StringReader(File.ReadAllText(dataSourcePath));
-            IDeserializer deserializer = new DeserializerBuilder()
+            var input = new StringReader(File.ReadAllText(dataSourcePath));
+            var deserializer = new DeserializerBuilder()
                 .WithNamingConvention(CamelCaseNamingConvention.Instance)
                 .IgnoreUnmatchedProperties()
                 .Build();
 
             Console.WriteLine("====== Deserializing");
-            Root root = deserializer.Deserialize<Root>(input);
+            var root = deserializer.Deserialize<Root>(input);
 
             Console.WriteLine("====== API info");
             Console.WriteLine("    " + root.Openapi);
@@ -41,9 +39,9 @@ namespace OpenSdk.Services
             Console.WriteLine("    " + root.Info.Title);
 
             Console.WriteLine("====== Paths parsing");
-            List<Method> generatorMethods = pathsParserService.getParsedPaths(root.Paths);
+            var generatorMethods = pathsParserService.getParsedPaths(root.Paths);
             Console.WriteLine("====== Components parsing");
-            List<Schema> generatorSchemas = componentsParserService.getParsedComponents(root.Components);
+            var generatorSchemas = componentsParserService.getParsedComponents(root.Components);
 
             return new ParserResponse(generatorMethods, generatorSchemas);
         }

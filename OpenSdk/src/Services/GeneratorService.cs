@@ -4,7 +4,6 @@ using System.IO;
 using Cottle;
 using OpenSdk.Factories;
 using OpenSdk.ValueObjects;
-using OpenSdk.ValueObjects.Generator;
 
 namespace OpenSdk.Services
 {
@@ -19,14 +18,14 @@ namespace OpenSdk.Services
 
         public void Generate(ParserResponse openapiValues)
         {
-            string interfaceTemplate = File.ReadAllText(@"w:\\Interface.tpl");
-            string valueObjectTemplate = File.ReadAllText(@"w:\\ValueObject.tpl");
+            var interfaceTemplate = File.ReadAllText(@"w:\\Interface.tpl");
+            var valueObjectTemplate = File.ReadAllText(@"w:\\ValueObject.tpl");
 
 
             // Console.Write(cottleFactory.CreateDocument(valueObjectTemplate).Render(context));
             Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
-            foreach (Method method in openapiValues.Methods)
+            foreach (var method in openapiValues.Methods)
             {
                 var context = Context.CreateBuiltin(new Dictionary<Value, Value>
                 {
