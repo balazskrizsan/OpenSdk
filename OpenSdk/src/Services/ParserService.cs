@@ -1,5 +1,5 @@
-using System;
 using System.IO;
+using Microsoft.Extensions.Logging;
 using OpenSdk.Services.ParserServices;
 using OpenSdk.ValueObjects;
 using YamlDotNet.Serialization;
@@ -11,36 +11,39 @@ namespace OpenSdk.Services
     {
         private readonly IPathsParserService pathsParserService;
         private readonly IComponentsParserService componentsParserService;
+        private readonly ILogger<ParserService> logger;
 
         public ParserService(
             IPathsParserService pathsParserService,
-            IComponentsParserService componentsParserService
+            IComponentsParserService componentsParserService,
+            ILogger<ParserService> logger
         )
         {
+            this.logger = logger;
             this.pathsParserService = pathsParserService;
             this.componentsParserService = componentsParserService;
         }
 
         public ParserResponse Parse(string dataSourcePath)
         {
-            Console.WriteLine("====== Parser init with: " + dataSourcePath);
+            logger.LogInformation("====== Parser init with {dataSourcePath}", dataSourcePath);
             var input = new StringReader(File.ReadAllText(dataSourcePath));
             var deserializer = new DeserializerBuilder()
                 .WithNamingConvention(CamelCaseNamingConvention.Instance)
                 .IgnoreUnmatchedProperties()
                 .Build();
 
-            Console.WriteLine("====== Deserializing");
+            logger.LogInformation("====== Deserializing");
             var root = deserializer.Deserialize<Root>(input);
 
-            Console.WriteLine("====== API info");
-            Console.WriteLine("    " + root.Openapi);
-            Console.WriteLine("    " + root.Info.Version);
-            Console.WriteLine("    " + root.Info.Title);
+            logger.LogInformation("====== API info");
+            logger.LogInformation("    {root.Openapi}", root.Openapi);
+            logger.LogInformation("    {root.Info.Version}",  root.Info.Version);
+            logger.LogInformation("    {root.Info.Title}", root.Info.Title);
 
-            Console.WriteLine("====== Paths parsing");
+            logger.LogInformation("====== Paths parsing");
             var generatorMethods = pathsParserService.getParsedPaths(root.Paths);
-            Console.WriteLine("====== Components parsing");
+            logger.LogInformation("====== Components parsing");
             var generatorSchemas = componentsParserService.getParsedComponents(root.Components);
 
             return new ParserResponse(generatorMethods, generatorSchemas);

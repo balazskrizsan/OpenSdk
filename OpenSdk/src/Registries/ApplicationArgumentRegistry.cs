@@ -1,5 +1,3 @@
-using System.ComponentModel;
-
 namespace OpenSdk.Registries
 {
     public class ApplicationArgumentRegistry : IApplicationArgumentRegistry
