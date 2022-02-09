@@ -37,9 +37,9 @@ namespace OpenSdk.Services
             var root = deserializer.Deserialize<Root>(input);
 
             logger.LogInformation("====== API info");
-            logger.LogInformation("    {root.Openapi}", root.Openapi);
-            logger.LogInformation("    {root.Info.Version}",  root.Info.Version);
-            logger.LogInformation("    {root.Info.Title}", root.Info.Title);
+            logger.LogInformation("    {rootOpenapi}", root.Openapi);
+            logger.LogInformation("    {rootInfoVersion}",  root.Info.Version);
+            logger.LogInformation("    {rootInfoTitle}", root.Info.Title);
 
             logger.LogInformation("====== Paths parsing");
             var generatorMethods = pathsParserService.getParsedPaths(root.Paths);

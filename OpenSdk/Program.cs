@@ -8,7 +8,7 @@ namespace OpenSdk
     {
         static void Main(string[] args)
         {
-            var dataSourcePath = @"c:\Repos\OpenSdk\sample_api.yml";
+            var dataSourcePath = args[0];
             var host = AppStartup(dataSourcePath);
 
             var bootstrap = ActivatorUtilities.CreateInstance<Bootstrap>(host.Services);
