@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Cottle;
 using OpenSdk.Factories;
 using OpenSdk.ValueObjects;
@@ -22,9 +23,7 @@ namespace OpenSdk.Services
             string interfaceTemplate = File.ReadAllText(@"w:\\Interface.tpl");
             string valueObjectTemplate = File.ReadAllText(@"w:\\ValueObject.tpl");
 
-
-            // Console.Write(cottleFactory.CreateDocument(valueObjectTemplate).Render(context));
-            Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            Console.WriteLine("=====================================================");
 
             foreach (Method method in openapiValues.Methods)
             {
@@ -35,7 +34,50 @@ namespace OpenSdk.Services
                     ["paramObjectVarName"] = StringService.LowercaseFirst(method.ParamObjectName),
                     ["methodUri"] = method.Uri,
                 });
-                Console.Write(cottleFactory.CreateDocument(interfaceTemplate).Render(context));
+                Console.WriteLine(cottleFactory.CreateDocument(interfaceTemplate).Render(context));
+            }
+
+            Console.WriteLine("=====================================================");
+            foreach (Schema schema in openapiValues.Schemas)
+            {
+                Dictionary<Value, Value> templateParams = new Dictionary<Value, Value>();
+                foreach (var parameter in schema.Parameters)
+                {
+                    templateParams.Add(VarNameMapper(parameter.Key), TypeMapper(parameter.Value));
+                }
+
+                var context = Context.CreateBuiltin(new Dictionary<Value, Value>
+                {
+                    ["objectName"] = schema.Name,
+                    ["parameters"] = templateParams,
+                });
+                Console.WriteLine(cottleFactory.CreateDocument(valueObjectTemplate).Render(context));
+            }
+
+            Console.WriteLine("=====================================================");
+        }
+
+        private string TypeMapper(string openapiType)
+        {
+            switch (openapiType)
+            {
+                case "string":
+                    return "String";
+                case "#/components/schemas/FileUpload":
+                    return "FileUpload";
+                default:
+                    throw new Exception("No type found for: " + openapiType);
+            }
+        }
+
+        private string VarNameMapper(string varName)
+        {
+            switch (varName)
+            {
+                case "#/components/schemas/FileUpload":
+                    return "fileUpload";
+                default:
+                    return varName;
             }
         }
     }

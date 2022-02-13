@@ -7,13 +7,13 @@ namespace OpenSdk.ValueObjects.Generator
     {
         [ReadOnly(true)] public string Name { get; }
         [ReadOnly(true)] public string Type { get; }
-        [ReadOnly(true)] public Dictionary<string, string> SchemaParams { get; }
+        [ReadOnly(true)] public Dictionary<string, string> Parameters { get; }
 
-        public Schema(string name, string type, Dictionary<string, string> schemaParams)
+        public Schema(string name, string type, Dictionary<string, string> parameters)
         {
             Name = name;
             Type = type;
-            SchemaParams = schemaParams;
+            Parameters = parameters;
         }
     }
 }

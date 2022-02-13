@@ -21,18 +21,34 @@ namespace OpenSdk.Services.ParserServices
                     Console.WriteLine("      " + schema.Key);
                     Console.WriteLine("      " + schema.Value.Type);
                     Dictionary<string, string> schemaParams = new Dictionary<string, string>();
-                    foreach (var property in schema.Value.Properties)
+                    var properties = schema.Value?.Properties;
+
+                    if (null == properties)
+                    {
+                        continue;
+                    }
+                    
+                    foreach (var property in properties)
                     {
                         Console.WriteLine("        #properties");
                         Console.WriteLine("          " + property.Key);
+                        Console.WriteLine("          " + property.Value.Ref);
                         Console.WriteLine("          " + property.Value.Type);
-                        schemaParams.Add(property.Key, property.Value.Type);
+
+                        if (property.Value.Ref == null)
+                        {
+                            schemaParams.Add(property.Key, property.Value.Type);
+                        }
+                        else
+                        {
+                            schemaParams.Add(property.Value.Ref, property.Value.Ref);
+                        }
                     }
 
                     generatorSchemas.Add(new Schema(schema.Key, schema.Value.Type, schemaParams));
                 }
             }
-            
+
             return generatorSchemas;
         }
     }
