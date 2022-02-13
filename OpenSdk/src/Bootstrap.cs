@@ -1,6 +1,5 @@
 using OpenSdk.Registries;
 using OpenSdk.Services;
-using OpenSdk.ValueObjects;
 
 namespace OpenSdk
 {
@@ -8,7 +7,7 @@ namespace OpenSdk
     {
         private readonly IParserService parserService;
         private readonly IGeneratorService generatorService;
-        private readonly ApplicationArgumentRegistry applicationArgumentRegistry;
+        private readonly IApplicationArgumentRegistry applicationArgumentRegistry;
 
         public Bootstrap(
             IParserService parserService,
@@ -18,12 +17,12 @@ namespace OpenSdk
         {
             this.parserService = parserService;
             this.generatorService = generatorService;
-            this.applicationArgumentRegistry = applicationArgumentRegistry as ApplicationArgumentRegistry;
+            this.applicationArgumentRegistry = applicationArgumentRegistry;
         }
 
         public void Start()
         {
-            ParserResponse parserResponse = parserService.Parse(applicationArgumentRegistry.DataSourcePath);
+            var parserResponse = parserService.Parse(applicationArgumentRegistry.DataSourcePath);
 
             generatorService.Generate(parserResponse);
         }

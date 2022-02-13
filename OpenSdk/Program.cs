@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using OpenSdk.Factories;
-using OpenSdk.Registries;
-using OpenSdk.Services;
-using OpenSdk.Services.ParserServices;
+using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace OpenSdk
 {
@@ -10,20 +8,27 @@ namespace OpenSdk
     {
         static void Main(string[] args)
         {
-            string dataSourcePath = args[0];
+            var dataSourcePath = args[0];
+            var host = AppStartup(dataSourcePath);
 
-            ServiceProvider serviceProvider = new ServiceCollection()
-                .AddLogging()
-                .AddSingleton<IApplicationArgumentRegistry>(_ => new ApplicationArgumentRegistry(dataSourcePath))
-                .AddSingleton<IBootstrap, Bootstrap>()
-                .AddSingleton<IParserService, ParserService>()
-                .AddSingleton<IComponentsParserService, ComponentsParserService>()
-                .AddSingleton<IPathsParserService, PathsParserService>()
-                .AddSingleton<IGeneratorService, GeneratorService>()
-                .AddSingleton<ICottleFactory, CottleFactory>()
-                .BuildServiceProvider();
+            var bootstrap = ActivatorUtilities.CreateInstance<Bootstrap>(host.Services);
 
-            serviceProvider.GetService<IBootstrap>().Start();
+            bootstrap.Start();
+        }
+
+        static IHost AppStartup(string dataSourcePath)
+        {
+            var host = Host.CreateDefaultBuilder()
+                .ConfigureServices((context, services) =>
+                {
+                    services
+                        .ConfigureDependencies(dataSourcePath)
+                        .SetupLogger();
+                })
+                .UseSerilog()
+                .Build();
+
+            return host;
         }
     }
 }

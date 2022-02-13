@@ -9,7 +9,7 @@ namespace OpenSdk.Services.ParserServices
     {
         public List<Schema> getParsedComponents(Dictionary<string, Dictionary<string, ComponentsSchemaItem>> components)
         {
-            List<Schema> generatorSchemas = new List<Schema>();
+            var generatorSchemas = new List<Schema>();
 
             foreach (var component in components)
             {

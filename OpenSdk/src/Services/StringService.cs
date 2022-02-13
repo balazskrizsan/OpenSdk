@@ -9,7 +9,7 @@ namespace OpenSdk.Services
                 return string.Empty;
             }
 
-            char[] a = s.ToCharArray();
+            var a = s.ToCharArray();
             a[0] = char.ToUpper(a[0]);
 
             return new string(a);
@@ -22,7 +22,7 @@ namespace OpenSdk.Services
                 return string.Empty;
             }
 
-            char[] a = s.ToCharArray();
+            var a = s.ToCharArray();
             a[0] = char.ToLower(a[0]);
 
             return new string(a);

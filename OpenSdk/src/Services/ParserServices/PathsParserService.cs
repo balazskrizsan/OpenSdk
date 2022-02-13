@@ -11,18 +11,18 @@ namespace OpenSdk.Services.ParserServices
     {
         public List<Method> getParsedPaths(Dictionary<string, Dictionary<string, PathUriMethodMethodDetails>> paths)
         {
-            List<Method> generatorMethods = new List<Method>();
+            var generatorMethods = new List<Method>();
 
             foreach (var path in paths)
             {
                 Console.WriteLine("# path");
                 Console.WriteLine(path.Key);
-                string pathUri = path.Key;
+                var pathUri = path.Key;
                 foreach (var methods in path.Value)
                 {
                     Console.WriteLine("    #method");
                     Console.WriteLine("      " + methods.Key);
-                    string pathMethod = methods.Key;
+                    var pathMethod = methods.Key;
                     foreach (var requestBody in methods.Value.requestBody)
                     {
                         Console.WriteLine("         #request");
@@ -31,7 +31,7 @@ namespace OpenSdk.Services.ParserServices
                         {
                             Console.WriteLine("            #content");
                             Console.WriteLine("              " + content.Key);
-                            string pathContentType = content.Key;
+                            var pathContentType = content.Key;
                             foreach (var contentType in content.Value)
                             {
                                 Console.WriteLine("                #content type");
@@ -72,12 +72,12 @@ namespace OpenSdk.Services.ParserServices
 
         private string GenerateMethodName(string path)
         {
-            string[] pathParts = path.Split("/");
-            List<string> slashCleanPathParts = new List<string>();
+            var pathParts = path.Split("/");
+            var slashCleanPathParts = new List<string>();
 
-            foreach (string pathPart in pathParts)
+            foreach (var pathPart in pathParts)
             {
-                string cleanPart = Regex.Replace(pathPart, "[^A-Za-z0-9]", "");
+                var cleanPart = Regex.Replace(pathPart, "[^A-Za-z0-9]", "");
                 if (cleanPart.Length > 0)
                 {
                     slashCleanPathParts.Add(cleanPart);

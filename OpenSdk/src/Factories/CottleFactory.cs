@@ -6,9 +6,9 @@ namespace OpenSdk.Factories
     {
         public IDocument CreateDocument(string template)
         {
-            DocumentResult documentResult = Document.CreateDefault(
+            var documentResult = Document.CreateDefault(
                 template,
-                new DocumentConfiguration()
+                new DocumentConfiguration
                 {
                     BlockBegin = "{{",
                     BlockEnd = "}}"
