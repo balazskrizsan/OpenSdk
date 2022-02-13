@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Logging;
 using OpenSdk.ValueObjects;
 using OpenSdk.ValueObjects.Generator;
 
@@ -9,38 +10,45 @@ namespace OpenSdk.Services.ParserServices
 {
     public class PathsParserService : IPathsParserService
     {
+        private readonly ILogger<ParserService> logger;
+
+        public PathsParserService(ILogger<ParserService> logger)
+        {
+            this.logger = logger;
+        }
+
         public List<Method> getParsedPaths(Dictionary<string, Dictionary<string, PathUriMethodMethodDetails>> paths)
         {
             var generatorMethods = new List<Method>();
 
             foreach (var path in paths)
             {
-                Console.WriteLine("# path");
-                Console.WriteLine(path.Key);
+                logger.LogInformation("# path");
+                logger.LogInformation(path.Key);
                 var pathUri = path.Key;
                 foreach (var methods in path.Value)
                 {
-                    Console.WriteLine("    #method");
-                    Console.WriteLine("      " + methods.Key);
+                    logger.LogInformation("    #method");
+                    logger.LogInformation("      " + methods.Key);
                     var pathMethod = methods.Key;
                     foreach (var requestBody in methods.Value.requestBody)
                     {
-                        Console.WriteLine("         #request");
-                        Console.WriteLine("           " + requestBody.Key);
+                        logger.LogInformation("         #request");
+                        logger.LogInformation("           " + requestBody.Key);
                         foreach (var content in requestBody.Value)
                         {
-                            Console.WriteLine("            #content");
-                            Console.WriteLine("              " + content.Key);
+                            logger.LogInformation("            #content");
+                            logger.LogInformation("              " + content.Key);
                             var pathContentType = content.Key;
                             foreach (var contentType in content.Value)
                             {
-                                Console.WriteLine("                #content type");
-                                Console.WriteLine("                  " + contentType.Key);
+                                logger.LogInformation("                #content type");
+                                logger.LogInformation("                  " + contentType.Key);
                                 foreach (var schema in contentType.Value)
                                 {
-                                    Console.WriteLine("                    #schema");
-                                    Console.WriteLine("                      " + schema.Key);
-                                    Console.WriteLine("                      " + schema.Value);
+                                    logger.LogInformation("                    #schema");
+                                    logger.LogInformation("                      " + schema.Key);
+                                    logger.LogInformation("                      " + schema.Value);
                                     generatorMethods.Add(new Method(
                                         pathUri,
                                         GenerateMethodName(pathUri),

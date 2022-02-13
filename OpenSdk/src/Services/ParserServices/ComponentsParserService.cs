@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using OpenSdk.ValueObjects;
 using OpenSdk.ValueObjects.Generator;
 
@@ -7,19 +8,26 @@ namespace OpenSdk.Services.ParserServices
 {
     public class ComponentsParserService : IComponentsParserService
     {
+        private readonly ILogger<ParserService> logger;
+
+        public ComponentsParserService(ILogger<ParserService> logger)
+        {
+            this.logger = logger;
+        }
+
         public List<Schema> getParsedComponents(Dictionary<string, Dictionary<string, ComponentsSchemaItem>> components)
         {
             var generatorSchemas = new List<Schema>();
 
             foreach (var component in components)
             {
-                Console.WriteLine("#component");
-                Console.WriteLine(component.Key);
+                logger.LogInformation("#component");
+                logger.LogInformation(component.Key);
                 foreach (var schema in component.Value)
                 {
-                    Console.WriteLine("    #schema");
-                    Console.WriteLine("      " + schema.Key);
-                    Console.WriteLine("      " + schema.Value.Type);
+                    logger.LogInformation("    #schema");
+                    logger.LogInformation("      " + schema.Key);
+                    logger.LogInformation("      " + schema.Value.Type);
                     Dictionary<string, string> schemaParams = new Dictionary<string, string>();
                     var properties = schema.Value?.Properties;
 
@@ -30,10 +38,10 @@ namespace OpenSdk.Services.ParserServices
                     
                     foreach (var property in properties)
                     {
-                        Console.WriteLine("        #properties");
-                        Console.WriteLine("          " + property.Key);
-                        Console.WriteLine("          " + property.Value.Ref);
-                        Console.WriteLine("          " + property.Value.Type);
+                        logger.LogInformation("        #properties");
+                        logger.LogInformation("          " + property.Key);
+                        logger.LogInformation("          " + property.Value.Ref);
+                        logger.LogInformation("          " + property.Value.Type);
 
                         if (property.Value.Ref == null)
                         {

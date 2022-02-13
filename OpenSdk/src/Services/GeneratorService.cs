@@ -1,20 +1,26 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Cottle;
+using Microsoft.Extensions.Logging;
 using OpenSdk.Factories;
 using OpenSdk.ValueObjects;
+using OpenSdk.ValueObjects.Generator;
 
 namespace OpenSdk.Services
 {
     public class GeneratorService : IGeneratorService
     {
         private readonly ICottleFactory cottleFactory;
+        private readonly ILogger<ParserService> logger;
 
-        public GeneratorService(ICottleFactory cottleFactory)
+        public GeneratorService(
+            ICottleFactory cottleFactory,
+            ILogger<ParserService> logger
+            )
         {
             this.cottleFactory = cottleFactory;
+            this.logger = logger;
         }
 
         public void Generate(ParserResponse openapiValues)
@@ -22,7 +28,7 @@ namespace OpenSdk.Services
             var interfaceTemplate = File.ReadAllText(@"w:\\Interface.tpl");
             var valueObjectTemplate = File.ReadAllText(@"w:\\ValueObject.tpl");
 
-            Console.WriteLine("=====================================================");
+            logger.LogInformation("=====================================================");
 
             foreach (var method in openapiValues.Methods)
             {
@@ -33,10 +39,10 @@ namespace OpenSdk.Services
                     ["paramObjectVarName"] = StringService.LowercaseFirst(method.ParamObjectName),
                     ["methodUri"] = method.Uri,
                 });
-                Console.WriteLine(cottleFactory.CreateDocument(interfaceTemplate).Render(context));
+                logger.LogInformation(cottleFactory.CreateDocument(interfaceTemplate).Render(context));
             }
 
-            Console.WriteLine("=====================================================");
+            logger.LogInformation("=====================================================");
             foreach (Schema schema in openapiValues.Schemas)
             {
                 Dictionary<Value, Value> templateParams = new Dictionary<Value, Value>();
@@ -50,10 +56,10 @@ namespace OpenSdk.Services
                     ["objectName"] = schema.Name,
                     ["parameters"] = templateParams,
                 });
-                Console.WriteLine(cottleFactory.CreateDocument(valueObjectTemplate).Render(context));
+                logger.LogInformation(cottleFactory.CreateDocument(valueObjectTemplate).Render(context));
             }
 
-            Console.WriteLine("=====================================================");
+            logger.LogInformation("=====================================================");
         }
 
         private string TypeMapper(string openapiType)
