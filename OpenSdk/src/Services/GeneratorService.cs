@@ -38,6 +38,7 @@ namespace OpenSdk.Services
                     ["paramObjectClassName"] = method.ParamObjectName,
                     ["paramObjectVarName"] = StringService.LowercaseFirst(method.ParamObjectName),
                     ["methodUri"] = method.Uri,
+                    ["methodType"] = method.MethodType
                 });
                 logger.LogInformation(cottleFactory.CreateDocument(interfaceTemplate).Render(context));
             }
@@ -50,7 +51,7 @@ namespace OpenSdk.Services
                 {
                     templateParams.Add(VarNameMapper(parameter.Key), TypeMapper(parameter.Value));
                 }
-
+            
                 var context = Context.CreateBuiltin(new Dictionary<Value, Value>
                 {
                     ["objectName"] = schema.Name,
@@ -58,7 +59,7 @@ namespace OpenSdk.Services
                 });
                 logger.LogInformation(cottleFactory.CreateDocument(valueObjectTemplate).Render(context));
             }
-
+            
             logger.LogInformation("=====================================================");
         }
 
@@ -69,7 +70,7 @@ namespace OpenSdk.Services
                 case "string":
                     return "String";
                 case "#/components/schemas/FileUpload":
-                    return "FileUpload";
+                    return "HttpEntity<ByteArrayResource>";
                 default:
                     throw new Exception("No type found for: " + openapiType);
             }
@@ -80,7 +81,7 @@ namespace OpenSdk.Services
             switch (varName)
             {
                 case "#/components/schemas/FileUpload":
-                    return "fileUpload";
+                    return "content";
                 default:
                     return varName;
             }
