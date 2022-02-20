@@ -25,8 +25,9 @@ namespace OpenSdk.Services
 
         public void Generate(ParserResponse openapiValues)
         {
-            var interfaceTemplate = File.ReadAllText(@"w:\\Interface.tpl");
-            var valueObjectTemplate = File.ReadAllText(@"w:\\ValueObject.tpl");
+            // var interfaceTemplate = File.ReadAllText(@"w:\\Interface.tpl");
+            var interfaceTemplate = new StreamReader(@"./../../../templates/Interface.tpl").ReadToEnd();
+            var valueObjectTemplate = new StreamReader(@"./../../../templates/ValueObject.tpl").ReadToEnd();
 
             logger.LogInformation("=====================================================");
 
