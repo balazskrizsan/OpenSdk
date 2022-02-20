@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using OpenSdk.Factories;
 using OpenSdk.Registries;
 using OpenSdk.Services;
+using OpenSdk.Services.GeneratorServices;
 using OpenSdk.Services.ParserServices;
 using Serilog;
 
@@ -22,7 +23,11 @@ namespace OpenSdk
                 .AddSingleton<IComponentsParserService, ComponentsParserService>()
                 .AddSingleton<IPathsParserService, PathsParserService>()
                 .AddSingleton<IGeneratorService, GeneratorService>()
-                .AddSingleton<ICottleFactory, CottleFactory>();
+                .AddSingleton<IFileGeneratorService, FileGeneratorService>()
+                .AddSingleton<IInterfaceGeneratorService, InterfaceGeneratorService>()
+                .AddSingleton<IValueObjectGeneratorService, ValueObjectGeneratorService>()
+                .AddSingleton<ICottleFactory, CottleFactory>()
+                ;
         }
 
         public static IServiceCollection SetupLogger(this IServiceCollection serviceCollection)
