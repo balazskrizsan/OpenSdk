@@ -45,7 +45,7 @@ namespace OpenSdk.Services.GeneratorServices
 
                 var context = Context.CreateBuiltin(new Dictionary<Value, Value>
                 {
-                    ["namespaceValue"] = schema.Name,
+                    ["namespaceValue"] = namespaceValue,
                     ["valueObjectName"] = valueObjectName,
                     ["parameters"] = templateParams,
                 });
