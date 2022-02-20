@@ -14,10 +14,7 @@ namespace OpenSdk.Services
         private readonly ICottleFactory cottleFactory;
         private readonly ILogger<ParserService> logger;
 
-        public GeneratorService(
-            ICottleFactory cottleFactory,
-            ILogger<ParserService> logger
-            )
+        public GeneratorService(ICottleFactory cottleFactory, ILogger<ParserService> logger)
         {
             this.cottleFactory = cottleFactory;
             this.logger = logger;
@@ -27,41 +24,67 @@ namespace OpenSdk.Services
         {
             // var interfaceTemplate = File.ReadAllText(@"w:\\Interface.tpl");
             var interfaceTemplate = new StreamReader(@"./../../../templates/Interface.tpl").ReadToEnd();
-            var valueObjectTemplate = new StreamReader(@"./../../../templates/ValueObject.tpl").ReadToEnd();
 
-            logger.LogInformation("=====================================================");
+            logger.LogInformation("====== Generate API Interfaces");
 
+            var templateDocument = cottleFactory.CreateDocument(interfaceTemplate);
             foreach (var method in openapiValues.Methods)
             {
+                var namespaceValue = "com.kbalazsworks.stackjudge_aws_sdk.schema_interfaces";
+                var interfaceName = "I" + method.MethodName;
+
                 var context = Context.CreateBuiltin(new Dictionary<Value, Value>
                 {
-                    ["interfaceName"] = method.MethodName,
+                    ["interfaceName"] = interfaceName,
+                    ["namespace"] = namespaceValue,
                     ["paramObjectClassName"] = method.ParamObjectName,
                     ["paramObjectVarName"] = StringService.LowercaseFirst(method.ParamObjectName),
                     ["methodUri"] = method.Uri,
                     ["methodType"] = method.MethodType
                 });
-                logger.LogInformation(cottleFactory.CreateDocument(interfaceTemplate).Render(context));
+
+                var destinationFolder = "W:/Cs/OpenSdkOutputTest/" + namespaceValue.Replace(".", "/");
+                var fileName = interfaceName + ".java";
+
+                SaveFile(destinationFolder, fileName, templateDocument.Render(context));
             }
 
-            logger.LogInformation("=====================================================");
+            logger.LogInformation("====== Generate Value Objects");
+            var valueObjectTemplate = new StreamReader(@"./../../../templates/ValueObject.tpl").ReadToEnd();
+            templateDocument = cottleFactory.CreateDocument(valueObjectTemplate);
+
             foreach (Schema schema in openapiValues.Schemas)
             {
+                var namespaceValue = "com.kbalazsworks.stackjudge_aws_sdk.schema_parameter_objects";
+                var valueObjectName = schema.Name;
+
                 Dictionary<Value, Value> templateParams = new Dictionary<Value, Value>();
                 foreach (var parameter in schema.Parameters)
                 {
                     templateParams.Add(VarNameMapper(parameter.Key), TypeMapper(parameter.Value));
                 }
-            
+
                 var context = Context.CreateBuiltin(new Dictionary<Value, Value>
                 {
-                    ["objectName"] = schema.Name,
+                    ["namespaceValue"] = schema.Name,
+                    ["valueObjectName"] = valueObjectName,
                     ["parameters"] = templateParams,
                 });
-                logger.LogInformation(cottleFactory.CreateDocument(valueObjectTemplate).Render(context));
+
+                var destinationFolder = "W:/Cs/OpenSdkOutputTest/" + namespaceValue.Replace(".", "/");
+                var fileName = valueObjectName + ".java";
+
+                SaveFile(destinationFolder, fileName, templateDocument.Render(context));
             }
-            
-            logger.LogInformation("=====================================================");
+
+            logger.LogInformation("====== Successful finish");
+        }
+
+        private void SaveFile(string destinationFolder, string fileName, string content)
+        {
+            Directory.CreateDirectory(destinationFolder);
+            File.WriteAllTextAsync(destinationFolder + "/" + fileName, content);
+            logger.LogInformation("    - " + destinationFolder + "/" + fileName);
         }
 
         private string TypeMapper(string openapiType)

@@ -1,4 +1,4 @@
-package com.kbalazsworks.stackjudge_aws_sdk.schema_parameter_objects;
+package {{namespaceValue}};
 
 import com.kbalazsworks.stackjudge_aws_sdk.common.interfaces.IOpenSdkPostable;
 import org.springframework.core.io.ByteArrayResource;
@@ -10,7 +10,7 @@ import javax.annotation.processing.Generated;
 import java.util.List;
 
 @Generated("OpenSDK: https://github.com/balazskrizsan/OpenSdk")
-public final class {{objectName}} implements IOpenSdkPostable
+public final class {{valueObjectName}} implements IOpenSdkPostable
 {
     {{for name, type in parameters:
 
@@ -20,7 +20,7 @@ public final class {{objectName}} implements IOpenSdkPostable
 
     {{ set i to 1 }}
 
-    public {{objectName}}(
+    public {{valueObjectName}}(
 
     {{for name, type in parameters:
 
