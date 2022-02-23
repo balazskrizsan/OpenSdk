@@ -19,7 +19,7 @@ namespace OpenSdk.Services.GeneratorServices
 
         public void Generate(List<Method> methods)
         {
-            var interfaceTemplate = new StreamReader(@"./../../../templates/Interface.tpl").ReadToEnd();
+            var interfaceTemplate = new StreamReader(@"./templates/Interface.tpl").ReadToEnd();
 
             var templateDocument = cottleFactory.CreateDocument(interfaceTemplate);
             foreach (var method in methods)

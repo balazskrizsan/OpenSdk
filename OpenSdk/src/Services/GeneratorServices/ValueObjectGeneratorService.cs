@@ -26,7 +26,7 @@ namespace OpenSdk.Services.GeneratorServices
 
         public void Generate(List<Schema> schemas)
         {
-            var valueObjectTemplate = new StreamReader(@"./../../../templates/ValueObject.tpl").ReadToEnd();
+            var valueObjectTemplate = new StreamReader(@"./templates/ValueObject.tpl").ReadToEnd();
             var templateDocument = cottleFactory.CreateDocument(valueObjectTemplate);
 
             foreach (Schema schema in schemas)
