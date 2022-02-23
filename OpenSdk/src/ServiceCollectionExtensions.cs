@@ -13,11 +13,14 @@ namespace OpenSdk
 {
     public static class ConfigureServicesHelperExtensions
     {
-        public static IServiceCollection ConfigureDependencies(this IServiceCollection serviceCollection, string dataSourcePath)
+        public static IServiceCollection ConfigureDependencies(
+            this IServiceCollection serviceCollection,
+            IApplicationArgumentRegistry applicationArgumentRegistry
+        )
         {
             return serviceCollection
                 .AddLogging()
-                .AddSingleton<IApplicationArgumentRegistry>(_ => new ApplicationArgumentRegistry(dataSourcePath))
+                .AddSingleton(_ => applicationArgumentRegistry)
                 .AddSingleton<IBootstrap, Bootstrap>()
                 .AddSingleton<IParserService, ParserService>()
                 .AddSingleton<IComponentsParserService, ComponentsParserService>()
@@ -36,9 +39,9 @@ namespace OpenSdk
                 .SetBasePath(Directory.GetParent(AppContext.BaseDirectory)?.FullName)
                 .AddJsonFile("appsettings.json", false)
                 .Build();
-            
-            serviceCollection.AddSingleton<IConfigurationRoot>(configuration);
-            
+
+            serviceCollection.AddSingleton(configuration);
+
             Log.Logger = new LoggerConfiguration() // initiate the logger configuration
                 .ReadFrom.Configuration(configuration) // connect serilog to our configuration folder
                 .Enrich.FromLogContext() //Adds more information to our logs from built in Serilog 

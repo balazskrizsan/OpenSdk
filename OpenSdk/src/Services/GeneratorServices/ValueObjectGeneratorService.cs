@@ -50,7 +50,7 @@ namespace OpenSdk.Services.GeneratorServices
                     ["parameters"] = templateParams,
                 });
 
-                var destinationFolder = "W:/Cs/OpenSdkOutputTest/" + namespaceValue.Replace(".", "/");
+                var destinationFolder = "/" + namespaceValue.Replace(".", "/");
                 var fileName = valueObjectName + ".java";
 
                 fileGeneratorService.SaveFile(destinationFolder, fileName, templateDocument.Render(context));

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OpenSdk.Registries;
 using Serilog;
 
 namespace OpenSdk
@@ -8,27 +9,24 @@ namespace OpenSdk
     {
         static void Main(string[] args)
         {
-            var dataSourcePath = args[0];
-            var host = AppStartup(dataSourcePath);
+            var applicationArgumentRegistry = new ApplicationArgumentRegistry(args[0], args[1]);
 
-            var bootstrap = ActivatorUtilities.CreateInstance<Bootstrap>(host.Services);
+            var host = AppStartup(applicationArgumentRegistry);
 
-            bootstrap.Start();
+            ActivatorUtilities.CreateInstance<Bootstrap>(host.Services).Start();
         }
 
-        static IHost AppStartup(string dataSourcePath)
+        static IHost AppStartup(IApplicationArgumentRegistry applicationArgumentRegistry)
         {
-            var host = Host.CreateDefaultBuilder()
+            return Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) =>
                 {
                     services
-                        .ConfigureDependencies(dataSourcePath)
+                        .ConfigureDependencies(applicationArgumentRegistry)
                         .SetupLogger();
                 })
                 .UseSerilog()
                 .Build();
-
-            return host;
         }
     }
 }

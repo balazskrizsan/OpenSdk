@@ -37,7 +37,7 @@ namespace OpenSdk.Services.GeneratorServices
                     ["methodType"] = method.MethodType
                 });
 
-                var destinationFolder = "W:/Cs/OpenSdkOutputTest/" + namespaceValue.Replace(".", "/");
+                var destinationFolder = "/" + namespaceValue.Replace(".", "/");
                 var fileName = interfaceName + ".java";
 
                 fileGeneratorService.SaveFile(destinationFolder, fileName, templateDocument.Render(context));
