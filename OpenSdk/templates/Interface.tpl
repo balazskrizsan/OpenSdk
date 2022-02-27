@@ -15,3 +15,5 @@ public interface {{interfaceName}}
 
     void execute(IOpenSdkPostable {{paramObjectVarName}});
 }
+
+
