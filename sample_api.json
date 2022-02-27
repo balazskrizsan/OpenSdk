@@ -7,7 +7,7 @@
   "paths" : {
     "/s3/upload" : {
       "post" : {
-        "tags" : [ "Post Upload" ],
+        "tags" : [ "Post Upload Action" ],
         "requestBody" : {
           "content" : {
             "multipart/form-data" : {
@@ -18,15 +18,22 @@
           }
         },
         "responses" : {
-          "201" : {
-            "description" : "Created"
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponseDataCdnServicePutResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/ses/send/company-own-email" : {
       "post" : {
-        "tags" : [ "Post Send Action" ],
+        "tags" : [ "Post Send Send Company Own Email Action" ],
         "requestBody" : {
           "content" : {
             "multipart/form-data" : {
@@ -46,6 +53,41 @@
   },
   "components" : {
     "schemas" : {
+      "ApiResponseDataCdnServicePutResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/CdnServicePutResponse"
+          },
+          "success" : {
+            "type" : "boolean"
+          },
+          "errorCodeerrorCode" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "requestId" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CdnServicePutResponse" : {
+        "type" : "object",
+        "properties" : {
+          "path" : {
+            "type" : "string"
+          },
+          "fileName" : {
+            "type" : "string"
+          },
+          "s3eTag" : {
+            "type" : "string"
+          },
+          "s3contentMd5" : {
+            "type" : "string"
+          }
+        }
+      },
       "FileUpload" : {
         "type" : "object"
       },
@@ -67,6 +109,9 @@
         "type" : "object",
         "properties" : {
           "cdnNamespace" : {
+            "type" : "string"
+          },
+          "subFolder" : {
             "type" : "string"
           },
           "fileName" : {

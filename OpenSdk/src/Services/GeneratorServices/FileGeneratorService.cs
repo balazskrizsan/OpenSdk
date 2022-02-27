@@ -33,10 +33,21 @@ namespace OpenSdk.Services.GeneratorServices
             {
                 case "string":
                     return "String";
+                case "boolean":
+                    return "Boolean";
+                case "integer":
+                    return "Integer";
                 case "#/components/schemas/FileUpload":
                     return "HttpEntity<ByteArrayResource>";
                 default:
-                    throw new Exception("No type found for: " + openapiType);
+                    try
+                    {
+                        return openapiType.Split("/")[3];
+                    }
+                    catch (Exception)
+                    {
+                        throw new Exception("No type found for: " + openapiType);
+                    }
             }
         }
 
@@ -47,7 +58,14 @@ namespace OpenSdk.Services.GeneratorServices
                 case "#/components/schemas/FileUpload":
                     return "content";
                 default:
-                    return varName;
+                    try
+                    {
+                        return varName.Split("/")[3];
+                    }
+                    catch (Exception)
+                    {
+                        return varName;
+                    }
             }
         }
     }
