@@ -43,6 +43,9 @@ namespace OpenSdk.Services.GeneratorServices
                     );
                 }
 
+                // @todo: run a component check:
+                //  - if schema is a response it should not implement the IOpenSdk[Post|Get|Put|Delete]able
+                //  - add condition around the IOpenSdk*
                 var context = Context.CreateBuiltin(new Dictionary<Value, Value>
                 {
                     ["namespaceValue"] = namespaceValue,
