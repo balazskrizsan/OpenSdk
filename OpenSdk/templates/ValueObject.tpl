@@ -54,13 +54,13 @@ public final class {{valueObjectName}} implements IOpenSdkPostable
     public MultiValueMap<String, Object> toOpenSdkPost()
     {
         return new LinkedMultiValueMap<>()
-        \{{\{{
+        \{{
             {{for name, type in parameters:
         
             addAll("{{name}}", List.of({{name}}()));
             }}
 
-        \}}\}};
+        \}};
     }
 
     // not yet supported in the generator
