@@ -7,6 +7,7 @@ import javax.annotation.processing.Generated;
 
 @Generated("OpenSDK: https://github.com/balazskrizsan/OpenSdk")
 public interface {{interfaceName}}
+
 {
     default String getApiUri()
     {
