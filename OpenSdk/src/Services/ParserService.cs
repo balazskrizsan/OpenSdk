@@ -42,7 +42,7 @@ namespace OpenSdk.Services
             logger.LogInformation("    {rootInfoTitle}", root.Info.Title);
 
             logger.LogInformation("====== Paths parsing");
-            var generatorMethods = pathsParserService.getParsedPaths(root.Paths);
+            var generatorMethods = pathsParserService.GetParsedPaths(root.Paths, root.Components);
             logger.LogInformation("====== Components parsing");
             var generatorSchemas = componentsParserService.getParsedComponents(root.Components);
 

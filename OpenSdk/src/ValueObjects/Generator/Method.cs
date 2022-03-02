@@ -1,16 +1,16 @@
-using System.ComponentModel;
-
 namespace OpenSdk.ValueObjects.Generator
 {
     public class Method
     {
-        [ReadOnly(true)] public string Uri { get; }
-        [ReadOnly(true)] public string MethodName { get; }
-        [ReadOnly(true)] public string MethodType { get; }
-        [ReadOnly(true)] public string ContentType { get; }
-        [ReadOnly(true)] public string ParamSchemaType { get; }
-        [ReadOnly(true)] public string ParamSchemaValue { get; }
-        [ReadOnly(true)] public string ParamObjectName { get; }
+        public string Uri { get; }
+        public string MethodName { get; }
+        public string MethodType { get; }
+        public string ContentType { get; }
+        public string ParamSchemaType { get; }
+        public string ParamSchemaValue { get; }
+        public string ParamObjectName { get; }
+        public string OkResponseValueObject { get; }
+        public string OkResponseDataValueObject { get; }
 
         public Method(
             string uri,
@@ -19,7 +19,9 @@ namespace OpenSdk.ValueObjects.Generator
             string contentType,
             string paramSchemaType,
             string paramSchemaValue,
-            string paramObjectName
+            string paramObjectName,
+            string okResponseValueObject,
+            string okResponseDataValueObject
         )
         {
             Uri = uri;
@@ -29,6 +31,8 @@ namespace OpenSdk.ValueObjects.Generator
             ParamSchemaType = paramSchemaType;
             ParamSchemaValue = paramSchemaValue;
             ParamObjectName = paramObjectName;
+            OkResponseValueObject = okResponseValueObject;
+            OkResponseDataValueObject = okResponseDataValueObject;
         }
     }
 }

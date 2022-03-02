@@ -1,5 +1,6 @@
 package {{namespace}};
 
+import com.kbalazsworks.stackjudge_aws_sdk.common.entities.OpenSdkStdResponse;
 import com.kbalazsworks.stackjudge_aws_sdk.common.interfaces.IOpenSdkPostable;
 import com.kbalazsworks.stackjudge_aws_sdk.schema_parameter_objects.*;
 
@@ -14,7 +15,8 @@ public interface {{interfaceName}}
         return "{{methodUri}}";
     }
 
-    void execute(IOpenSdkPostable {{paramObjectVarName}});
+
+    {{execReturnType}} execute(IOpenSdkPostable {{paramObjectVarName}});
 }
 
 

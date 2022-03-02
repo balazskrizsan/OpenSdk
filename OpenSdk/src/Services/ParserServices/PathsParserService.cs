@@ -1,10 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using OpenSdk.ValueObjects;
 using OpenSdk.ValueObjects.Generator;
+using OpenSdk.ValueObjects.Parser;
 
 namespace OpenSdk.Services.ParserServices
 {
@@ -17,7 +17,10 @@ namespace OpenSdk.Services.ParserServices
             this.logger = logger;
         }
 
-        public List<Method> getParsedPaths(Dictionary<string, Dictionary<string, PathUriMethodMethodDetails>> paths)
+        public List<Method> GetParsedPaths(
+            Dictionary<string, Dictionary<string, PathUriMethodMethodDetails>> paths,
+            Dictionary<string, Dictionary<string, ComponentsSchemaItem>> components
+        )
         {
             var generatorMethods = new List<Method>();
 
@@ -31,7 +34,40 @@ namespace OpenSdk.Services.ParserServices
                     logger.LogInformation("    #method");
                     logger.LogInformation("      " + methods.Key);
                     var pathMethod = methods.Key;
-                    foreach (var requestBody in methods.Value.requestBody)
+
+                    var okResponseValueObject = string.Empty;
+                    var okResponseDataValueObject = string.Empty;
+                    if (methods.Value.Responses.Count > 0)
+                    {
+                        foreach (var response in methods.Value.Responses)
+                        {
+                            logger.LogInformation("         #responses: count " + methods.Value.Responses.Count);
+                            if (response.Key == "200")
+                            {
+                                foreach (var contentType in response.Value.Content)
+                                {
+                                    logger.LogInformation("             #contentType");
+                                    logger.LogInformation("               " + contentType.Key);
+                                    foreach (var schemas in contentType.Value)
+                                    {
+                                        foreach (var schema in schemas.Value)
+                                        {
+                                            logger.LogInformation("             #schema");
+                                            logger.LogInformation("               " + schema.Key);
+                                            logger.LogInformation("               " + schema.Value);
+                                            okResponseValueObject = GetParamObjectName(schema.Key, schema.Value);
+                                            okResponseDataValueObject = GetResponseDataValueObject(
+                                                schema.Value,
+                                                components
+                                            );
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    foreach (var requestBody in methods.Value.RequestBody)
                     {
                         logger.LogInformation("         #request");
                         logger.LogInformation("           " + requestBody.Key);
@@ -56,7 +92,9 @@ namespace OpenSdk.Services.ParserServices
                                         pathContentType,
                                         schema.Key,
                                         schema.Value,
-                                        GetParamObjectName(schema.Key, schema.Value)
+                                        GetParamObjectName(schema.Key, schema.Value),
+                                        okResponseValueObject,
+                                        okResponseDataValueObject
                                     ));
                                 }
                             }
@@ -66,6 +104,24 @@ namespace OpenSdk.Services.ParserServices
             }
 
             return generatorMethods;
+        }
+
+        private string GetResponseDataValueObject(
+            string schemaRef,
+            Dictionary<string, Dictionary<string, ComponentsSchemaItem>> components
+        )
+        {
+            // @todo check if ref exists
+            var dataRef = components
+                .Values
+                .First()
+                .Where(x => x.Key == schemaRef.Split("/")[3])
+                .Select(x => x.Value.Properties.Values)
+                .First()
+                .First()
+                .Ref;
+
+            return dataRef.Split("/")[3];
         }
 
         private string GetParamObjectName(string type, string value)

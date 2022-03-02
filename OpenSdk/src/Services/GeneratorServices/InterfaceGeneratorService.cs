@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Cottle;
@@ -34,13 +35,36 @@ namespace OpenSdk.Services.GeneratorServices
                     ["paramObjectClassName"] = method.ParamObjectName,
                     ["paramObjectVarName"] = StringService.LowercaseFirst(method.ParamObjectName),
                     ["methodUri"] = method.Uri,
-                    ["methodType"] = method.MethodType
+                    ["methodType"] = method.MethodType,
+                    ["execReturnType"] = "void"
                 });
 
                 var destinationFolder = "/" + namespaceValue.Replace(".", "/");
                 var fileName = interfaceName + ".java";
 
                 fileGeneratorService.SaveFile(destinationFolder, fileName, templateDocument.Render(context));
+
+                if (!String.IsNullOrEmpty(method.OkResponseValueObject))
+                {
+                    namespaceValue = "com.kbalazsworks.stackjudge_aws_sdk.schema_interfaces";
+                    interfaceName = "I" + method.MethodName + "WithReturn";
+
+                    context = Context.CreateBuiltin(new Dictionary<Value, Value>
+                    {
+                        ["interfaceName"] = interfaceName,
+                        ["namespace"] = namespaceValue,
+                        ["paramObjectClassName"] = method.ParamObjectName,
+                        ["paramObjectVarName"] = StringService.LowercaseFirst(method.ParamObjectName),
+                        ["methodUri"] = method.Uri,
+                        ["methodType"] = method.MethodType,
+                        ["execReturnType"] = "OpenSdkStdResponse<" + method.OkResponseDataValueObject + ">"
+                    });
+
+                    destinationFolder = "/" + namespaceValue.Replace(".", "/");
+                    fileName = interfaceName + ".java";
+
+                    fileGeneratorService.SaveFile(destinationFolder, fileName, templateDocument.Render(context));
+                }
             }
         }
     }
