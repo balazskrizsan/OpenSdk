@@ -1,4 +1,4 @@
-package {{namespace}};
+package {{Namespace}};
 
 import com.kbalazsworks.stackjudge_aws_sdk.common.entities.OpenSdkStdResponse;
 import com.kbalazsworks.stackjudge_aws_sdk.common.interfaces.IOpenSdkPostable;
@@ -7,16 +7,12 @@ import com.kbalazsworks.stackjudge_aws_sdk.schema_parameter_objects.*;
 import javax.annotation.processing.Generated;
 
 @Generated("OpenSDK: https://github.com/balazskrizsan/OpenSdk")
-public interface {{interfaceName}}
-
+public interface {{InterfaceName}}
 {
     default String getApiUri()
     {
-        return "{{methodUri}}";
+        return "{{MethodUri}}";
     }
 
-
-    {{execReturnType}} execute(IOpenSdkPostable {{paramObjectVarName}});
+    {{ExecReturnType}} execute(IOpenSdkPostable {{ParamObjectVarName}});
 }
-
-

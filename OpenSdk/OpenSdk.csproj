@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <PackageReference Include="Cottle" Version="2.0.7" />
+      <PackageReference Include="Fluid.Core" Version="2.2.14" />
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="6.0.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
@@ -31,6 +32,9 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="templates\ValueObject.tpl">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="templates\Interface.3tpl.tpl">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>

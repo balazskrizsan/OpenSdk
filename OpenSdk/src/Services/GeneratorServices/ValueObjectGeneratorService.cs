@@ -9,12 +9,12 @@ namespace OpenSdk.Services.GeneratorServices
 {
     public class ValueObjectGeneratorService : IValueObjectGeneratorService
     {
-        private readonly ILogger<ParserService> logger;
+        private readonly ILogger<ValueObjectGeneratorService> logger;
         private readonly ICottleFactory cottleFactory;
         private readonly IFileGeneratorService fileGeneratorService;
 
         public ValueObjectGeneratorService(
-            ILogger<ParserService> logger,
+            ILogger<ValueObjectGeneratorService> logger,
             ICottleFactory cottleFactory,
             IFileGeneratorService fileGeneratorService
         )
