@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using OpenSdk.Factories;
 using OpenSdk.Registries;
 using OpenSdk.Services;
 using OpenSdk.Services.GeneratorServices;
@@ -29,7 +28,6 @@ public static class ConfigureServicesHelperExtensions
                 .AddSingleton<IFileGeneratorService, FileGeneratorService>()
                 .AddSingleton<IInterfaceGeneratorService, InterfaceGeneratorService>()
                 .AddSingleton<IValueObjectGeneratorService, ValueObjectGeneratorService>()
-                .AddSingleton<ICottleFactory, CottleFactory>()
                 .AddSingleton<ITemplateService, TemplateService>()
             ;
     }
