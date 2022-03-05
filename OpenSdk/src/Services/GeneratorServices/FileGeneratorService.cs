@@ -60,7 +60,7 @@ namespace OpenSdk.Services.GeneratorServices
                 default:
                     try
                     {
-                        return varName.Split("/")[3];
+                        return StringService.LowercaseFirst(varName.Split("/")[3]);
                     }
                     catch (Exception)
                     {
