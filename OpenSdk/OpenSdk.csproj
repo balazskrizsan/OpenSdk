@@ -34,9 +34,6 @@
       <None Update="templates\ValueObject.tpl">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="templates\Interface.3tpl.tpl">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
     </ItemGroup>
 
 </Project>
