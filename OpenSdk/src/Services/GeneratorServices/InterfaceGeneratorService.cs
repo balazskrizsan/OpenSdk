@@ -1,93 +1,75 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using Fluid;
 using Microsoft.Extensions.Logging;
 using OpenSdk.Factories;
 using OpenSdk.ValueObjects.Generator;
 
-namespace OpenSdk.Services.GeneratorServices
+namespace OpenSdk.Services.GeneratorServices;
+
+public class InterfaceGeneratorService : IInterfaceGeneratorService
 {
-    public class InterfaceGeneratorService : IInterfaceGeneratorService
+    private readonly IFileGeneratorService fileGeneratorService;
+    private readonly IFluidFactory fluidFactory;
+    private readonly ITemplateService templateService;
+    private readonly ILogger<InterfaceGeneratorService> logger;
+
+    public InterfaceGeneratorService(
+        IFileGeneratorService fileGeneratorService,
+        IFluidFactory fluidFactory,
+        ITemplateService templateService,
+        ILogger<InterfaceGeneratorService> logger
+    )
     {
-        private readonly IFileGeneratorService fileGeneratorService;
-        private readonly IFluidFactory fluidFactory;
-        private readonly ILogger<InterfaceGeneratorService> logger;
+        this.fileGeneratorService = fileGeneratorService;
+        this.fluidFactory = fluidFactory;
+        this.templateService = templateService;
+        this.logger = logger;
+    }
 
-        public InterfaceGeneratorService(
-            IFileGeneratorService fileGeneratorService,
-            IFluidFactory fluidFactory,
-            ILogger<InterfaceGeneratorService> logger
-        )
+    public void Generate(List<Method> methods)
+    {
+        var interfaceTemplatePath = @"./templates/Interface.tpl";
+        var namespaceValue = "com.kbalazsworks.stackjudge_aws_sdk.schema_interfaces";
+        var destinationFolder = "/" + namespaceValue.Replace(".", "/");
+
+        foreach (var method in methods)
         {
-            this.fileGeneratorService = fileGeneratorService;
-            this.fluidFactory = fluidFactory;
-            this.logger = logger;
-        }
+            var interfaceName = "I" + method.MethodName;
 
-        public void Generate(List<Method> methods)
-        {
-            var interfaceTemplate = new StreamReader(@"./templates/Interface.tpl").ReadToEnd();
-
-            var parser = fluidFactory.Create();
-            foreach (var method in methods)
+            var context = new TemplateContext(new
             {
-                var namespaceValue = "com.kbalazsworks.stackjudge_aws_sdk.schema_interfaces";
-                var interfaceName = "I" + method.MethodName;
+                InterfaceName = interfaceName,
+                Namespace = namespaceValue,
+                ParamObjectClassName = method.ParamObjectName,
+                ParamObjectVarName = StringService.LowercaseFirst(method.ParamObjectName),
+                MethodUri = method.Uri,
+                MethodType = method.MethodType,
+                ExecReturnType = "void"
+            });
+            var fileName = interfaceName + ".java";
 
-                var context = new TemplateContext(new
+            var generatedInterface = templateService.GenerateTemplate(interfaceTemplatePath, context);
+            fileGeneratorService.SaveFile(destinationFolder, fileName, generatedInterface);
+
+            if (!String.IsNullOrWhiteSpace(method.OkResponseValueObject))
+            {
+                var interfaceNameWithReturn = interfaceName + "WithReturn";
+
+                context = new TemplateContext(new
                 {
-                    InterfaceName = interfaceName,
+                    InterfaceName = interfaceNameWithReturn,
                     Namespace = namespaceValue,
                     ParamObjectClassName = method.ParamObjectName,
                     ParamObjectVarName = StringService.LowercaseFirst(method.ParamObjectName),
                     MethodUri = method.Uri,
                     MethodType = method.MethodType,
-                    ExecReturnType = "void"
+                    ExecReturnType = "OpenSdkStdResponse<" + method.OkResponseDataValueObject + ">"
                 });
+                var fileNameWithReturn = interfaceNameWithReturn + ".java";
 
-                var destinationFolder = "/" + namespaceValue.Replace(".", "/");
-                var fileName = interfaceName + ".java";
-
-                if (parser.TryParse(interfaceTemplate, out var template, out var error))
-                {
-                    var renderedTemplate = template.Render(context);
-                    fileGeneratorService.SaveFile(destinationFolder, fileName, renderedTemplate);
-                }
-                else
-                {
-                    logger.LogError("Interface generator error: {}", error);
-                }
-
-                if (!String.IsNullOrEmpty(method.OkResponseValueObject))
-                {
-                    namespaceValue = "com.kbalazsworks.stackjudge_aws_sdk.schema_interfaces";
-                    interfaceName = "I" + method.MethodName + "WithReturn";
-
-                    context = new TemplateContext(new
-                    {
-                        InterfaceName = interfaceName,
-                        Namespace = namespaceValue,
-                        ParamObjectClassName = method.ParamObjectName,
-                        ParamObjectVarName = StringService.LowercaseFirst(method.ParamObjectName),
-                        MethodUri = method.Uri,
-                        MethodType = method.MethodType,
-                        ExecReturnType = "OpenSdkStdResponse<" + method.OkResponseDataValueObject + ">"
-                    });
-
-                    destinationFolder = "/" + namespaceValue.Replace(".", "/");
-                    fileName = interfaceName + ".java";
-
-                    if (parser.TryParse(interfaceTemplate, out template, out error))
-                    {
-                        var renderedTemplate = template.Render(context);
-                        fileGeneratorService.SaveFile(destinationFolder, fileName, renderedTemplate);
-                    }
-                    else
-                    {
-                        logger.LogError("Interface generator error: {}", error);
-                    }
-                }
+                generatedInterface = templateService.GenerateTemplate(interfaceTemplatePath, context);
+                fileGeneratorService.SaveFile(destinationFolder, fileNameWithReturn, generatedInterface);
             }
         }
     }

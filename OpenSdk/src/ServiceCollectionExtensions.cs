@@ -9,16 +9,16 @@ using OpenSdk.Services.GeneratorServices;
 using OpenSdk.Services.ParserServices;
 using Serilog;
 
-namespace OpenSdk
+namespace OpenSdk;
+
+public static class ConfigureServicesHelperExtensions
 {
-    public static class ConfigureServicesHelperExtensions
+    public static IServiceCollection ConfigureDependencies(
+        this IServiceCollection serviceCollection,
+        IApplicationArgumentRegistry applicationArgumentRegistry
+    )
     {
-        public static IServiceCollection ConfigureDependencies(
-            this IServiceCollection serviceCollection,
-            IApplicationArgumentRegistry applicationArgumentRegistry
-        )
-        {
-            return serviceCollection
+        return serviceCollection
                 .AddLogging()
                 .AddSingleton(_ => applicationArgumentRegistry)
                 .AddSingleton<IBootstrap, Bootstrap>()
@@ -31,26 +31,25 @@ namespace OpenSdk
                 .AddSingleton<IValueObjectGeneratorService, ValueObjectGeneratorService>()
                 .AddSingleton<ICottleFactory, CottleFactory>()
                 .AddSingleton<IFluidFactory, FluidFactory>()
-                ;
-        }
+                .AddSingleton<ITemplateService, TemplateService>()
+            ;
+    }
 
-        public static IServiceCollection SetupLogger(this IServiceCollection serviceCollection)
-        {
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetParent(AppContext.BaseDirectory)?.FullName)
-                .AddJsonFile("appsettings.json", false)
-                .Build();
+    public static IServiceCollection SetupLogger(this IServiceCollection serviceCollection)
+    {
+        var configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetParent(AppContext.BaseDirectory)?.FullName)
+            .AddJsonFile("appsettings.json", false)
+            .Build();
 
-            serviceCollection.AddSingleton(configuration);
+        serviceCollection.AddSingleton(configuration);
 
-            Log.Logger = new LoggerConfiguration() // initiate the logger configuration
-                .ReadFrom.Configuration(configuration) // connect serilog to our configuration folder
-                .Enrich.FromLogContext() //Adds more information to our logs from built in Serilog 
-                .WriteTo.Console() // decide where the logs are going to be shown
-                .CreateLogger();
+        Log.Logger = new LoggerConfiguration() // initiate the logger configuration
+            .ReadFrom.Configuration(configuration) // connect serilog to our configuration folder
+            .Enrich.FromLogContext() //Adds more information to our logs from built in Serilog 
+            .WriteTo.Console() // decide where the logs are going to be shown
+            .CreateLogger();
 
-
-            return serviceCollection;
-        }
+        return serviceCollection;
     }
 }
