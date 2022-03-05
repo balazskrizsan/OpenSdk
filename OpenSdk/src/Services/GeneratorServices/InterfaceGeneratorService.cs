@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Fluid;
 using Microsoft.Extensions.Logging;
-using OpenSdk.Factories;
 using OpenSdk.ValueObjects.Generator;
 
 namespace OpenSdk.Services.GeneratorServices;
@@ -10,19 +8,16 @@ namespace OpenSdk.Services.GeneratorServices;
 public class InterfaceGeneratorService : IInterfaceGeneratorService
 {
     private readonly IFileGeneratorService fileGeneratorService;
-    private readonly IFluidFactory fluidFactory;
     private readonly ITemplateService templateService;
     private readonly ILogger<InterfaceGeneratorService> logger;
 
     public InterfaceGeneratorService(
         IFileGeneratorService fileGeneratorService,
-        IFluidFactory fluidFactory,
         ITemplateService templateService,
         ILogger<InterfaceGeneratorService> logger
     )
     {
         this.fileGeneratorService = fileGeneratorService;
-        this.fluidFactory = fluidFactory;
         this.templateService = templateService;
         this.logger = logger;
     }
@@ -37,7 +32,7 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
         {
             var interfaceName = "I" + method.MethodName;
 
-            var context = new TemplateContext(new
+            var context = new
             {
                 InterfaceName = interfaceName,
                 Namespace = namespaceValue,
@@ -46,7 +41,7 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
                 MethodUri = method.Uri,
                 MethodType = method.MethodType,
                 ExecReturnType = "void"
-            });
+            };
             var fileName = interfaceName + ".java";
 
             var generatedInterface = templateService.GenerateTemplate(interfaceTemplatePath, context);
@@ -56,7 +51,7 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
             {
                 var interfaceNameWithReturn = interfaceName + "WithReturn";
 
-                context = new TemplateContext(new
+                context = new
                 {
                     InterfaceName = interfaceNameWithReturn,
                     Namespace = namespaceValue,
@@ -65,7 +60,7 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
                     MethodUri = method.Uri,
                     MethodType = method.MethodType,
                     ExecReturnType = "OpenSdkStdResponse<" + method.OkResponseDataValueObject + ">"
-                });
+                };
                 var fileNameWithReturn = interfaceNameWithReturn + ".java";
 
                 generatedInterface = templateService.GenerateTemplate(interfaceTemplatePath, context);

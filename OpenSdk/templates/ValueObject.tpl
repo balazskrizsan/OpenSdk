@@ -1,4 +1,4 @@
-package {{namespaceValue}};
+package {{NamespaceValue}};
 
 import com.kbalazsworks.stackjudge_aws_sdk.common.interfaces.IOpenSdkPostable;
 import org.springframework.core.io.ByteArrayResource;
@@ -10,57 +10,38 @@ import javax.annotation.processing.Generated;
 import java.util.List;
 
 @Generated("OpenSDK: https://github.com/balazskrizsan/OpenSdk")
-public final class {{valueObjectName}} implements IOpenSdkPostable
+public final class {{ValueObjectName}} implements IOpenSdkPostable
 {
-    {{for name, type in parameters:
-
-    private final {{type}} {{name}};
-    }}
-
-
-    {{ set i to 1 }}
+    {%- for parameter in Parameters -%}
+    private final {{parameter.Key}} {{parameter.Value}};
+    {%- endfor -%}
 
     public {{valueObjectName}}(
-
-    {{for name, type in parameters:
-
-            {{type}} {{name}}{{if len(parameters) > i:
-            ,
-            }}
-
-
-            {{set i to i + 1)}}
-    }}
-    {{ set i to 1 }}
+    {%- for parameter in parameters -%}
+        {{parameter.Key}} {{parameter.Value}}{%- if parameter != parameters.last -%},{%- endif %}
+    {%- endfor -%}
     )
     {
-        {{for name, type in parameters:
-    
-        this.{{name}} = {{name}};
-        }}
-    
+    {%- for parameter in parameters -%}
+        this.{{parameter.Value}} = {{parameter.Value}};
+    {%- endfor -%}
     }
-
-    {{for name, type in parameters:
-    
-    public {{type}} {{name}}()
+    {%- for parameter in parameters %}
+    public {{parameter.Key}} {{parameter.Value}}()
     {
-        return {{name}};
+        return {{parameter.Value}};
     }
-
-    }}
+    {%- endfor -%}
 
     @Override
     public MultiValueMap<String, Object> toOpenSdkPost()
     {
         return new LinkedMultiValueMap<>()
-        \{{
-            {{for name, type in parameters:
-        
-            addAll("{{name}}", List.of({{name}}()));
-            }}
-
-        \}};
+        {{ "{{" }}
+        {%- for parameter in parameters -%}
+            addAll("{{parameter.Value}}", List.of({{parameter.Value}}()));
+        {%- endfor -%}
+        {{ "}}" }};
     }
 
     // not yet supported in the generator
@@ -81,5 +62,3 @@ public final class {{valueObjectName}} implements IOpenSdkPostable
 //    {
 //    }
 }
-
-

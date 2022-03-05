@@ -30,7 +30,6 @@ public static class ConfigureServicesHelperExtensions
                 .AddSingleton<IInterfaceGeneratorService, InterfaceGeneratorService>()
                 .AddSingleton<IValueObjectGeneratorService, ValueObjectGeneratorService>()
                 .AddSingleton<ICottleFactory, CottleFactory>()
-                .AddSingleton<IFluidFactory, FluidFactory>()
                 .AddSingleton<ITemplateService, TemplateService>()
             ;
     }

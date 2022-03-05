@@ -1,63 +1,59 @@
 using System.Collections.Generic;
-using System.IO;
-using Cottle;
 using Microsoft.Extensions.Logging;
-using OpenSdk.Factories;
 using OpenSdk.ValueObjects.Generator;
 
-namespace OpenSdk.Services.GeneratorServices
+namespace OpenSdk.Services.GeneratorServices;
+
+public class ValueObjectGeneratorService : IValueObjectGeneratorService
 {
-    public class ValueObjectGeneratorService : IValueObjectGeneratorService
+    private readonly ILogger<ValueObjectGeneratorService> logger;
+    private readonly ITemplateService templateService;
+    private readonly IFileGeneratorService fileGeneratorService;
+
+    public ValueObjectGeneratorService(
+        ILogger<ValueObjectGeneratorService> logger,
+        ITemplateService templateService,
+        IFileGeneratorService fileGeneratorService
+    )
     {
-        private readonly ILogger<ValueObjectGeneratorService> logger;
-        private readonly ICottleFactory cottleFactory;
-        private readonly IFileGeneratorService fileGeneratorService;
+        this.logger = logger;
+        this.templateService = templateService;
+        this.fileGeneratorService = fileGeneratorService;
+    }
 
-        public ValueObjectGeneratorService(
-            ILogger<ValueObjectGeneratorService> logger,
-            ICottleFactory cottleFactory,
-            IFileGeneratorService fileGeneratorService
-        )
+    public void Generate(List<Schema> schemas)
+    {
+        var templatePath = @"./templates/ValueObject.tpl";
+        var namespaceValue = "com.kbalazsworks.stackjudge_aws_sdk.schema_parameter_objects";
+
+        foreach (Schema schema in schemas)
         {
-            this.logger = logger;
-            this.cottleFactory = cottleFactory;
-            this.fileGeneratorService = fileGeneratorService;
-        }
+            var valueObjectName = schema.Name;
 
-        public void Generate(List<Schema> schemas)
-        {
-            var valueObjectTemplate = new StreamReader(@"./templates/ValueObject.tpl").ReadToEnd();
-            var templateDocument = cottleFactory.CreateDocument(valueObjectTemplate);
-
-            foreach (Schema schema in schemas)
+            var parameters = new List<KeyValuePair<string, string>>();
+            foreach (var parameter in schema.Parameters)
             {
-                var namespaceValue = "com.kbalazsworks.stackjudge_aws_sdk.schema_parameter_objects";
-                var valueObjectName = schema.Name;
-
-                Dictionary<Value, Value> templateParams = new Dictionary<Value, Value>();
-                foreach (var parameter in schema.Parameters)
-                {
-                    templateParams.Add(
-                        fileGeneratorService.VarNameMapper(parameter.Key),
-                        fileGeneratorService.TypeMapper(parameter.Value)
-                    );
-                }
-
-                // @todo: run a component check:
-                //  - if schema is a response it should not implement the IOpenSdk[Post|Get|Put|Delete]able
-                //  - add condition around the IOpenSdk*
-                var context = Context.CreateBuiltin(new Dictionary<Value, Value>
-                {
-                    ["namespaceValue"] = namespaceValue,
-                    ["valueObjectName"] = valueObjectName,
-                    ["parameters"] = templateParams,
-                });
-
-                var destinationFolder = "/" + namespaceValue.Replace(".", "/");
-                var fileName = valueObjectName + ".java";
-
-                fileGeneratorService.SaveFile(destinationFolder, fileName, templateDocument.Render(context));
+                parameters.Add(new KeyValuePair<string, string>(
+                    fileGeneratorService.TypeMapper(parameter.Value),
+                    fileGeneratorService.VarNameMapper(parameter.Key)
+                ));
             }
+
+            // @todo: run a component check:
+            //  - if schema is a response it should not implement the IOpenSdk[Post|Get|Put|Delete]able
+            //  - add condition around the IOpenSdk*
+            var context = new
+            {
+                NamespaceValue = namespaceValue,
+                ValueObjectName = valueObjectName,
+                Parameters = parameters,
+            };
+
+            var destinationFolder = "/" + namespaceValue.Replace(".", "/");
+            var fileName = valueObjectName + ".java";
+
+            var generatedValueObject = templateService.GenerateTemplate(templatePath, context);
+            fileGeneratorService.SaveFile(destinationFolder, fileName, generatedValueObject);
         }
     }
 }
