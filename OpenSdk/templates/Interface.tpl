@@ -1,6 +1,7 @@
 package {{Namespace}};
 
-import com.kbalazsworks.stackjudge_aws_sdk.common.entities.OpenSdkStdResponse;
+import com.kbalazsworks.stackjudge_aws_sdk.common.exceptions.ResponseException;
+import com.kbalazsworks.stackjudge_aws_sdk.common.entities.StdResponse;
 import com.kbalazsworks.stackjudge_aws_sdk.common.interfaces.IOpenSdkPostable;
 import com.kbalazsworks.stackjudge_aws_sdk.schema_parameter_objects.*;
 
@@ -14,5 +15,6 @@ public interface {{InterfaceName}}
         return "{{MethodUri}}";
     }
 
-    {{ExecReturnType}} execute(IOpenSdkPostable {{ParamObjectVarName}});
+    {{ExecReturnType}} execute(IOpenSdkPostable {{ParamObjectVarName}})
+    throws ResponseException;
 }

@@ -59,7 +59,7 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
                     ParamObjectVarName = StringService.LowercaseFirst(method.ParamObjectName),
                     MethodUri = method.Uri,
                     MethodType = method.MethodType,
-                    ExecReturnType = "OpenSdkStdResponse<" + method.OkResponseDataValueObject + ">"
+                    ExecReturnType = "StdResponse<" + method.OkResponseDataValueObject + ">"
                 };
                 var fileNameWithReturn = interfaceNameWithReturn + ".java";
 
