@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.Logging;
+using OpenSdk.Constaints;
 using OpenSdk.ValueObjects.Generator;
 
 namespace OpenSdk.Services.GeneratorServices;
@@ -23,19 +25,23 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
 
     public void Generate(List<Schema> schemas)
     {
-        var templatePath = @"./templates/ValueObject.tpl";
+        var templatePath = @"./templates/ValueObjectLombok.liquid";
         var namespaceValue = "com.kbalazsworks.stackjudge_aws_sdk.schema_parameter_objects";
 
         foreach (Schema schema in schemas)
         {
             var valueObjectName = schema.Name;
+            var isResponseObject = IsResponseObject(schema.Parameters);
 
-            var parameters = new List<KeyValuePair<string, string>>();
+            var parameters = new List<KeyValuePair<string, ValueObjectProperty>>();
             foreach (var parameter in schema.Parameters)
             {
-                parameters.Add(new KeyValuePair<string, string>(
+                parameters.Add(new KeyValuePair<string, ValueObjectProperty>(
                     fileGeneratorService.TypeMapper(parameter.Value),
-                    fileGeneratorService.VarNameMapper(parameter.Key)
+                    new ValueObjectProperty(
+                        fileGeneratorService.VarNameMapper(parameter.Key),
+                        GetJsonPropertyValue(parameter.Key, isResponseObject)
+                    )
                 ));
             }
 
@@ -55,5 +61,33 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
             var generatedValueObject = templateService.GenerateTemplate(templatePath, context);
             fileGeneratorService.SaveFile(destinationFolder, fileName, generatedValueObject);
         }
+    }
+
+    private string? GetJsonPropertyValue(string parameterKey, bool isResponseObject)
+    {
+        if (!isResponseObject)
+        {
+            return parameterKey;
+        }
+
+        if (ResponseEntityPropertyConst.asListWithoutData().Contains(parameterKey))
+        {
+            return parameterKey;
+        }
+
+        return ResponseEntityPropertyConst.DATA;
+    }
+
+    private bool IsResponseObject(Dictionary<string, string> schemaParameters)
+    {
+        var foundResponseEntityKeys = schemaParameters
+            .Keys
+            .Count(x =>
+                x.Contains(ResponseEntityPropertyConst.SUCCESS) ||
+                x.Contains(ResponseEntityPropertyConst.ERROR_CODE) ||
+                x.Contains(ResponseEntityPropertyConst.REQUEST_ID)
+            );
+
+        return foundResponseEntityKeys == 3;
     }
 }

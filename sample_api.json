@@ -62,7 +62,7 @@
           "success" : {
             "type" : "boolean"
           },
-          "errorCodeerrorCode" : {
+          "errorCode" : {
             "format" : "int32",
             "type" : "integer"
           },

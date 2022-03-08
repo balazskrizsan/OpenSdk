@@ -30,7 +30,10 @@
       <None Update="templates\Interface.tpl">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="templates\ValueObject.tpl">
+      <None Update="templates\ValueObjectLombok.liquid">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="templates\ValueObjectPojo.liquid">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
