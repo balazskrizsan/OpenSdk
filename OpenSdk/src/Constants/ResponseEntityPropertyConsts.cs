@@ -6,7 +6,7 @@ public class ResponseEntityPropertyConst
 {
     public const string SUCCESS = "success";
     public const string ERROR_CODE = "errorCode";
-    public const string REQUEST_ID = "requestI";
+    public const string REQUEST_ID = "requestId";
     public const string DATA = "data";
 
     public static IList<string> asListWithoutData()
