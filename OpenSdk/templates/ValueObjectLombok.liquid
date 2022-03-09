@@ -20,7 +20,10 @@ import java.util.List;
 @Builder(access = AccessLevel.PUBLIC)
 @AllArgsConstructor
 @Getter
-public final class {{ ValueObjectName }} implements IOpenSdkPostable
+public final class {{ ValueObjectName -}}
+{%- if Implementation != "" -%}
+ implements {{ Implementation -}}
+{%- endif %}
 {
     {%- for parameter in Parameters -%}
     {%- if parameter.Value.JsonPropertyValue != null -%}
@@ -28,6 +31,7 @@ public final class {{ ValueObjectName }} implements IOpenSdkPostable
     {%- endif -%}
     private final {{ parameter.Key }} {{ parameter.Value.Value }};
     {%- endfor -%}
+    {%- if Implementation != "" -%}
 
     @Override
     public MultiValueMap<String, Object> toOpenSdkPost()
@@ -39,4 +43,5 @@ public final class {{ ValueObjectName }} implements IOpenSdkPostable
         {%- endfor -%}
         {{ "}}" }};
     }
+    {%- endif -%}
 }

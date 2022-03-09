@@ -32,6 +32,7 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
         {
             var valueObjectName = schema.Name;
             var isResponseObject = IsResponseObject(schema.Parameters);
+            var implementation = GetImplementation(schema, isResponseObject);
 
             var parameters = new List<KeyValuePair<string, ValueObjectProperty>>();
             foreach (var parameter in schema.Parameters)
@@ -50,6 +51,7 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
             //  - add condition around the IOpenSdk*
             var context = new
             {
+                Implementation = implementation,
                 NamespaceValue = namespaceValue,
                 ValueObjectName = valueObjectName,
                 Parameters = parameters,
@@ -61,6 +63,17 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
             var generatedValueObject = templateService.GenerateTemplate(templatePath, context);
             fileGeneratorService.SaveFile(destinationFolder, fileName, generatedValueObject);
         }
+    }
+
+    private string GetImplementation(Schema schema, bool isResponseObject)
+    {
+        if (isResponseObject)
+        {
+            return string.Empty;
+        }
+        //@todo: add condition if it's a postable object
+
+        return "IOpenSdkPostable";
     }
 
     private string? GetJsonPropertyValue(string parameterKey, bool isResponseObject)
