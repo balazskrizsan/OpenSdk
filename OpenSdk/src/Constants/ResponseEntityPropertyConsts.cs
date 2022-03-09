@@ -9,7 +9,7 @@ public class ResponseEntityPropertyConst
     public const string REQUEST_ID = "requestId";
     public const string DATA = "data";
 
-    public static IList<string> asListWithoutData()
+    public static IList<string> AsListWithoutData()
     {
         return new[]
         {

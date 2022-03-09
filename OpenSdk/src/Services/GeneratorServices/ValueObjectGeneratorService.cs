@@ -70,7 +70,7 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
             return parameterKey;
         }
 
-        if (ResponseEntityPropertyConst.asListWithoutData().Contains(parameterKey))
+        if (ResponseEntityPropertyConst.AsListWithoutData().Contains(parameterKey))
         {
             return parameterKey;
         }
