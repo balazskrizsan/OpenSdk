@@ -27,7 +27,7 @@
       <None Update="appsettings.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="templates\Interface.tpl">
+      <None Update="templates\Interface.liquid">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="templates\ValueObjectLombok.liquid">

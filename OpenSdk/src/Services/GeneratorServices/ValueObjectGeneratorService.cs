@@ -64,6 +64,7 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
 
             var generatedValueObject = templateService.GenerateTemplate(templatePath, context);
             files.Add(new File(destinationFolder, fileName, generatedValueObject));
+            logger.LogInformation("    - {destinationFolder}/{fileName} ", destinationFolder, fileName);
         }
 
         return files;

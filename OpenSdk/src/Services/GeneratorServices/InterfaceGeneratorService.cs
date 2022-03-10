@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using OpenSdk.ValueObjects;
@@ -25,9 +24,9 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
 
     public List<File> GetGeneratedFiles(List<Method> methods)
     {
-        var interfaceTemplatePath = @"./templates/Interface.tpl";
+        var interfaceTemplatePath = @"./templates/Interface.liquid";
         var namespaceValue = "com.kbalazsworks.stackjudge_aws_sdk.schema_interfaces";
-        var destinationFolder = "/" + namespaceValue.Replace(".", "\\");
+        var destinationFolder = "\\" + namespaceValue.Replace(".", "\\");
 
         var files = new List<File>();
         foreach (var method in methods)
@@ -48,8 +47,9 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
 
             var generatedInterface = templateService.GenerateTemplate(interfaceTemplatePath, context);
             files.Add(new File(destinationFolder, fileName, generatedInterface));
+            logger.LogInformation("    - {destinationFolder}/{fileName} ", destinationFolder, fileName);
 
-            if (!String.IsNullOrWhiteSpace(method.OkResponseValueObject))
+            if (!string.IsNullOrWhiteSpace(method.OkResponseValueObject))
             {
                 var interfaceNameWithReturn = interfaceName + "WithReturn";
 
@@ -67,9 +67,14 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
 
                 generatedInterface = templateService.GenerateTemplate(interfaceTemplatePath, context);
                 files.Add(new File(destinationFolder, fileNameWithReturn, generatedInterface));
+                logger.LogInformation(
+                    "    - {destinationFolder}/{fileNameWithReturn}",
+                    destinationFolder,
+                    fileNameWithReturn
+                );
             }
         }
-        
+
         return files;
     }
 }
