@@ -26,7 +26,7 @@ public static class ConfigureServicesHelperExtensions
                 .AddSingleton<IComponentsParserService, ComponentsParserService>()
                 .AddSingleton<IPathsParserService, PathsParserService>()
                 .AddSingleton<IGeneratorService, GeneratorService>()
-                .AddSingleton<IFileGeneratorService, FileGeneratorService>()
+                .AddSingleton<IMapperService, MapperService>()
                 .AddSingleton<IFileService, FileService>()
                 .AddSingleton<IInterfaceGeneratorService, InterfaceGeneratorService>()
                 .AddSingleton<IValueObjectGeneratorService, ValueObjectGeneratorService>()

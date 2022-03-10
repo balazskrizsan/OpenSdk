@@ -2,10 +2,9 @@ using System.Collections.Generic;
 using OpenSdk.ValueObjects;
 using OpenSdk.ValueObjects.Generator;
 
-namespace OpenSdk.Services.GeneratorServices
+namespace OpenSdk.Services.GeneratorServices;
+
+public interface IValueObjectGeneratorService
 {
-    public interface IValueObjectGeneratorService
-    {
-        List<File> GetGeneratedFiles(List<Schema> schemas);
-    }
+    List<File> GetGeneratedFiles(List<Schema> schemas);
 }

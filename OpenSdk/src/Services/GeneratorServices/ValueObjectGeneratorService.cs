@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using OpenSdk.Constaints;
 using OpenSdk.ValueObjects;
@@ -12,17 +11,17 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
 {
     private readonly ILogger<ValueObjectGeneratorService> logger;
     private readonly ITemplateService templateService;
-    private readonly IFileGeneratorService fileGeneratorService;
+    private readonly IMapperService mapperService;
 
     public ValueObjectGeneratorService(
         ILogger<ValueObjectGeneratorService> logger,
         ITemplateService templateService,
-        IFileGeneratorService fileGeneratorService
+        IMapperService mapperService
     )
     {
         this.logger = logger;
         this.templateService = templateService;
-        this.fileGeneratorService = fileGeneratorService;
+        this.mapperService = mapperService;
     }
 
     public List<File> GetGeneratedFiles(List<Schema> schemas)
@@ -41,9 +40,9 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
             foreach (var parameter in schema.Parameters)
             {
                 parameters.Add(new KeyValuePair<string, ValueObjectProperty>(
-                    fileGeneratorService.TypeMapper(parameter.Value),
+                    mapperService.TypeMapper(parameter.Value),
                     new ValueObjectProperty(
-                        fileGeneratorService.VarNameMapper(parameter.Key),
+                        mapperService.VarNameMapper(parameter.Key),
                         GetJsonPropertyValue(parameter.Key, isResponseObject)
                     )
                 ));
