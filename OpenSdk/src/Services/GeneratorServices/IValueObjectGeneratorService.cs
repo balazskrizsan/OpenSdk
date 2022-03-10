@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using OpenSdk.ValueObjects;
 using OpenSdk.ValueObjects.Generator;
 
 namespace OpenSdk.Services.GeneratorServices
 {
     public interface IValueObjectGeneratorService
     {
-        public void Generate(List<Schema> openapiValuesSchemas);
+        List<File> GetGeneratedFiles(List<Schema> schemas);
     }
 }

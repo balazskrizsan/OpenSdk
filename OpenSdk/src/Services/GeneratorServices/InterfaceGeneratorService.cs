@@ -1,33 +1,35 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
+using OpenSdk.ValueObjects;
 using OpenSdk.ValueObjects.Generator;
 
 namespace OpenSdk.Services.GeneratorServices;
 
 public class InterfaceGeneratorService : IInterfaceGeneratorService
 {
-    private readonly IFileGeneratorService fileGeneratorService;
+    private readonly IFileService fileService;
     private readonly ITemplateService templateService;
     private readonly ILogger<InterfaceGeneratorService> logger;
 
     public InterfaceGeneratorService(
-        IFileGeneratorService fileGeneratorService,
+        IFileService fileService,
         ITemplateService templateService,
         ILogger<InterfaceGeneratorService> logger
     )
     {
-        this.fileGeneratorService = fileGeneratorService;
+        this.fileService = fileService;
         this.templateService = templateService;
         this.logger = logger;
     }
 
-    public void Generate(List<Method> methods)
+    public List<File> GetGeneratedFiles(List<Method> methods)
     {
         var interfaceTemplatePath = @"./templates/Interface.tpl";
         var namespaceValue = "com.kbalazsworks.stackjudge_aws_sdk.schema_interfaces";
-        var destinationFolder = "/" + namespaceValue.Replace(".", "/");
+        var destinationFolder = "/" + namespaceValue.Replace(".", "\\");
 
+        var files = new List<File>();
         foreach (var method in methods)
         {
             var interfaceName = "I" + method.MethodName;
@@ -45,7 +47,7 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
             var fileName = interfaceName + ".java";
 
             var generatedInterface = templateService.GenerateTemplate(interfaceTemplatePath, context);
-            fileGeneratorService.SaveFile(destinationFolder, fileName, generatedInterface);
+            files.Add(new File(destinationFolder, fileName, generatedInterface));
 
             if (!String.IsNullOrWhiteSpace(method.OkResponseValueObject))
             {
@@ -64,8 +66,10 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
                 var fileNameWithReturn = interfaceNameWithReturn + ".java";
 
                 generatedInterface = templateService.GenerateTemplate(interfaceTemplatePath, context);
-                fileGeneratorService.SaveFile(destinationFolder, fileNameWithReturn, generatedInterface);
+                files.Add(new File(destinationFolder, fileNameWithReturn, generatedInterface));
             }
         }
+        
+        return files;
     }
 }

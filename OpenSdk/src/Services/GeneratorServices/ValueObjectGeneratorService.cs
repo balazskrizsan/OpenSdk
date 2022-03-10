@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using OpenSdk.Constaints;
+using OpenSdk.ValueObjects;
 using OpenSdk.ValueObjects.Generator;
 
 namespace OpenSdk.Services.GeneratorServices;
@@ -23,11 +25,12 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
         this.fileGeneratorService = fileGeneratorService;
     }
 
-    public void Generate(List<Schema> schemas)
+    public List<File> GetGeneratedFiles(List<Schema> schemas)
     {
         var templatePath = @"./templates/ValueObjectLombok.liquid";
         var namespaceValue = "com.kbalazsworks.stackjudge_aws_sdk.schema_parameter_objects";
 
+        var files = new List<File>();
         foreach (Schema schema in schemas)
         {
             var valueObjectName = schema.Name;
@@ -57,12 +60,14 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
                 Parameters = parameters,
             };
 
-            var destinationFolder = "/" + namespaceValue.Replace(".", "/");
+            var destinationFolder = "\\" + namespaceValue.Replace(".", "\\");
             var fileName = valueObjectName + ".java";
 
             var generatedValueObject = templateService.GenerateTemplate(templatePath, context);
-            fileGeneratorService.SaveFile(destinationFolder, fileName, generatedValueObject);
+            files.Add(new File(destinationFolder, fileName, generatedValueObject));
         }
+
+        return files;
     }
 
     private string GetImplementation(Schema schema, bool isResponseObject)

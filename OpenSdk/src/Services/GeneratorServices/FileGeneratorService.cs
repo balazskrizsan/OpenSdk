@@ -19,14 +19,6 @@ namespace OpenSdk.Services.GeneratorServices
             this.applicationArgumentRegistry = applicationArgumentRegistry;
         }
 
-        public void SaveFile(string destinationFolder, string fileName, string content)
-        {
-            destinationFolder = applicationArgumentRegistry.OutputFolder + destinationFolder;
-            Directory.CreateDirectory(destinationFolder);
-            File.WriteAllTextAsync(destinationFolder + "/" + fileName, content);
-            logger.LogInformation("    - " + destinationFolder + "/" + fileName);
-        }
-
         public string TypeMapper(string openapiType)
         {
             switch (openapiType)
