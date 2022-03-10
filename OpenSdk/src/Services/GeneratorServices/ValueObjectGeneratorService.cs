@@ -81,7 +81,7 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
         return "IOpenSdkPostable";
     }
 
-    private string? GetJsonPropertyValue(string parameterKey, bool isResponseObject)
+    private string GetJsonPropertyValue(string parameterKey, bool isResponseObject)
     {
         if (!isResponseObject)
         {

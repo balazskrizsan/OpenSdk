@@ -26,9 +26,7 @@ public final class {{ ValueObjectName -}}
 {%- endif %}
 {
     {%- for parameter in Parameters -%}
-    {%- if parameter.Value.JsonPropertyValue != null -%}
     @JsonProperty("{{ parameter.Value.JsonPropertyValue }}")
-    {%- endif -%}
     private final {{ parameter.Key }} {{ parameter.Value.Value }};
     {%- endfor -%}
     {%- if Implementation != "" -%}
