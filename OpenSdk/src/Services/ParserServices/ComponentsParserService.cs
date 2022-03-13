@@ -15,7 +15,7 @@ namespace OpenSdk.Services.ParserServices
             this.logger = logger;
         }
 
-        public List<Schema> getParsedComponents(Dictionary<string, Dictionary<string, ComponentsSchemaItem>> components)
+        public List<Schema> GetParsedComponents(Dictionary<string, Dictionary<string, ComponentsSchemaItem>> components)
         {
             var generatorSchemas = new List<Schema>();
 

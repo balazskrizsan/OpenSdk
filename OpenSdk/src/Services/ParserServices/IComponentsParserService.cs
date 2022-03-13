@@ -6,6 +6,6 @@ namespace OpenSdk.Services.ParserServices
 {
     public interface IComponentsParserService
     {
-        List<Schema> getParsedComponents(Dictionary<string, Dictionary<string, ComponentsSchemaItem>> components);
+        List<Schema> GetParsedComponents(Dictionary<string, Dictionary<string, ComponentsSchemaItem>> components);
     }
 }
