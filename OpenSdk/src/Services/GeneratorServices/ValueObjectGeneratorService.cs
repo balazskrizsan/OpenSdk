@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
-using OpenSdk.Constaints;
+using OpenSdk.Constants;
 using OpenSdk.ValueObjects;
 using OpenSdk.ValueObjects.Generator;
 

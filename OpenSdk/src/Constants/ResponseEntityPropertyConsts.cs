@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-namespace OpenSdk.Constaints;
+namespace OpenSdk.Constants;
 
-public class ResponseEntityPropertyConst
+public static class ResponseEntityPropertyConst
 {
     public const string SUCCESS = "success";
     public const string ERROR_CODE = "errorCode";
@@ -11,11 +11,6 @@ public class ResponseEntityPropertyConst
 
     public static IList<string> AsListWithoutData()
     {
-        return new[]
-        {
-            SUCCESS,
-            ERROR_CODE,
-            REQUEST_ID
-        };
+        return new[] { SUCCESS, ERROR_CODE, REQUEST_ID };
     }
 }
