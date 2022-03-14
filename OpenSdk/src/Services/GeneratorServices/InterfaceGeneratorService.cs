@@ -7,22 +7,19 @@ namespace OpenSdk.Services.GeneratorServices;
 
 public class InterfaceGeneratorService : IInterfaceGeneratorService
 {
-    private readonly IFileService fileService;
     private readonly ITemplateService templateService;
     private readonly ILogger<InterfaceGeneratorService> logger;
 
     public InterfaceGeneratorService(
-        IFileService fileService,
         ITemplateService templateService,
         ILogger<InterfaceGeneratorService> logger
     )
     {
-        this.fileService = fileService;
         this.templateService = templateService;
         this.logger = logger;
     }
 
-    public List<File> GetGeneratedFiles(List<Method> methods)
+    public List<File> GenerateFiles(List<Method> methods)
     {
         var interfaceTemplatePath = @"./templates/Interface.liquid";
         var namespaceValue = "com.kbalazsworks.stackjudge_aws_sdk.schema_interfaces";

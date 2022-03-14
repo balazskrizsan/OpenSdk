@@ -6,5 +6,5 @@ namespace OpenSdk.Services.GeneratorServices;
 
 public interface IInterfaceGeneratorService
 {
-    List<File> GetGeneratedFiles(List<Method> methods);
+    List<File> GenerateFiles(List<Method> methods);
 }

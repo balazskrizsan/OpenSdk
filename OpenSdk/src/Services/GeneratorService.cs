@@ -30,7 +30,7 @@ namespace OpenSdk.Services
             var files = new List<File>();
 
             logger.LogInformation("====== Generate API Interfaces");
-            files.AddRange(interfaceGeneratorService.GetGeneratedFiles(openapiValues.Methods));
+            files.AddRange(interfaceGeneratorService.GenerateFiles(openapiValues.Methods));
 
             logger.LogInformation("====== Generate Value Objects");
             files.AddRange(valueObjectGeneratorService.GetGeneratedFiles(openapiValues.Schemas));
