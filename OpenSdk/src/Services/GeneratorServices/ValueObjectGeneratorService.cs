@@ -62,7 +62,7 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
             var destinationFolder = "\\" + namespaceValue.Replace(".", "\\");
             var fileName = valueObjectName + ".java";
 
-            var generatedValueObject = templateService.GenerateTemplate(templatePath, context);
+            var generatedValueObject = templateService.RenderTemplate(templatePath, context);
             files.Add(new File(destinationFolder, fileName, generatedValueObject));
             logger.LogInformation("    - {destinationFolder}/{fileName} ", destinationFolder, fileName);
         }

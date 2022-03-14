@@ -21,4 +21,10 @@
         <ProjectReference Include="..\OpenSdk\OpenSdk.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="test_templates\test.liquid">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

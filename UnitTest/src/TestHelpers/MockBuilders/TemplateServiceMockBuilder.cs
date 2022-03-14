@@ -10,7 +10,7 @@ public static class TemplateServiceMockBuilder
         var mock = new Mock<ITemplateService>();
 
         mock
-            .Setup(s => s.GenerateTemplate(It.IsAny<string>(), It.IsAny<object>()))
+            .Setup(s => s.RenderTemplate(It.IsAny<string>(), It.IsAny<object>()))
             .Returns("generated template string");
 
         return mock;

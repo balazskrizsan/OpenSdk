@@ -42,7 +42,7 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
             };
             var fileName = interfaceName + ".java";
 
-            var generatedInterface = templateService.GenerateTemplate(interfaceTemplatePath, context);
+            var generatedInterface = templateService.RenderTemplate(interfaceTemplatePath, context);
             files.Add(new File(destinationFolder, fileName, generatedInterface));
             logger.LogInformation("    - {destinationFolder}/{fileName} ", destinationFolder, fileName);
 
@@ -62,7 +62,7 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
                 };
                 var fileNameWithReturn = interfaceNameWithReturn + ".java";
 
-                generatedInterface = templateService.GenerateTemplate(interfaceTemplatePath, context);
+                generatedInterface = templateService.RenderTemplate(interfaceTemplatePath, context);
                 files.Add(new File(destinationFolder, fileNameWithReturn, generatedInterface));
                 logger.LogInformation(
                     "    - {destinationFolder}/{fileNameWithReturn}",

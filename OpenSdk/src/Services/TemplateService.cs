@@ -13,7 +13,7 @@ public class TemplateService : ITemplateService
         this.dotLiquidFactory = dotLiquidFactory;
     }
 
-    public string GenerateTemplate(string templatePath, object context)
+    public string RenderTemplate(string templatePath, object context)
     {
         return dotLiquidFactory
             .CreateTemplate(new StreamReader(templatePath).ReadToEnd())
