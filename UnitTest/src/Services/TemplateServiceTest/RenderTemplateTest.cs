@@ -7,7 +7,7 @@ namespace OpenSdk.UnitTest.Services.TemplateServiceTest;
 public class RenderTemplateTest
 {
     [Test]
-    public void Render_Perfect()
+    public void RenderSimpleTemplate_TestContextAppliedInTemplate()
     {
         // Arrange
         var testedTemplate = "test_templates/test.liquid";
