@@ -2,7 +2,7 @@ using Microsoft.Extensions.Logging;
 using OpenSdk.Registries;
 using OpenSdk.Services;
 
-namespace OpenSdk
+namespace OpenSdk.App.Cli
 {
     public class Bootstrap : IBootstrap
     {

@@ -21,7 +21,7 @@ public static class ConfigureServicesHelperExtensions
         return serviceCollection
                 .AddLogging()
                 .AddSingleton(_ => applicationArgumentRegistry)
-                .AddSingleton<IBootstrap, Bootstrap>()
+                .AddSingleton<App.Cli.IBootstrap, App.Cli.Bootstrap>()
                 .AddSingleton<IParserService, ParserService>()
                 .AddSingleton<IComponentsParserService, ComponentsParserService>()
                 .AddSingleton<IPathsParserService, PathsParserService>()

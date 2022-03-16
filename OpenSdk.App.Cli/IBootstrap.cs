@@ -1,4 +1,4 @@
-namespace OpenSdk
+namespace OpenSdk.App.Cli
 {
     public interface IBootstrap
     {
