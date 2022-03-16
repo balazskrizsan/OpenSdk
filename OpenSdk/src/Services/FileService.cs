@@ -9,11 +9,11 @@ namespace OpenSdk.Services;
 
 public class FileService : IFileService
 {
-    private readonly ILogger<ParserService> logger;
+    private readonly ILogger<FileService> logger;
     private readonly IApplicationArgumentRegistry applicationArgumentRegistry;
 
     public FileService(
-        ILogger<ParserService> logger,
+        ILogger<FileService> logger,
         IApplicationArgumentRegistry applicationArgumentRegistry
     )
     {
