@@ -12,6 +12,14 @@ public class FileFakeBuilder
     string Content => "generated template string";
     string ContentWithResponse => "generated template string";
 
+    public List<File> BuildAsList()
+    {
+        return new List<File>
+        {
+            new(DestinationFolder, FileName, Content)
+        };
+    }
+
     public List<File> BuildBothAsList()
     {
         return new List<File>

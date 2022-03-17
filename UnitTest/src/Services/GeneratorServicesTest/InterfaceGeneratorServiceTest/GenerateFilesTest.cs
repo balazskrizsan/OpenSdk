@@ -1,26 +1,28 @@
-using NUnit.Framework;
+using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenSdk.Services.GeneratorServices;
 using OpenSdk.UnitTest.TestHelpers.FakeBuilders;
 using OpenSdk.UnitTest.TestHelpers.MockBuilders;
 
 namespace OpenSdk.UnitTest.Services.GeneratorServicesTest.InterfaceGeneratorServiceTest;
 
+[TestClass]
 public class GenerateFilesTest
 {
-    [Test]
+    [TestMethod]
     public void GenerateOneInterfaceAndReturnVersion_Perfect()
     {
         // Arrange
-        var templateServiceMock = TemplateServiceMockBuilder.GetMock();
-        var loggerMock = LoggerMockBuilder.GetMock();
+        var templateServiceMock = TemplateServiceMockBuilder.CreateMock();
+        var loggerMock = LoggerMockBuilder<InterfaceGeneratorService>.CreateMock();
         var testedMethodList = new MethodFakeBuilder().GetAsList();
         var expectedFiles = new FileFakeBuilder().BuildBothAsList();
         
         // Act
-        var actual = new InterfaceGeneratorService(templateServiceMock.Object, loggerMock.Object)
-            .GenerateFiles(testedMethodList);
+        var actual = new InterfaceGeneratorService(templateServiceMock, loggerMock)
+            .GetGenerateFiles(testedMethodList);
 
         // Assert
-        Assert.AreEqual(expectedFiles, actual);
+        actual.Should().BeEquivalentTo(expectedFiles);
     }
 }

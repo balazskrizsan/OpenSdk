@@ -1,12 +1,14 @@
 using DotLiquid;
-using NUnit.Framework;
+using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenSdk.Factories;
 
 namespace OpenSdk.UnitTest.Factories.DotLiquidFactoryTest;
 
+[TestClass]
 public class CreateTemplateTest
 {
-    [Test]
+    [TestMethod]
     public void callsMethodWithTemplateString_returnsWithTemplateObject()
     {
         // Arrange
@@ -16,6 +18,6 @@ public class CreateTemplateTest
         var actual = new DotLiquidFactory().CreateTemplate(testedTemplate);
 
         // Assert
-        Assert.IsInstanceOf<Template>(actual);
+        actual.Should().BeOfType<Template>();
     }
 }

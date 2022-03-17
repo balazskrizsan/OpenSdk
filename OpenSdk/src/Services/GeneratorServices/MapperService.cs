@@ -6,11 +6,11 @@ namespace OpenSdk.Services.GeneratorServices;
 
 public class MapperService : IMapperService
 {
-    private readonly ILogger<ParserService> logger;
+    private readonly ILogger<MapperService> logger;
     private readonly IApplicationArgumentRegistry applicationArgumentRegistry;
 
     public MapperService(
-        ILogger<ParserService> logger,
+        ILogger<MapperService> logger,
         IApplicationArgumentRegistry applicationArgumentRegistry
     )
     {

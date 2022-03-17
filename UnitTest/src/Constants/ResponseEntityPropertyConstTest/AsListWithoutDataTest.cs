@@ -1,11 +1,13 @@
-using NUnit.Framework;
+using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenSdk.Constants;
 
 namespace OpenSdk.UnitTest.Constants.ResponseEntityPropertyConstTest;
 
+[TestClass]
 public class AsListWithoutDataTest
 {
-    [Test]
+    [TestMethod]
     public void GetAllValuesWithoutData_Perfect()
     {
         // Arrange
@@ -15,6 +17,6 @@ public class AsListWithoutDataTest
         var actual = ResponseEntityPropertyConst.AsListWithoutData();
 
         // Assert
-        Assert.AreEqual(expectedValues, actual);
+        actual.Should().Equal(expectedValues);
     }
 }

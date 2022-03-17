@@ -1,16 +1,17 @@
-using Moq;
+using NSubstitute;
 using OpenSdk.Services;
 
 namespace OpenSdk.UnitTest.TestHelpers.MockBuilders;
 
 public static class TemplateServiceMockBuilder
 {
-    public static Mock<ITemplateService> GetMock()
+    public static ITemplateService CreateMock()
     {
-        var mock = new Mock<ITemplateService>();
+        var mock = Substitute.For<ITemplateService>();
 
+        //@todo: should not be here
         mock
-            .Setup(s => s.RenderTemplate(It.IsAny<string>(), It.IsAny<object>()))
+            .RenderTemplate(Arg.Any<string>(), Arg.Any<object>())
             .Returns("generated template string");
 
         return mock;

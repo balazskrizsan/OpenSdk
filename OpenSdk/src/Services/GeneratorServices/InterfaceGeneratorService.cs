@@ -19,7 +19,7 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
         this.logger = logger;
     }
 
-    public List<File> GenerateFiles(List<Method> methods)
+    public List<File> GetGenerateFiles(List<Method> methods)
     {
         var interfaceTemplatePath = @"./templates/Interface.liquid";
         var namespaceValue = "com.kbalazsworks.stackjudge_aws_sdk.schema_interfaces";

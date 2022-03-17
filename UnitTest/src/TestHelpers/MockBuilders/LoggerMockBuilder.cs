@@ -1,13 +1,9 @@
 using Microsoft.Extensions.Logging;
-using Moq;
-using OpenSdk.Services.GeneratorServices;
+using NSubstitute;
 
 namespace OpenSdk.UnitTest.TestHelpers.MockBuilders;
 
-public static class LoggerMockBuilder
+public static class LoggerMockBuilder<T>
 {
-    public static Mock<ILogger<InterfaceGeneratorService>> GetMock()
-    {
-        return new Mock<ILogger<InterfaceGeneratorService>>();
-    }
+    public static ILogger<T> CreateMock() => Substitute.For<ILogger<T>>();
 }

@@ -1,12 +1,14 @@
-using NUnit.Framework;
+using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenSdk.Factories;
 using OpenSdk.Services;
 
 namespace OpenSdk.UnitTest.Services.TemplateServiceTest;
 
+[TestClass]
 public class RenderTemplateTest
 {
-    [Test]
+    [TestMethod]
     public void RenderSimpleTemplate_TestContextAppliedInTemplate()
     {
         // Arrange
@@ -21,6 +23,6 @@ public class RenderTemplateTest
         var actual = new TemplateService(new DotLiquidFactory()).RenderTemplate(testedTemplate, testedContext);
 
         // Assert
-        Assert.AreEqual(expectedTemplate, actual);
+        actual.Should().Be(expectedTemplate);
     }
 }

@@ -1,11 +1,13 @@
-using NUnit.Framework;
+using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenSdk.Constants;
 
 namespace OpenSdk.UnitTest.Constants.ResponseEntityPropertyConstTest;
 
+[TestClass]
 public class ConstantsTest
 {
-    [Test]
+    [TestMethod]
     public void CheckNecessaryConstants_returnsConstantValues()
     {
         // Arrange
@@ -21,6 +23,6 @@ public class ConstantsTest
         };
 
         // Assert
-        Assert.AreEqual(expectedValues, actual);
+        actual.Should().Equal(expectedValues);
     }
 }
