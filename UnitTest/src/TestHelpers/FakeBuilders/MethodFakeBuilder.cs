@@ -32,7 +32,6 @@ public class MethodFakeBuilder
 
     public List<Method> GetAsList()
     {
-        new MethodFakeBuilder().Uri = "";
         return new List<Method> { Build() };
     }
 }
