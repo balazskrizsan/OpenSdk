@@ -1,0 +1,130 @@
+{
+  "openapi" : "3.0.3",
+  "info" : {
+    "title" : "stackjudge-aws API",
+    "version" : "1.0-SNAPSHOT"
+  },
+  "paths" : {
+    "/s3/upload" : {
+      "post" : {
+        "tags" : [ "Post Upload Action" ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PostUploadRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponseDataCdnServicePutResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ses/send/company-own-email" : {
+      "post" : {
+        "tags" : [ "Post Send Send Company Own Email Action" ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PostCompanyOwnEmailRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Created"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "ApiResponseDataCdnServicePutResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/CdnServicePutResponse"
+          },
+          "success" : {
+            "type" : "boolean"
+          },
+          "errorCode" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "requestId" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CdnServicePutResponse" : {
+        "type" : "object",
+        "properties" : {
+          "path" : {
+            "type" : "string"
+          },
+          "fileName" : {
+            "type" : "string"
+          },
+          "s3eTag" : {
+            "type" : "string"
+          },
+          "s3contentMd5" : {
+            "type" : "string"
+          }
+        }
+      },
+      "FileUpload" : {
+        "type" : "object"
+      },
+      "PostCompanyOwnEmailRequest" : {
+        "type" : "object",
+        "properties" : {
+          "to" : {
+            "type" : "string"
+          },
+          "varName" : {
+            "type" : "string"
+          },
+          "varOwnUrl" : {
+            "type" : "string"
+          }
+        }
+      },
+      "PostUploadRequest" : {
+        "type" : "object",
+        "properties" : {
+          "cdnNamespace" : {
+            "type" : "string"
+          },
+          "subFolder" : {
+            "type" : "string"
+          },
+          "fileName" : {
+            "type" : "string"
+          },
+          "fileExtension" : {
+            "type" : "string"
+          },
+          "content" : {
+            "$ref" : "#/components/schemas/FileUpload"
+          }
+        }
+      }
+    }
+  }
+}
