@@ -26,8 +26,13 @@ public static class AssertionExtensions
                 string.Join(Environment.NewLine, System.IO.File.ReadAllLines(TestFile.Path)),
                 string.Join(Environment.NewLine, System.IO.File.ReadAllLines(filePath))
             );
+            var changes = diff
+                .Lines
+                .Where(x => x.Type != ChangeType.Unchanged)
+                .ToArray()
+                .Length;
 
-            if (diff.Lines.Count > 0)
+            if (changes > 0)
             {
                 Console.WriteLine("-- File diff error:");
                 Console.WriteLine("File A: " + TestFile.Path);
@@ -58,13 +63,7 @@ public static class AssertionExtensions
                 Console.ForegroundColor = savedColor;
             }
 
-            diff
-                .Lines
-                .Where(x => x.Type != ChangeType.Unchanged)
-                .ToArray()
-                .Length
-                .Should()
-                .Be(0);
+            changes.Should().Be(0);
         }
     }
 
