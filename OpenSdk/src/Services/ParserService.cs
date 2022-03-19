@@ -1,5 +1,7 @@
+using System;
 using System.IO;
 using Microsoft.Extensions.Logging;
+using OpenSdk.Exceptions;
 using OpenSdk.Services.ParserServices;
 using OpenSdk.ValueObjects;
 using YamlDotNet.Serialization;
@@ -28,7 +30,16 @@ namespace OpenSdk.Services
         public ParserResponse Parse(string dataSourcePath)
         {
             logger.LogInformation("====== Parser init with {dataSourcePath}", dataSourcePath);
-            var input = new StringReader(File.ReadAllText(dataSourcePath));
+            StringReader input;
+            try
+            {
+                input = new StringReader(File.ReadAllText(dataSourcePath));
+            }
+            catch (Exception e)
+            {
+                throw new ParserException($"Input read error: {e.Message}");
+            }
+
             var deserializer = new DeserializerBuilder()
                 .WithNamingConvention(CamelCaseNamingConvention.Instance)
                 .IgnoreUnmatchedProperties()

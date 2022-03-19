@@ -42,10 +42,34 @@
       <None Update="openapi_generated_output\test_1\com\kbalazsworks\stackjudge_aws_sdk\schema_value_objects\PostUploadRequest.java">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="TestOpenapiGeneratedFilesForDiff\test_1\com\kbalazsworks\stackjudge_aws_sdk\schema_interfaces\IS3Upload.java">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="TestOpenapiGeneratedFilesForDiff\test_1\com\kbalazsworks\stackjudge_aws_sdk\schema_interfaces\IS3UploadWithReturn.java">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="TestOpenapiGeneratedFilesForDiff\test_1\com\kbalazsworks\stackjudge_aws_sdk\schema_interfaces\ISesSendCompanyownemail.java">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="TestOpenapiGeneratedFilesForDiff\test_1\com\kbalazsworks\stackjudge_aws_sdk\schema_value_objects\ApiResponseDataCdnServicePutResponse.java">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="TestOpenapiGeneratedFilesForDiff\test_1\com\kbalazsworks\stackjudge_aws_sdk\schema_value_objects\CdnServicePutResponse.java">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="TestOpenapiGeneratedFilesForDiff\test_1\com\kbalazsworks\stackjudge_aws_sdk\schema_value_objects\PostCompanyOwnEmailRequest.java">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="TestOpenapiGeneratedFilesForDiff\test_1\com\kbalazsworks\stackjudge_aws_sdk\schema_value_objects\PostUploadRequest.java">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="TestOpenapiYamls\test_1.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="openapi_generated_output\test_1" />
+      <Folder Include="TestOpenapiGeneratedFilesForDiff\test_1" />
     </ItemGroup>
 
 </Project>

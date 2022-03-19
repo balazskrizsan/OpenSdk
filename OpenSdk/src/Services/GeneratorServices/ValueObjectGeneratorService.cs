@@ -27,7 +27,7 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
     public List<File> GetGeneratedFiles(List<Schema> schemas)
     {
         var templatePath = @"./templates/ValueObjectLombok.liquid";
-        var namespaceValue = "com.kbalazsworks.stackjudge_aws_sdk.schema_parameter_objects";
+        var namespaceValue = "com.kbalazsworks.stackjudge_aws_sdk.schema_value_objects";
 
         var files = new List<File>();
         foreach (Schema schema in schemas)
