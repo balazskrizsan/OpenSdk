@@ -26,11 +26,7 @@ public static class AssertionExtensions
                 string.Join(Environment.NewLine, System.IO.File.ReadAllLines(TestFile.Path)),
                 string.Join(Environment.NewLine, System.IO.File.ReadAllLines(filePath))
             );
-            var changes = diff
-                .Lines
-                .Where(x => x.Type != ChangeType.Unchanged)
-                .ToArray()
-                .Length;
+            var changes = diff.Lines.Where(x => x.Type != ChangeType.Unchanged).ToArray().Length;
 
             if (changes > 0)
             {
