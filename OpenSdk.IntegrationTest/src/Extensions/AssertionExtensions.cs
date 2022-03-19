@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using DiffPlex.DiffBuilder;
 using DiffPlex.DiffBuilder.Model;
 using FluentAssertions;
@@ -57,7 +58,13 @@ public static class AssertionExtensions
                 Console.ForegroundColor = savedColor;
             }
 
-            diff.Lines.Count.Should().Be(0);
+            diff
+                .Lines
+                .Where(x => x.Type != ChangeType.Unchanged)
+                .ToArray()
+                .Length
+                .Should()
+                .Be(0);
         }
     }
 
