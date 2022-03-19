@@ -8,7 +8,7 @@ namespace OpenSdk.IntegrationTest.Extensions;
 
 public static class AssertionExtensions
 {
-    public static FileAssertion Should(this TestFile testFile) => new FileAssertion { TestFile = testFile };
+    public static FileAssertion Should(this TestFile testFile) => new() { TestFile = testFile };
 
     public class FileAssertion
     {
