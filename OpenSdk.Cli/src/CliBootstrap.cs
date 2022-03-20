@@ -4,14 +4,14 @@ using OpenSdk.Services;
 
 namespace OpenSdk
 {
-    public class Bootstrap : IBootstrap
+    public class CliBootstrap : ICliBootstrap
     {
         private readonly IParserService parserService;
         private readonly IGeneratorService generatorService;
         private readonly IApplicationArgumentRegistry applicationArgumentRegistry;
         private readonly ILogger<ParserService> logger;
 
-        public Bootstrap(
+        public CliBootstrap(
             IParserService parserService,
             IGeneratorService generatorService,
             IApplicationArgumentRegistry applicationArgumentRegistry,

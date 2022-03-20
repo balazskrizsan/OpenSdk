@@ -85,7 +85,7 @@ public class BootstrapStartTest : AbstractIntegrationTest
         };
 
         // Act
-        services.GetService<IBootstrap>().Start();
+        services.GetService<ICliBootstrap>().Start();
 
         // Assert
         Directory

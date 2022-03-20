@@ -1,5 +1,3 @@
-using System;
-using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OpenSdk.Factories;
@@ -21,7 +19,7 @@ public static class ConfigureServicesHelperExtensions
         return serviceCollection
                 .AddLogging()
                 .AddSingleton(_ => applicationArgumentRegistry)
-                .AddSingleton<IBootstrap, Bootstrap>()
+                .AddSingleton<ICliBootstrap, CliBootstrap>()
                 .AddSingleton<IParserService, ParserService>()
                 .AddSingleton<IComponentsParserService, ComponentsParserService>()
                 .AddSingleton<IPathsParserService, PathsParserService>()

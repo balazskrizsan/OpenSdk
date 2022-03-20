@@ -13,7 +13,7 @@ namespace OpenSdk
 
             var host = AppStartup(applicationArgumentRegistry);
 
-            ActivatorUtilities.CreateInstance<Bootstrap>(host.Services).Start();
+            ActivatorUtilities.CreateInstance<CliBootstrap>(host.Services).Start();
         }
 
         static IHost AppStartup(IApplicationArgumentRegistry applicationArgumentRegistry)

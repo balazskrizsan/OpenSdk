@@ -1,6 +1,6 @@
 namespace OpenSdk
 {
-    public interface IBootstrap
+    public interface ICliBootstrap
     {
         void Start();
     }
