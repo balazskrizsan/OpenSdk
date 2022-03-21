@@ -149,7 +149,7 @@ namespace OpenSdk.Services.ParserServices
             }
 
             return slashCleanPathParts.Aggregate(
-                (x, y) => StringService.UppercaseFirst(x) + StringService.UppercaseFirst(y)
+                (x, y) => x.UppercaseFirst() + y.UppercaseFirst()
             );
         }
     }

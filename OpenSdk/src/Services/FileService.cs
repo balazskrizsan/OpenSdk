@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using OpenSdk.Registries;
@@ -21,15 +22,9 @@ public class FileService : IFileService
         this.applicationArgumentRegistry = applicationArgumentRegistry;
     }
 
-    public void SaveFilesAsync(List<File> files)
+    public void SaveFiles(List<File> files)
     {
-        var tasks = new List<Task>();
-        foreach (var file in files)
-        {
-            tasks.Add(Task.Factory.StartNew(() => SaveFile(file)));
-        }
-
-        Task.WaitAll(tasks.ToArray());
+        Task.WaitAll(files.Select(file => Task.Factory.StartNew(() => SaveFile(file))).ToArray());
     }
 
     private void SaveFile(File file)

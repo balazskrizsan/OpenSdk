@@ -36,7 +36,7 @@ namespace OpenSdk.Services
             files.AddRange(valueObjectGeneratorService.GetGeneratedFiles(openapiValues.Schemas));
 
             logger.LogInformation("====== Saving generated files");
-            fileService.SaveFilesAsync(files);
+            fileService.SaveFiles(files);
         }
     }
 }

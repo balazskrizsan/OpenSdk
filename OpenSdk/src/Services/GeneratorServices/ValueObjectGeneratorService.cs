@@ -26,27 +26,20 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
 
     public List<File> GetGeneratedFiles(List<Schema> schemas)
     {
-        var templatePath = @"./templates/ValueObjectLombok.liquid";
-        var namespaceValue = "com.kbalazsworks.stackjudge_aws_sdk.schema_parameter_objects";
+        const string templatePath = @"./templates/ValueObjectLombok.liquid";
+        const string namespaceValue = "com.kbalazsworks.stackjudge_aws_sdk.schema_parameter_objects";
 
         var files = new List<File>();
-        foreach (Schema schema in schemas)
+        foreach (var schema in schemas)
         {
             var valueObjectName = schema.Name;
             var isResponseObject = IsResponseObject(schema.Parameters);
             var implementation = GetImplementation(schema, isResponseObject);
 
-            var parameters = new List<KeyValuePair<string, ValueObjectProperty>>();
-            foreach (var parameter in schema.Parameters)
-            {
-                parameters.Add(new KeyValuePair<string, ValueObjectProperty>(
+            var parameters = schema.Parameters.Select(parameter =>
+                new KeyValuePair<string, ValueObjectProperty>(
                     mapperService.TypeMapper(parameter.Value),
-                    new ValueObjectProperty(
-                        mapperService.VarNameMapper(parameter.Key),
-                        GetJsonPropertyValue(parameter.Key, isResponseObject)
-                    )
-                ));
-            }
+                    new ValueObjectProperty(mapperService.VarNameMapper(parameter.Key), GetJsonPropertyValue(parameter.Key, isResponseObject)))).ToList();
 
             // @todo: run a component check:
             //  - if schema is a response it should not implement the IOpenSdk[Post|Get|Put|Delete]able
@@ -88,24 +81,19 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
             return parameterKey;
         }
 
-        if (ResponseEntityPropertyConst.AsListWithoutData().Contains(parameterKey))
-        {
-            return parameterKey;
-        }
-
-        return ResponseEntityPropertyConst.DATA;
+        return ResponseEntityPropertyConst.AsListWithoutData().Contains(parameterKey) 
+            ? parameterKey 
+            : ResponseEntityPropertyConst.DATA;
     }
 
-    private bool IsResponseObject(Dictionary<string, string> schemaParameters)
+    private static bool IsResponseObject(Dictionary<string, string> schemaParameters)
     {
-        var foundResponseEntityKeys = schemaParameters
+        return schemaParameters
             .Keys
             .Count(x =>
                 x.Contains(ResponseEntityPropertyConst.SUCCESS) ||
                 x.Contains(ResponseEntityPropertyConst.ERROR_CODE) ||
                 x.Contains(ResponseEntityPropertyConst.REQUEST_ID)
-            );
-
-        return foundResponseEntityKeys == 3;
+            ) == 3;
     }
 }

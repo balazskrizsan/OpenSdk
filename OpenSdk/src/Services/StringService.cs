@@ -1,10 +1,10 @@
 namespace OpenSdk.Services
 {
-    public class StringService
+    public static class StringService
     {
-        public static string UppercaseFirst(string s)
+        public static string UppercaseFirst(this string s)
         {
-            if (string.IsNullOrEmpty(s))
+            if (string.IsNullOrWhiteSpace(s))
             {
                 return string.Empty;
             }
@@ -15,9 +15,9 @@ namespace OpenSdk.Services
             return new string(a);
         }
 
-        public static string LowercaseFirst(string s)
+        public static string LowercaseFirst(this string s)
         {
-            if (string.IsNullOrEmpty(s))
+            if (string.IsNullOrWhiteSpace(s))
             {
                 return string.Empty;
             }

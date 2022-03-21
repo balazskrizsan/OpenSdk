@@ -21,9 +21,9 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
 
     public List<File> GenerateFiles(List<Method> methods)
     {
-        var interfaceTemplatePath = @"./templates/Interface.liquid";
-        var namespaceValue = "com.kbalazsworks.stackjudge_aws_sdk.schema_interfaces";
-        var destinationFolder = "\\" + namespaceValue.Replace(".", "\\");
+        const string interfaceTemplatePath = @"./templates/Interface.liquid";
+        const string namespaceValue = "com.kbalazsworks.stackjudge_aws_sdk.schema_interfaces";
+        var destinationFolder = $"\\" + namespaceValue.Replace(".", "\\");
 
         var files = new List<File>();
         foreach (var method in methods)
@@ -35,7 +35,7 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
                 InterfaceName = interfaceName,
                 Namespace = namespaceValue,
                 ParamObjectClassName = method.ParamObjectName,
-                ParamObjectVarName = StringService.LowercaseFirst(method.ParamObjectName),
+                ParamObjectVarName = method.ParamObjectName.LowercaseFirst(),
                 MethodUri = method.Uri,
                 MethodType = method.MethodType,
                 ExecReturnType = "void"
@@ -55,7 +55,7 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
                     InterfaceName = interfaceNameWithReturn,
                     Namespace = namespaceValue,
                     ParamObjectClassName = method.ParamObjectName,
-                    ParamObjectVarName = StringService.LowercaseFirst(method.ParamObjectName),
+                    ParamObjectVarName = method.ParamObjectName.LowercaseFirst(),
                     MethodUri = method.Uri,
                     MethodType = method.MethodType,
                     ExecReturnType = "StdResponse<" + method.OkResponseDataValueObject + ">"

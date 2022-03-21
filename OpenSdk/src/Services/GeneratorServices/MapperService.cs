@@ -18,9 +18,9 @@ public class MapperService : IMapperService
         this.applicationArgumentRegistry = applicationArgumentRegistry;
     }
 
-    public string TypeMapper(string openapiType)
+    public string TypeMapper(string openApiType)
     {
-        switch (openapiType)
+        switch (openApiType)
         {
             case "string":
                 return "String";
@@ -33,11 +33,11 @@ public class MapperService : IMapperService
             default:
                 try
                 {
-                    return openapiType.Split("/")[3];
+                    return openApiType.Split("/")[3];
                 }
                 catch (Exception)
                 {
-                    throw new Exception("No type found for: " + openapiType);
+                    throw new Exception("No type found for: " + openApiType);
                 }
         }
     }
@@ -51,7 +51,7 @@ public class MapperService : IMapperService
             default:
                 try
                 {
-                    return StringService.LowercaseFirst(varName.Split("/")[3]);
+                    return varName.Split("/")[3].LowercaseFirst();
                 }
                 catch (Exception)
                 {

@@ -5,5 +5,5 @@ namespace OpenSdk.Services;
 
 public interface IFileService
 {
-    void SaveFilesAsync(List<File> files);
+    void SaveFiles(List<File> files);
 }
