@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
+using OpenSdk.Registries;
 using OpenSdk.ValueObjects;
 using OpenSdk.ValueObjects.Generator;
 
@@ -8,21 +9,24 @@ namespace OpenSdk.Services.GeneratorServices;
 public class InterfaceGeneratorService : IInterfaceGeneratorService
 {
     private readonly ITemplateService templateService;
+    private readonly IApplicationArgumentRegistry applicationArgumentRegistry;
     private readonly ILogger<InterfaceGeneratorService> logger;
 
     public InterfaceGeneratorService(
         ITemplateService templateService,
+        IApplicationArgumentRegistry applicationArgumentRegistry,
         ILogger<InterfaceGeneratorService> logger
     )
     {
         this.templateService = templateService;
+        this.applicationArgumentRegistry = applicationArgumentRegistry;
         this.logger = logger;
     }
 
     public List<File> GetGenerateFiles(List<Method> methods)
     {
         var interfaceTemplatePath = @"./templates/Interface.liquid";
-        var namespaceValue = "com.kbalazsworks.stackjudge_aws_sdk.schema_interfaces";
+        var namespaceValue = applicationArgumentRegistry.NamespacePrefix + ".schema_interfaces";
         var destinationFolder = "\\" + namespaceValue.Replace(".", "\\");
 
         var files = new List<File>();
@@ -38,7 +42,8 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
                 ParamObjectVarName = StringService.LowercaseFirst(method.ParamObjectName),
                 MethodUri = method.Uri,
                 MethodType = method.MethodType,
-                ExecReturnType = "void"
+                ExecReturnType = "void",
+                NamespacePrefix = applicationArgumentRegistry.NamespacePrefix
             };
             var fileName = interfaceName + ".java";
 
@@ -58,7 +63,8 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
                     ParamObjectVarName = StringService.LowercaseFirst(method.ParamObjectName),
                     MethodUri = method.Uri,
                     MethodType = method.MethodType,
-                    ExecReturnType = "StdResponse<" + method.OkResponseDataValueObject + ">"
+                    ExecReturnType = "StdResponse<" + method.OkResponseDataValueObject + ">",
+                    NamespacePrefix = applicationArgumentRegistry.NamespacePrefix
                 };
                 var fileNameWithReturn = interfaceNameWithReturn + ".java";
 

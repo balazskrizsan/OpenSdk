@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using OpenSdk.Constants;
+using OpenSdk.Registries;
 using OpenSdk.ValueObjects;
 using OpenSdk.ValueObjects.Generator;
 
@@ -9,25 +10,28 @@ namespace OpenSdk.Services.GeneratorServices;
 
 public class ValueObjectGeneratorService : IValueObjectGeneratorService
 {
-    private readonly ILogger<ValueObjectGeneratorService> logger;
     private readonly ITemplateService templateService;
     private readonly IMapperService mapperService;
+    private readonly IApplicationArgumentRegistry applicationArgumentRegistry;
+    private readonly ILogger<ValueObjectGeneratorService> logger;
 
     public ValueObjectGeneratorService(
-        ILogger<ValueObjectGeneratorService> logger,
         ITemplateService templateService,
-        IMapperService mapperService
+        IMapperService mapperService,
+        IApplicationArgumentRegistry applicationArgumentRegistry,
+        ILogger<ValueObjectGeneratorService> logger
     )
     {
-        this.logger = logger;
         this.templateService = templateService;
         this.mapperService = mapperService;
+        this.applicationArgumentRegistry = applicationArgumentRegistry;
+        this.logger = logger;
     }
 
     public List<File> GetGeneratedFiles(List<Schema> schemas)
     {
         var templatePath = @"./templates/ValueObjectLombok.liquid";
-        var namespaceValue = "com.kbalazsworks.stackjudge_aws_sdk.schema_value_objects";
+        var namespaceValue = applicationArgumentRegistry.NamespacePrefix + ".schema_parameter_objects";
 
         var files = new List<File>();
         foreach (Schema schema in schemas)
@@ -57,6 +61,7 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
                 NamespaceValue = namespaceValue,
                 ValueObjectName = valueObjectName,
                 Parameters = parameters,
+                NamespacePrefix = applicationArgumentRegistry.NamespacePrefix
             };
 
             var destinationFolder = "\\" + namespaceValue.Replace(".", "\\");

@@ -9,7 +9,11 @@ namespace OpenSdk
     {
         static void Main(string[] args)
         {
-            var applicationArgumentRegistry = new ApplicationArgumentRegistry(args[0], args[1]);
+            var applicationArgumentRegistry = new ApplicationArgumentRegistry(
+                args[0],
+                args[1],
+                args[2]
+            );
 
             var host = AppStartup(applicationArgumentRegistry);
 

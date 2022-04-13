@@ -1,0 +1,46 @@
+{
+  "openapi" : "3.0.3",
+  "info" : {
+    "title" : "stackjudge_notification API",
+    "version" : "1.0-SNAPSHOT"
+  },
+  "paths" : {
+    "/push/to-user" : {
+      "post" : {
+        "tags" : [ "Post Push To User Action" ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PushToUserRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Created"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "PushToUserRequest" : {
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "string"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        }
+      }
+    }
+  }
+}
