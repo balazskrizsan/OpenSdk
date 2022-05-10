@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -67,35 +68,37 @@ namespace OpenSdk.Services.ParserServices
                         }
                     }
 
-                    foreach (var requestBody in methods.Value.RequestBody)
-                    {
-                        logger.LogInformation("         #request");
-                        logger.LogInformation("           " + requestBody.Key);
-                        foreach (var content in requestBody.Value)
+                    if (methods.Key == "post") {
+                        foreach (var requestBody in methods.Value.RequestBody)
                         {
-                            logger.LogInformation("            #content");
-                            logger.LogInformation("              " + content.Key);
-                            var pathContentType = content.Key;
-                            foreach (var contentType in content.Value)
+                            logger.LogInformation("         #request");
+                            logger.LogInformation("           " + requestBody.Key);
+                            foreach (var content in requestBody.Value)
                             {
-                                logger.LogInformation("                #content type");
-                                logger.LogInformation("                  " + contentType.Key);
-                                foreach (var schema in contentType.Value)
+                                logger.LogInformation("            #content");
+                                logger.LogInformation("              " + content.Key);
+                                var pathContentType = content.Key;
+                                foreach (var contentType in content.Value)
                                 {
-                                    logger.LogInformation("                    #schema");
-                                    logger.LogInformation("                      " + schema.Key);
-                                    logger.LogInformation("                      " + schema.Value);
-                                    generatorMethods.Add(new Method(
-                                        pathUri,
-                                        GenerateMethodName(pathUri),
-                                        pathMethod,
-                                        pathContentType,
-                                        schema.Key,
-                                        schema.Value,
-                                        GetParamObjectName(schema.Key, schema.Value),
-                                        okResponseValueObject,
-                                        okResponseDataValueObject
-                                    ));
+                                    logger.LogInformation("                #content type");
+                                    logger.LogInformation("                  " + contentType.Key);
+                                    foreach (var schema in contentType.Value)
+                                    {
+                                        logger.LogInformation("                    #schema");
+                                        logger.LogInformation("                      " + schema.Key);
+                                        logger.LogInformation("                      " + schema.Value);
+                                        generatorMethods.Add(new Method(
+                                            pathUri,
+                                            GenerateMethodName(pathUri),
+                                            pathMethod,
+                                            pathContentType,
+                                            schema.Key,
+                                            schema.Value,
+                                            GetParamObjectName(schema.Key, schema.Value),
+                                            okResponseValueObject,
+                                            okResponseDataValueObject
+                                        ));
+                                    }
                                 }
                             }
                         }
