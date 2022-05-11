@@ -68,6 +68,26 @@ namespace OpenSdk.Services.ParserServices
                         }
                     }
 
+                    if (methods.Key == "get") {
+                        foreach (var parameter in methods.Value.Parameters)
+                        {
+                            logger.LogInformation("         #parameters");
+                            logger.LogInformation("           " + parameter.Schema.Values);
+                            var schema = parameter.Schema.First();
+                            generatorMethods.Add(new Method(
+                                pathUri,
+                                GenerateMethodName(pathUri),
+                                pathMethod,
+                                null,
+                                schema.Key,
+                                schema.Value,
+                                GetParamObjectName(schema.Key, schema.Value),
+                                okResponseValueObject,
+                                okResponseDataValueObject
+                            ));
+                        }
+                    }
+
                     if (methods.Key == "post") {
                         foreach (var requestBody in methods.Value.RequestBody)
                         {
