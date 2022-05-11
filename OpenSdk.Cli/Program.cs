@@ -12,7 +12,8 @@ namespace OpenSdk
             var applicationArgumentRegistry = new ApplicationArgumentRegistry(
                 args[0],
                 args[1],
-                args[2]
+                args[2],
+                args[3]
             );
 
             var host = AppStartup(applicationArgumentRegistry);
