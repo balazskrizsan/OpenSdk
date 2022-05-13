@@ -23,13 +23,16 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="templates\Interface.liquid">
+      <None Update="templates\Interface.Java.liquid">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="templates\ValueObjectLombok.liquid">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="templates\ValueObjectPojo.liquid">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="templates\Interface.TypeScript.liquid">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>

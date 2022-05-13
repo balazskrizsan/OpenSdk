@@ -26,7 +26,7 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
 
     public List<File> GetGenerateFiles(List<Method> methods)
     {
-        var interfaceTemplatePath = @"./templates/Interface.liquid";
+        var interfaceTemplatePath = GetInterfaceTemplate();
         var namespaceValue = applicationArgumentRegistry.NamespacePrefix + ".schema_interfaces";
         var destinationFolder = "\\" + namespaceValue.Replace(".", "\\");
 
@@ -49,7 +49,7 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
                 NamespacePrefix = applicationArgumentRegistry.NamespacePrefix,
                 ExecuteParameterType = executeParameterType
             };
-            var fileName = interfaceName + ".java";
+            var fileName = interfaceName + GetFileExtension();
 
             var generatedInterface = templateService.RenderTemplate(interfaceTemplatePath, context);
             files.Add(new File(destinationFolder, fileName, generatedInterface));
@@ -71,7 +71,7 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
                     NamespacePrefix = applicationArgumentRegistry.NamespacePrefix,
                     ExecuteParameterType = executeParameterType
                 };
-                var fileNameWithReturn = interfaceNameWithReturn + ".java";
+                var fileNameWithReturn = interfaceNameWithReturn + GetFileExtension();
 
                 generatedInterface = templateService.RenderTemplate(interfaceTemplatePath, context);
                 files.Add(new File(destinationFolder, fileNameWithReturn, generatedInterface));
@@ -84,6 +84,30 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
         }
 
         return files;
+    }
+
+    private string GetFileExtension()
+    {
+        var language = applicationArgumentRegistry.OutputLanguage;
+
+        switch (language)
+        {
+            case "TypeScript": return ".ts";
+            case "Java": return ".java";
+            default: throw new Exception("Language is not supported: " + language);
+        }
+    }
+
+    private string GetInterfaceTemplate()
+    {
+        var language = applicationArgumentRegistry.OutputLanguage;
+
+        switch (language)
+        {
+            case "TypeScript": return @"./templates/Interface.TypeScript.liquid";
+            case "Java": return @"./templates/Interface.Java.liquid";
+            default: throw new Exception("Language interface template missing: " + language);
+        }
     }
 
     private string GetExecuteParameterType(string methodType)
