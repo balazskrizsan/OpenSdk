@@ -10,14 +10,13 @@ export class {{ ValueObjectName -}}
     {%- endfor -%}
     {%- if Implementation != "" -%}
 
-    public MultiValueMap<String, Object> toOpenSdkPost()
+    public toOpenSdkPost()
     {
-        return new LinkedMultiValueMap<>()
-        {{ "{{" }}
+        return {
         {%- for parameter in parameters -%}
-            addAll("{{ parameter.Value.Value }}", List.of({{ parameter.Value.Value }}));
+            "{{ parameter.Value.Value }}": this.{{ parameter.Value.Value }},
         {%- endfor -%}
-        {{ "}}" }};
+        }
     }
     {%- endif -%}
 }
