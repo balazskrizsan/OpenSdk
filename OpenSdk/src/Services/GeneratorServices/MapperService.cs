@@ -20,14 +20,16 @@ public class MapperService : IMapperService
 
     public string TypeMapper(string openapiType)
     {
+        var language = applicationArgumentRegistry.OutputLanguage;
+
         switch (openapiType)
         {
             case "string":
-                return "String";
+                return GetLanguageSpecificType(language, "string");
             case "boolean":
-                return "Boolean";
+                return GetLanguageSpecificType(language, "boolean");
             case "integer":
-                return "Integer";
+                return GetLanguageSpecificType(language, "integer");
             case "#/components/schemas/FileUpload":
                 return "HttpEntity<ByteArrayResource>";
             default:
@@ -40,6 +42,41 @@ public class MapperService : IMapperService
                     throw new Exception("No type found for: " + openapiType);
                 }
         }
+    }
+
+    private string GetLanguageSpecificType(string language, string type)
+    {
+        if (language == "Java" && type == "string")
+        {
+            return "String";
+        }
+
+        if (language == "Java" && type == "boolean")
+        {
+            return "Boolean";
+        }
+
+        if (language == "Java" && type == "boolean")
+        {
+            return "Boolean";
+        }
+
+        if (language == "TypeScript" && type == "string")
+        {
+            return "string";
+        }
+
+        if (language == "TypeScript" && type == "boolean")
+        {
+            return "boolean";
+        }
+
+        if (language == "TypeScript" && type == "integer")
+        {
+            return "number";
+        }
+
+        return type;
     }
 
     public string VarNameMapper(string varName)
