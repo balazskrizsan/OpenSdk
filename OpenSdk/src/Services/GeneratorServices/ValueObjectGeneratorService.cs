@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
@@ -30,7 +31,7 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
 
     public List<File> GetGeneratedFiles(List<Schema> schemas)
     {
-        var templatePath = @"./templates/ValueObjectLombok.liquid";
+        var templatePath = GetTemplatePath();
         var namespaceValue = applicationArgumentRegistry.NamespacePrefix + ".schema_parameter_objects";
 
         var files = new List<File>();
@@ -65,7 +66,7 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
             };
 
             var destinationFolder = "\\" + namespaceValue.Replace(".", "\\");
-            var fileName = valueObjectName + ".java";
+            var fileName = valueObjectName + GetFileExtension();
 
             var generatedValueObject = templateService.RenderTemplate(templatePath, context);
             files.Add(new File(destinationFolder, fileName, generatedValueObject));
@@ -73,6 +74,30 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
         }
 
         return files;
+    }
+
+    private string GetTemplatePath()
+    {
+        var language = applicationArgumentRegistry.OutputLanguage;
+
+        switch (language)
+        {
+            case "Java": return @"./templates/ValueObject.Java.Lombok.liquid";
+            case "TypeScript": return @"./templates/ValueObject.TypeScript.liquid";
+            default: throw new Exception("ValueObject language template not existing: " + language);
+        }
+    }
+
+    private string GetFileExtension()
+    {
+        var language = applicationArgumentRegistry.OutputLanguage;
+
+        switch (language)
+        {
+            case "Java": return ".java";
+            case "TypeScript": return ".ts";
+            default: throw new Exception("File extension is not supported: " + language);
+        }
     }
 
     private string GetImplementation(Schema schema, bool isResponseObject)
@@ -83,7 +108,7 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
         }
         //@todo: add condition if it's a postable object
 
-        return "IOpenSdkPostable";
+        return "IOpenSdkGetable";
     }
 
     private string GetJsonPropertyValue(string parameterKey, bool isResponseObject)

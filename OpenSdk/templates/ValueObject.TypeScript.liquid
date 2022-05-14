@@ -1,0 +1,23 @@
+import {IOpenSdkGetable} from "../common/intercaes/IOpenSdkGetable";
+
+export class {{ ValueObjectName -}}
+{%- if Implementation != "" -%}
+ implements {{ Implementation -}}
+{%- endif %}
+{
+    {%- for parameter in Parameters -%}
+    private {{ parameter.Value.Value }}: {{ parameter.Key }};
+    {%- endfor -%}
+    {%- if Implementation != "" -%}
+
+    public MultiValueMap<String, Object> toOpenSdkPost()
+    {
+        return new LinkedMultiValueMap<>()
+        {{ "{{" }}
+        {%- for parameter in parameters -%}
+            addAll("{{ parameter.Value.Value }}", List.of({{ parameter.Value.Value }}));
+        {%- endfor -%}
+        {{ "}}" }};
+    }
+    {%- endif -%}
+}
