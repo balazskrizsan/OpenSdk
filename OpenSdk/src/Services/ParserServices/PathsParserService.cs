@@ -159,7 +159,23 @@ namespace OpenSdk.Services.ParserServices
 
         private string GenerateMethodName(string path)
         {
-            var pathParts = path.Split("/");
+            path = path.Replace("-", "/");
+            path = Regex.Replace(path, @"{([A-Za-z0-9])([A-Za-z0-9]*)}", "By___($1)___$2");
+
+            var pathVarFirstLetters = Regex.Matches(path, @"___\([A-Za-z0-9]\)___");
+            if (pathVarFirstLetters.Count > 0)
+            {
+                foreach  (Match pathVarFirstLetterWithWrap in pathVarFirstLetters)
+                {
+                    var pathVarFirstLetter = pathVarFirstLetterWithWrap.Value
+                        .Replace("___(", "")
+                        .Replace(")___", "")
+                        .ToUpper();
+                    var x = pathVarFirstLetterWithWrap.Value;
+                    path = path.Replace(pathVarFirstLetterWithWrap.Value, pathVarFirstLetter);
+                }
+            }
+
             var slashCleanPathParts = new List<string>();
 
             foreach (var pathPart in pathParts)
