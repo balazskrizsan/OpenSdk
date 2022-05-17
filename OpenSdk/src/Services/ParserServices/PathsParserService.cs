@@ -177,8 +177,7 @@ namespace OpenSdk.Services.ParserServices
             }
 
             var slashCleanPathParts = new List<string>();
-
-            foreach (var pathPart in pathParts)
+            foreach (var pathPart in path.Split("/"))
             {
                 var cleanPart = Regex.Replace(pathPart, "[^A-Za-z0-9]", "");
                 if (cleanPart.Length > 0)
