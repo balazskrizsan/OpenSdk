@@ -1,16 +1,28 @@
 import {IOpenSdkGetable} from "../common/intercaes/IOpenSdkGetable";
+import {IOpenSdkPostable} from "../common/intercaes/IOpenSdkPostable";
 
 export class {{ ValueObjectName -}}
-{%- if Implementation != "" -%}
- implements {{ Implementation -}}
+{%- if Implementations != "" -%}
+ implements {{ Implementations -}}
 {%- endif %}
 {
     {%- for parameter in Parameters -%}
     private {{ parameter.Value.Value }}: {{ parameter.Key }};
     {%- endfor -%}
-    {%- if Implementation != "" -%}
+    {%- if IsPostable -%}
 
     public toOpenSdkPost()
+    {
+        return {
+        {%- for parameter in parameters -%}
+            "{{ parameter.Value.Value }}": this.{{ parameter.Value.Value }},
+        {%- endfor -%}
+        }
+    }
+    {%- endif -%}
+    {%- if IsGetable -%}
+
+    public toOpenSdkGet()
     {
         return {
         {%- for parameter in parameters -%}

@@ -39,7 +39,7 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
         {
             var valueObjectName = schema.Name;
             var isResponseObject = IsResponseObject(schema.Parameters);
-            var implementation = GetImplementation(schema, isResponseObject);
+            var implementations = GetImplementations(schema, isResponseObject);
 
             var parameters = new List<KeyValuePair<string, ValueObjectProperty>>();
             foreach (var parameter in schema.Parameters)
@@ -58,7 +58,9 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
             //  - add condition around the IOpenSdk*
             var context = new
             {
-                Implementation = implementation,
+                Implementations = implementations,
+                IsGetable = IsGetable(),
+                IsPostable = IsPostable(),
                 NamespaceValue = namespaceValue,
                 ValueObjectName = valueObjectName,
                 Parameters = parameters,
@@ -74,6 +76,38 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
         }
 
         return files;
+    }
+
+    private bool IsGetable()
+    {
+        return true;
+    }
+
+    private bool IsPostable()
+    {
+        return true;
+    }
+
+    private string GetImplementations(Schema schema, bool isResponseObject)
+    {
+        if (isResponseObject)
+        {
+            return string.Empty;
+        }
+
+        var interfaces = new List<string>();
+
+        if (IsGetable())
+        {
+            interfaces.Add("IOpenSdkGetable");
+        }
+
+        if (IsPostable())
+        {
+            interfaces.Add("IOpenSdkPostable");
+        }
+
+        return string.Join(", ", interfaces.ToArray());
     }
 
     private string GetTemplatePath()
@@ -98,17 +132,6 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
             case "TypeScript": return ".ts";
             default: throw new Exception("File extension is not supported: " + language);
         }
-    }
-
-    private string GetImplementation(Schema schema, bool isResponseObject)
-    {
-        if (isResponseObject)
-        {
-            return string.Empty;
-        }
-        //@todo: add condition if it's a postable object
-
-        return "IOpenSdkGetable";
     }
 
     private string GetJsonPropertyValue(string parameterKey, bool isResponseObject)
