@@ -1,0 +1,5 @@
+W:\Cs\OpenSdk\OpenSdk\OpenApiYamlFiles\stackjudge.frontend.json W:\Java\stackjudge_frontend_ts_sdk\src\main\java stackjudge_frontend_ts_sdk TypeScript
+
+W:\Cs\OpenSdk\OpenSdk\OpenApiYamlFiles\stackjudge_aws.json W:\Java\stackjudge_aws_sdk_java_maven\src\main\java stackjudge_aws_sdk Java
+
+W:\Cs\OpenSdk\OpenSdk\OpenApiYamlFiles\stackjudge_notification.json W:\Java\stackjudge_notification_sdk_java_maven\src\main\java stackjudge_frontend_ts_sdk Java
