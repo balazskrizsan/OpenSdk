@@ -7,7 +7,7 @@ namespace OpenSdk.Services.ParserServices
 {
     public interface IPathsParserService
     {
-        List<Method> GetParsedPaths(
+        List<UriMethods> GetParsedPaths(
             Dictionary<string, Dictionary<string, PathUriMethodMethodDetails>> paths,
             Dictionary<string, Dictionary<string, ComponentsSchemaItem>> components
         );

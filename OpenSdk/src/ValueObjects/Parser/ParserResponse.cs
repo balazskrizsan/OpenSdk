@@ -6,12 +6,12 @@ namespace OpenSdk.ValueObjects
 {
     public class ParserResponse
     {
-        public List<Method> Methods { get; }
+        public List<UriMethods> UriMethods { get; }
         public List<Schema> Schemas { get; }
-        public ParserResponse(List<Method> Methods, List<Schema> Schemas)
+        public ParserResponse(List<UriMethods> uriMethods, List<Schema> schemas)
         {
-            this.Methods = Methods;
-            this.Schemas = Schemas;
+            this.UriMethods = uriMethods;
+            this.Schemas = schemas;
         }
     }
 }

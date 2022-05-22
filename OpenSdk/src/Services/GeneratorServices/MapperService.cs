@@ -56,9 +56,9 @@ public class MapperService : IMapperService
             return "Boolean";
         }
 
-        if (language == "Java" && type == "boolean")
+        if (language == "Java" && type == "integer")
         {
-            return "Boolean";
+            return "Integer";
         }
 
         if (language == "TypeScript" && type == "string")

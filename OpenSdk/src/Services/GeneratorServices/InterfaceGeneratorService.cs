@@ -24,63 +24,52 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
         this.logger = logger;
     }
 
-    public List<File> GetGenerateFiles(List<Method> methods)
+    public List<File> GetGenerateFiles(List<UriMethods> uriMethods)
     {
         var interfaceTemplatePath = GetInterfaceTemplate();
         var namespaceValue = applicationArgumentRegistry.NamespacePrefix + ".schema_interfaces";
         var destinationFolder = "\\" + namespaceValue.Replace(".", "\\");
 
         var files = new List<File>();
-        foreach (var method in methods)
+        foreach (var uriMethod in uriMethods)
         {
-            var executeParameterType = GetExecuteParameterType(method.MethodType);
+            var interfaceName = "I" + uriMethod.PathClassName;
 
-            var interfaceName = "I" + method.MethodName;
+            var hasGetMethod = uriMethod.GetMethod != null;
+            var hasPostMethod = uriMethod.PostMethod != null;
 
             var context = new
             {
                 InterfaceName = interfaceName,
                 Namespace = namespaceValue,
-                ParamObjectClassName = method.ParamObjectName,
-                ParamObjectVarName = StringService.LowercaseFirst(method.ParamObjectName),
-                MethodUri = method.Uri,
-                MethodType = method.MethodType,
-                ExecReturnType = "void",
+                MethodUri = uriMethod.Uri,
                 NamespacePrefix = applicationArgumentRegistry.NamespacePrefix,
-                ExecuteParameterType = executeParameterType
+                // Get
+                HasGetMethod = hasGetMethod,
+                GetParamObjectVarName = hasGetMethod
+                    ? StringService.LowercaseFirst(uriMethod.GetMethod.ParamObjectName)
+                    : null,
+                GetReturnType = hasGetMethod
+                    ? !string.IsNullOrWhiteSpace(uriMethod.GetMethod.OkResponseValueObject)
+                        ? "StdResponse<" + uriMethod.GetMethod.OkResponseDataValueObject + ">"
+                        : "void"
+                    : null,
+                // Post
+                HasPostMethod = hasPostMethod,
+                PostParamObjectVarName = hasPostMethod
+                    ? StringService.LowercaseFirst(uriMethod.PostMethod.ParamObjectName)
+                    : null,
+                PostReturnType = hasPostMethod
+                    ? !string.IsNullOrWhiteSpace(uriMethod.PostMethod.OkResponseValueObject)
+                        ? "StdResponse<" + uriMethod.PostMethod.OkResponseDataValueObject + ">"
+                        : "void"
+                    : null
             };
             var fileName = interfaceName + GetFileExtension();
 
             var generatedInterface = templateService.RenderTemplate(interfaceTemplatePath, context);
             files.Add(new File(destinationFolder, fileName, generatedInterface));
             logger.LogInformation("    - {destinationFolder}/{fileName} ", destinationFolder, fileName);
-
-            if (!string.IsNullOrWhiteSpace(method.OkResponseValueObject))
-            {
-                var interfaceNameWithReturn = interfaceName + "WithReturn";
-
-                context = new
-                {
-                    InterfaceName = interfaceNameWithReturn,
-                    Namespace = namespaceValue,
-                    ParamObjectClassName = method.ParamObjectName,
-                    ParamObjectVarName = StringService.LowercaseFirst(method.ParamObjectName),
-                    MethodUri = method.Uri,
-                    MethodType = method.MethodType,
-                    ExecReturnType = "StdResponse<" + method.OkResponseDataValueObject + ">",
-                    NamespacePrefix = applicationArgumentRegistry.NamespacePrefix,
-                    ExecuteParameterType = executeParameterType
-                };
-                var fileNameWithReturn = interfaceNameWithReturn + GetFileExtension();
-
-                generatedInterface = templateService.RenderTemplate(interfaceTemplatePath, context);
-                files.Add(new File(destinationFolder, fileNameWithReturn, generatedInterface));
-                logger.LogInformation(
-                    "    - {destinationFolder}/{fileNameWithReturn}",
-                    destinationFolder,
-                    fileNameWithReturn
-                );
-            }
         }
 
         return files;

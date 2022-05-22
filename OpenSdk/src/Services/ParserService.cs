@@ -54,11 +54,11 @@ namespace OpenSdk.Services
             logger.LogInformation("    {rootInfoTitle}", root.Info.Title);
 
             logger.LogInformation("====== Paths parsing");
-            var generatorMethods = pathsParserService.GetParsedPaths(root.Paths, root.Components);
+            var generatorUriMethods = pathsParserService.GetParsedPaths(root.Paths, root.Components);
             logger.LogInformation("====== Components parsing");
-            var generatorSchemas = componentsParserService.GetParsedComponents(root.Components);
+            var generatorSchemas = componentsParserService.GetParsedComponents(root.Components, root.Paths);
 
-            return new ParserResponse(generatorMethods, generatorSchemas);
+            return new ParserResponse(generatorUriMethods, generatorSchemas);
         }
     }
 }

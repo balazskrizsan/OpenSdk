@@ -1,7 +1,7 @@
 package {{NamespaceValue}};
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import {{NamespacePrefix}}.common.interfaces.IOpenSdkPostable;
+import {{NamespacePrefix}}.common.interfaces.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,18 +21,31 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 public final class {{ ValueObjectName -}}
-{%- if Implementation != "" -%}
- implements {{ Implementation -}}
+{%- if Implementation -%}
+ implements {{ Implementations -}}
 {%- endif %}
 {
     {%- for parameter in Parameters -%}
     @JsonProperty("{{ parameter.Value.JsonPropertyValue }}")
     private final {{ parameter.Key }} {{ parameter.Value.Value }};
     {%- endfor -%}
-    {%- if Implementation != "" -%}
+    {%- if IsPostable -%}
 
     @Override
     public MultiValueMap<String, Object> toOpenSdkPost()
+    {
+        return new LinkedMultiValueMap<>()
+        {{ "{{" }}
+        {%- for parameter in parameters -%}
+            addAll("{{ parameter.Value.Value }}", List.of({{ parameter.Value.Value }}));
+        {%- endfor -%}
+        {{ "}}" }};
+    }
+    {%- endif -%}
+    {%- if IsGetable -%}
+
+    @Override
+    public MultiValueMap<String, Object> toOpenSdkGet()
     {
         return new LinkedMultiValueMap<>()
         {{ "{{" }}

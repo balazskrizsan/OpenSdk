@@ -92,7 +92,7 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
     {
         if (isResponseObject)
         {
-            return string.Empty;
+            return null;
         }
 
         var interfaces = new List<string>();

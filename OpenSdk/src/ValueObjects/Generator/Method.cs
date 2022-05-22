@@ -2,9 +2,9 @@ namespace OpenSdk.ValueObjects.Generator
 {
     public class Method
     {
-        public string Uri { get; }
-        public string MethodName { get; }
-        public string MethodType { get; }
+        public string Uri { get; } // will be removed
+        public string MethodName { get; } // will be removed
+        public string MethodType { get; } // will be removed
         public string ContentType { get; }
         public string ParamSchemaType { get; }
         public string ParamSchemaValue { get; }

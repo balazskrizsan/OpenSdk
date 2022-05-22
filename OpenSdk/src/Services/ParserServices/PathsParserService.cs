@@ -18,18 +18,21 @@ namespace OpenSdk.Services.ParserServices
             this.logger = logger;
         }
 
-        public List<Method> GetParsedPaths(
+        public List<UriMethods> GetParsedPaths(
             Dictionary<string, Dictionary<string, PathUriMethodMethodDetails>> paths,
             Dictionary<string, Dictionary<string, ComponentsSchemaItem>> components
         )
         {
             var generatorMethods = new List<Method>();
+            var generatorUriMethods = new List<UriMethods>();
 
             foreach (var path in paths)
             {
                 logger.LogInformation("# path");
                 logger.LogInformation(path.Key);
                 var pathUri = path.Key;
+                Method getMethod = null;
+                Method postMethod = null;
                 foreach (var methods in path.Value)
                 {
                     logger.LogInformation("    #method");
@@ -74,9 +77,9 @@ namespace OpenSdk.Services.ParserServices
                             logger.LogInformation("         #parameters");
                             logger.LogInformation("           " + parameter.Schema.Values);
                             var schema = parameter.Schema.First();
-                            generatorMethods.Add(new Method(
+                            getMethod = new Method(
                                 pathUri,
-                                GenerateMethodName(pathUri),
+                                PathClassName(pathUri),
                                 pathMethod,
                                 null,
                                 schema.Key,
@@ -84,7 +87,8 @@ namespace OpenSdk.Services.ParserServices
                                 GetParamObjectName(schema.Key, schema.Value),
                                 okResponseValueObject,
                                 okResponseDataValueObject
-                            ));
+                            );
+                            generatorMethods.Add(getMethod);
                         }
                     }
 
@@ -107,9 +111,9 @@ namespace OpenSdk.Services.ParserServices
                                         logger.LogInformation("                    #schema");
                                         logger.LogInformation("                      " + schema.Key);
                                         logger.LogInformation("                      " + schema.Value);
-                                        generatorMethods.Add(new Method(
+                                        postMethod = new Method(
                                             pathUri,
-                                            GenerateMethodName(pathUri),
+                                            PathClassName(pathUri),
                                             pathMethod,
                                             pathContentType,
                                             schema.Key,
@@ -117,16 +121,19 @@ namespace OpenSdk.Services.ParserServices
                                             GetParamObjectName(schema.Key, schema.Value),
                                             okResponseValueObject,
                                             okResponseDataValueObject
-                                        ));
+                                        );
+                                        generatorMethods.Add(postMethod);
                                     }
                                 }
                             }
                         }
                     }
                 }
+
+                generatorUriMethods.Add(new UriMethods(pathUri, PathClassName(pathUri), getMethod, postMethod));
             }
 
-            return generatorMethods;
+            return generatorUriMethods;
         }
 
         private string GetResponseDataValueObject(
@@ -157,7 +164,7 @@ namespace OpenSdk.Services.ParserServices
             return null;
         }
 
-        private string GenerateMethodName(string path)
+        private string PathClassName(string path)
         {
             path = path.Replace("-", "/");
             path = Regex.Replace(path, @"{([A-Za-z0-9])([A-Za-z0-9]*)}", "By___($1)___$2");

@@ -2,7 +2,7 @@ package {{Namespace}};
 
 import {{NamespacePrefix}}.common.exceptions.ResponseException;
 import {{NamespacePrefix}}.common.entities.StdResponse;
-import {{NamespacePrefix}}.common.interfaces.IOpenSdkPostable;
+import {{NamespacePrefix}}.common.interfaces.*;
 import {{NamespacePrefix}}.schema_parameter_objects.*;
 
 import javax.annotation.processing.Generated;
@@ -14,7 +14,14 @@ public interface {{InterfaceName}}
     {
         return "{{MethodUri}}";
     }
+    {%- if HasGetMethod -%}
 
-    {{ExecReturnType}} execute({{ExecuteParameterType}} {{ParamObjectVarName}})
+    {{GetReturnType}} get(IOpenSdkGetable {{GetParamObjectVarName}})
     throws ResponseException;
+    {%- endif -%}
+    {%- if HasPostMethod -%}
+
+    {{PostReturnType}} post(IOpenSdkGetable {{PostParamObjectVarName}})
+    throws ResponseException;
+    {%- endif -%}
 }
