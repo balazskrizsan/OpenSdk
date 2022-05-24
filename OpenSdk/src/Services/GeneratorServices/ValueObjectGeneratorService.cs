@@ -59,8 +59,8 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
             var context = new
             {
                 Implementations = implementations,
-                IsGetable = IsGetable(),
-                IsPostable = IsPostable(),
+                IsGetable = schema.HasGet,
+                IsPostable = schema.HasPost,
                 NamespaceValue = namespaceValue,
                 ValueObjectName = valueObjectName,
                 Parameters = parameters,
@@ -78,16 +78,6 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
         return files;
     }
 
-    private bool IsGetable()
-    {
-        return true;
-    }
-
-    private bool IsPostable()
-    {
-        return true;
-    }
-
     private string GetImplementations(Schema schema, bool isResponseObject)
     {
         if (isResponseObject)
@@ -97,12 +87,12 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
 
         var interfaces = new List<string>();
 
-        if (IsGetable())
+        if (schema.HasGet)
         {
             interfaces.Add("IOpenSdkGetable");
         }
 
-        if (IsPostable())
+        if (schema.HasPost)
         {
             interfaces.Add("IOpenSdkPostable");
         }
