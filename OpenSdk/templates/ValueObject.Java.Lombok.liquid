@@ -21,7 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 public final class {{ ValueObjectName -}}
-{%- if Implementation -%}
+{%- if Implementations != null -%}
  implements {{ Implementations -}}
 {%- endif %}
 {

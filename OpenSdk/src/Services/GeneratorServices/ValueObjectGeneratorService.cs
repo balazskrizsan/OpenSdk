@@ -80,21 +80,24 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
 
     private string GetImplementations(Schema schema, bool isResponseObject)
     {
-        if (isResponseObject)
-        {
-            return null;
-        }
-
         var interfaces = new List<string>();
+        var hasInterface = false;
 
         if (schema.HasGet)
         {
+            hasInterface = true;
             interfaces.Add("IOpenSdkGetable");
         }
 
         if (schema.HasPost)
         {
+            hasInterface = true;
             interfaces.Add("IOpenSdkPostable");
+        }
+
+        if (!hasInterface)
+        {
+            return null;
         }
 
         return string.Join(", ", interfaces.ToArray());
