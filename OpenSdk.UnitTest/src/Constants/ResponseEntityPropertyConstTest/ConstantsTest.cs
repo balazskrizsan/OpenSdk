@@ -16,10 +16,10 @@ public class ConstantsTest
         // Act
         var actual = new[]
         {
-            ResponseEntityPropertyConst.SUCCESS,
-            ResponseEntityPropertyConst.ERROR_CODE,
-            ResponseEntityPropertyConst.REQUEST_ID,
-            ResponseEntityPropertyConst.DATA
+            ResponseEntityPropertyConsts.SUCCESS,
+            ResponseEntityPropertyConsts.ERROR_CODE,
+            ResponseEntityPropertyConsts.REQUEST_ID,
+            ResponseEntityPropertyConsts.DATA
         };
 
         // Assert

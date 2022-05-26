@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace OpenSdk.Constants;
 
-public static class ResponseEntityPropertyConst
+public static class ResponseEntityPropertyConsts
 {
     public const string SUCCESS = "success";
     public const string ERROR_CODE = "errorCode";
