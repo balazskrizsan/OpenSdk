@@ -86,13 +86,13 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
         if (schema.HasGet)
         {
             hasInterface = true;
-            interfaces.Add("IOpenSdkGetable");
+            interfaces.Add(FileNameConsts.I_OPENSDK_GETABLE);
         }
 
         if (schema.HasPost)
         {
             hasInterface = true;
-            interfaces.Add("IOpenSdkPostable");
+            interfaces.Add(FileNameConsts.I_OPENSDK_POSTABLE);
         }
 
         if (!hasInterface)
@@ -109,8 +109,8 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
 
         switch (language)
         {
-            case "Java": return @"./templates/ValueObject.Java.Lombok.liquid";
-            case "TypeScript": return @"./templates/ValueObject.TypeScript.liquid";
+            case LanguagesConsts.JAVA: return @"./templates/ValueObject.Java.Lombok.liquid";
+            case LanguagesConsts.TYPE_SCRIPT: return @"./templates/ValueObject.TypeScript.liquid";
             default: throw new Exception("ValueObject language template not existing: " + language);
         }
     }
@@ -121,8 +121,8 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
 
         switch (language)
         {
-            case "Java": return ".java";
-            case "TypeScript": return ".ts";
+            case LanguagesConsts.JAVA: return FileExtensionConsts.JAVA;
+            case LanguagesConsts.TYPE_SCRIPT: return FileExtensionConsts.TYPESCRTIPY;
             default: throw new Exception("File extension is not supported: " + language);
         }
     }
@@ -134,12 +134,12 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
             return parameterKey;
         }
 
-        if (ResponseEntityPropertyConst.AsListWithoutData().Contains(parameterKey))
+        if (ResponseEntityPropertyConsts.AsListWithoutData().Contains(parameterKey))
         {
             return parameterKey;
         }
 
-        return ResponseEntityPropertyConst.DATA;
+        return ResponseEntityPropertyConsts.DATA;
     }
 
     private bool IsResponseObject(Dictionary<string, string> schemaParameters)
@@ -147,9 +147,9 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
         var foundResponseEntityKeys = schemaParameters
             .Keys
             .Count(x =>
-                x.Contains(ResponseEntityPropertyConst.SUCCESS) ||
-                x.Contains(ResponseEntityPropertyConst.ERROR_CODE) ||
-                x.Contains(ResponseEntityPropertyConst.REQUEST_ID)
+                x.Contains(ResponseEntityPropertyConsts.SUCCESS) ||
+                x.Contains(ResponseEntityPropertyConsts.ERROR_CODE) ||
+                x.Contains(ResponseEntityPropertyConsts.REQUEST_ID)
             );
 
         return foundResponseEntityKeys == 3;

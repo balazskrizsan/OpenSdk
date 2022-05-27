@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Extensions.Logging;
+using OpenSdk.Constants;
 using OpenSdk.Registries;
 
 namespace OpenSdk.Services.GeneratorServices;
@@ -24,12 +25,12 @@ public class MapperService : IMapperService
 
         switch (openapiType)
         {
-            case "string":
-                return GetLanguageSpecificType(language, "string");
-            case "boolean":
-                return GetLanguageSpecificType(language, "boolean");
-            case "integer":
-                return GetLanguageSpecificType(language, "integer");
+            case OpenApiVariableConsts.STRING:
+                return GetLanguageSpecificType(language, OpenApiVariableConsts.STRING);
+            case OpenApiVariableConsts.BOOL:
+                return GetLanguageSpecificType(language, OpenApiVariableConsts.BOOL);
+            case OpenApiVariableConsts.INT:
+                return GetLanguageSpecificType(language, OpenApiVariableConsts.INT);
             case "#/components/schemas/FileUpload":
                 return "HttpEntity<ByteArrayResource>";
             default:
@@ -46,34 +47,24 @@ public class MapperService : IMapperService
 
     private string GetLanguageSpecificType(string language, string type)
     {
-        if (language == "Java" && type == "string")
+        if (LanguagesConsts.JAVA == language)
         {
-            return "String";
+            switch (type)
+            {
+                case OpenApiVariableConsts.STRING: return JavaVariableConsts.STRING;
+                case OpenApiVariableConsts.BOOL: return JavaVariableConsts.BOOL;
+                case OpenApiVariableConsts.INT: return JavaVariableConsts.INT;
+            }
         }
 
-        if (language == "Java" && type == "boolean")
+        if (LanguagesConsts.TYPE_SCRIPT == language)
         {
-            return "Boolean";
-        }
-
-        if (language == "Java" && type == "integer")
-        {
-            return "Integer";
-        }
-
-        if (language == "TypeScript" && type == "string")
-        {
-            return "string";
-        }
-
-        if (language == "TypeScript" && type == "boolean")
-        {
-            return "boolean";
-        }
-
-        if (language == "TypeScript" && type == "integer")
-        {
-            return "number";
+            switch (type)
+            {
+                case OpenApiVariableConsts.STRING: return TypeScriptVariableConsts.STRING;
+                case OpenApiVariableConsts.BOOL: return TypeScriptVariableConsts.BOOL;
+                case OpenApiVariableConsts.INT: return TypeScriptVariableConsts.NUMBER;
+            }
         }
 
         return type;

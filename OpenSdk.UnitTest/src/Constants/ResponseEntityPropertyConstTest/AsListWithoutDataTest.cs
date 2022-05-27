@@ -14,7 +14,7 @@ public class AsListWithoutDataTest
         var expectedValues = new[] { "success", "errorCode", "requestId" };
 
         // Act
-        var actual = ResponseEntityPropertyConst.AsListWithoutData();
+        var actual = ResponseEntityPropertyConsts.AsListWithoutData();
 
         // Assert
         actual.Should().Equal(expectedValues);
