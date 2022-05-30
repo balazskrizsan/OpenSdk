@@ -1,11 +1,13 @@
 package {{Namespace}};
 
-import {{NamespacePrefix}}.common.exceptions.ResponseException;
-import {{NamespacePrefix}}.common.entities.StdResponse;
-import {{NamespacePrefix}}.common.interfaces.*;
-import {{NamespacePrefix}}.schema_parameter_objects.*;
+import com.kbalazsworks.stackjudge_aws_sdk.common.entities.StdResponse;
+import com.kbalazsworks.stackjudge_aws_sdk.common.exceptions.ResponseException;
+import com.kbalazsworks.stackjudge_aws_sdk.common.interfaces.*;
+import com.kbalazsworks.stackjudge_aws_sdk.schema_parameter_objects.*;
+import org.springframework.scheduling.annotation.Async;
 
 import javax.annotation.processing.Generated;
+import java.util.concurrent.Future;
 
 @Generated("OpenSDK: https://github.com/balazskrizsan/OpenSdk")
 public interface {{InterfaceName}}
@@ -22,6 +24,10 @@ public interface {{InterfaceName}}
     {%- if HasPostMethod -%}
 
     {{PostReturnType}} post(IOpenSdkGetable {{PostParamObjectVarName}})
+    throws ResponseException;
+
+    @Async
+    {{PostAsyncReturnType}} postAsync(IOpenSdkGetable {{PostParamObjectVarName}})
     throws ResponseException;
     {%- endif -%}
 }

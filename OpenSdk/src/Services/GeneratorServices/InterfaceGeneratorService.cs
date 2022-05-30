@@ -63,6 +63,11 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
                     ? !string.IsNullOrWhiteSpace(uriMethod.PostMethod.OkResponseValueObject)
                         ? "StdResponse<" + uriMethod.PostMethod.OkResponseDataValueObject + ">"
                         : "void"
+                    : null,
+                PostAsyncReturnType = hasPostMethod
+                    ? !string.IsNullOrWhiteSpace(uriMethod.PostMethod.OkResponseValueObject)
+                        ? "Future<StdResponse<" + uriMethod.PostMethod.OkResponseDataValueObject + ">>"
+                        : "void"
                     : null
             };
             var fileName = interfaceName + GetFileExtension();
