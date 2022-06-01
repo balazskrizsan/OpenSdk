@@ -23,11 +23,11 @@ public interface {{InterfaceName}}
     {%- endif -%}
     {%- if HasPostMethod -%}
 
-    {{PostReturnType}} post(IOpenSdkGetable {{PostParamObjectVarName}})
+    {{PostReturnType}} post(IOpenSdkPostable {{PostParamObjectVarName}})
     throws ResponseException;
 
     @Async
-    {{PostAsyncReturnType}} postAsync(IOpenSdkGetable {{PostParamObjectVarName}})
+    {{PostAsyncReturnType}} postAsync(IOpenSdkPostable {{PostParamObjectVarName}})
     throws ResponseException;
     {%- endif -%}
 }
