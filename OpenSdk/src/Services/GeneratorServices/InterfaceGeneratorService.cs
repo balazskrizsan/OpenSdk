@@ -49,11 +49,7 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
                 GetParamObjectVarName = hasGetMethod
                     ? StringService.LowercaseFirst(uriMethod.GetMethod.ParamObjectName)
                     : null,
-                GetReturnType = hasGetMethod
-                    ? !string.IsNullOrWhiteSpace(uriMethod.GetMethod.OkResponseValueObject)
-                        ? "StdResponse<" + uriMethod.GetMethod.OkResponseDataValueObject + ">"
-                        : "void"
-                    : null,
+                GetReturnType = GetGetReturnType(hasGetMethod, uriMethod.GetMethod),
                 // Post
                 HasPostMethod = hasPostMethod,
                 PostParamObjectVarName = hasPostMethod
@@ -78,6 +74,28 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
         }
 
         return files;
+    }
+
+    private string GetGetReturnType(bool hasGetMethod, Method getMethod)
+    {
+        if (!hasGetMethod)
+        {
+            return null;
+        }
+
+        if (string.IsNullOrWhiteSpace(getMethod.OkResponseValueObject))
+        {
+            return "void";
+        }
+
+        var language = applicationArgumentRegistry.OutputLanguage;
+
+        switch (applicationArgumentRegistry.OutputLanguage)
+        {
+            case "TypeScript": return "Observable<StdResponse<" + getMethod.OkResponseDataValueObject + ">>";
+            case "Java": return "StdResponse<" + getMethod.OkResponseDataValueObject + ">";
+            default: throw new Exception("Language is not supported: " + language);
+        }
     }
 
     private string GetFileExtension()
