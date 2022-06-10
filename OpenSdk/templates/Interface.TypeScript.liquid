@@ -7,7 +7,7 @@ export const API_URL = "{{MethodUri}}";
 /**
  * @Generated("OpenSDK: https://github.com/balazskrizsan/OpenSdk")
  */
-interface {{InterfaceName}}
+export interface {{InterfaceName}}
 {
     {{- if HasGetMethod -}}
     get({{GetParamObjectVarName}}: IOpenSdkGetable): {{GetReturnType}};

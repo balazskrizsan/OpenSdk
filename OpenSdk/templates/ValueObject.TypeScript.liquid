@@ -4,15 +4,21 @@ import {IOpenSdkPostable} from "../../common/intercaes/IOpenSdkPostable";
 import {User} from "./User";
 {%- endif -%}
 
+/**
+* @Generated("OpenSDK: https://github.com/balazskrizsan/OpenSdk")
+*/
 export class {{ ValueObjectName -}}
 {%- if Implementations != null -%}
  implements {{ Implementations -}}
 {%- endif %}
 {
-    {%- for parameter in Parameters -%}
-    private {{ parameter.Value.Value }}: {{ parameter.Key }};
-    {%- endfor -%}
-    {%- if IsPostable -%}
+    public constructor(
+        {%- for parameter in Parameters -%}
+        private {{ parameter.Value.Value }}: {{ parameter.Key }},
+        {%- endfor -%}
+    ) {
+    }
+        {%- if IsPostable -%}
 
     public toOpenSdkPost()
     {
