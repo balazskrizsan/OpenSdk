@@ -16,30 +16,59 @@ public class ValueObjectByMethodTypeFilterService : IValueObjectByMethodTypeFilt
         {
             foreach (var (methodType, pathUriMethodMethodDetails) in uriItem)
             {
-                foreach (var (contentName, content) in pathUriMethodMethodDetails.RequestBody)
+                if (methodType == "post")
                 {
-                    foreach (var (contentType, contentDetails) in content)
+                    foreach (var (contentName, content) in pathUriMethodMethodDetails.RequestBody)
                     {
-                        foreach (var (schemaName, contentDetail) in contentDetails)
+                        foreach (var (contentType, contentDetails) in content)
                         {
-                            foreach (var (schemaType, schemaValue) in contentDetail)
+                            foreach (var (schemaName, contentDetail) in contentDetails)
                             {
-                                // @todo: if data is a ref, load the sub value object
-                                if (schemaType == "$ref")
+                                foreach (var (schemaType, schemaValue) in contentDetail)
                                 {
-                                    if (!valueObjectByMethodType.ContainsKey(schemaValue))
+                                    // @todo: if data is a ref, load the sub value object
+                                    if (schemaType == "$ref")
                                     {
-                                        valueObjectByMethodType.Add(schemaValue, new List<string> { methodType });
+                                        if (!valueObjectByMethodType.ContainsKey(schemaValue))
+                                        {
+                                            valueObjectByMethodType.Add(schemaValue, new List<string> { methodType });
 
-                                        continue;
-                                    }
+                                            continue;
+                                        }
 
-                                    valueObjectByMethodType.TryGetValue(schemaValue, out var relatedMethods);
-                                    if (null != relatedMethods)
-                                    {
-                                        relatedMethods.Add(methodType);
-                                        valueObjectByMethodType.TryAdd(schemaValue, relatedMethods);
+                                        valueObjectByMethodType.TryGetValue(schemaValue, out var relatedMethods);
+                                        if (null != relatedMethods)
+                                        {
+                                            relatedMethods.Add(methodType);
+                                            valueObjectByMethodType.TryAdd(schemaValue, relatedMethods);
+                                        }
                                     }
+                                }
+                            }
+                        }
+                    }
+                }
+                if (methodType == "get")
+                {
+                    foreach (var parameter in pathUriMethodMethodDetails.Parameters)
+                    {
+                        // @todo: remove duplication
+                        foreach (var (schemaType, schemaValue) in parameter.Schema)
+                        {
+                            if (schemaType == "$ref")
+                            {
+                                if (!valueObjectByMethodType.ContainsKey(schemaValue))
+                                {
+                                    valueObjectByMethodType.Add(schemaValue, new List<string> { methodType });
+
+                                    continue;
+                                }
+
+                                valueObjectByMethodType.TryGetValue(schemaValue, out var relatedMethods);
+                                if (null != relatedMethods)
+                                {
+                                    relatedMethods.Add(methodType);
+                                    valueObjectByMethodType.TryAdd(schemaValue, relatedMethods);
                                 }
                             }
                         }
