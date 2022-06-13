@@ -1,9 +1,11 @@
-import {IOpenSdkGetable} from "../common/intercaes/IOpenSdkGetable";
-import {IOpenSdkPostable} from "../common/intercaes/IOpenSdkPostable";
+import {IOpenSdkGetable} from "../../common/intercaes/IOpenSdkGetable";
+import {IOpenSdkPostable} from "../../common/intercaes/IOpenSdkPostable";
+{%- if ValueObjectName != "User" -%}
 import {User} from "./User";
+{%- endif -%}
 
 export class {{ ValueObjectName -}}
-{%- if Implementations != "" -%}
+{%- if Implementations != null -%}
  implements {{ Implementations -}}
 {%- endif %}
 {
