@@ -7,16 +7,23 @@ namespace OpenSdk.IntegrationTest;
 
 public class AbstractIntegrationTest
 {
-    public IServiceProvider GetServices(ApplicationArgumentRegistry? applicationArgumentRegistry = null)
-    {
-        var defaultApplicationArgumentRegistry =
-            applicationArgumentRegistry ?? new ApplicationArgumentRegistry("", "");
+    public static string INTEGRATION_ROOT_FOLDER = $"{Environment.CurrentDirectory}\\..\\..\\..";
 
+    public static Func<string, string, ApplicationArgumentRegistry> APP_ARGS_PRESET_JAVA =
+        (inputFilePath, testFullAppOutput) => new ApplicationArgumentRegistry(
+            inputFilePath,
+            testFullAppOutput,
+            "stackjudge_aws_sdk",
+            "Java"
+        );
+
+    public IServiceProvider GetServices(ApplicationArgumentRegistry applicationArgumentRegistry)
+    {
         var host = Host.CreateDefaultBuilder()
             .ConfigureServices((context, services) =>
             {
                 services
-                    .ConfigureDependencies(defaultApplicationArgumentRegistry)
+                    .ConfigureDependencies(applicationArgumentRegistry)
                     .SetupLogger();
             })
             .UseSerilog()

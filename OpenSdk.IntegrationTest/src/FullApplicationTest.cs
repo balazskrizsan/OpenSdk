@@ -4,7 +4,6 @@ using System.IO;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenSdk.Registries;
 using static OpenSdk.IntegrationTest.Extensions.AssertionExtensions;
 
 namespace OpenSdk.IntegrationTest;
@@ -12,8 +11,8 @@ namespace OpenSdk.IntegrationTest;
 [TestClass]
 public class BootstrapStartTest : AbstractIntegrationTest
 {
-    private static readonly string TestOutputFolder = $"{Environment.CurrentDirectory}\\TestFullAppOutput";
-    
+    private static readonly string TestOutputFolder = $"{INTEGRATION_ROOT_FOLDER}\\TestFullAppOutput";
+
     [TestInitialize()]
     public void Startup() => ClearTestFolder();
 
@@ -24,7 +23,7 @@ public class BootstrapStartTest : AbstractIntegrationTest
     {
         try
         {
-            new DirectoryInfo(TestOutputFolder).Delete(true);
+            // new DirectoryInfo(TestOutputFolder).Delete(true);
         }
         catch (Exception)
         {
@@ -36,67 +35,67 @@ public class BootstrapStartTest : AbstractIntegrationTest
     public void RunTheApplicationWithValidYAML_GeneratesEverythingWell()
     {
         // Arrange
-        var currentDirectory = Environment.CurrentDirectory;
+        var inputFilePath = $"{INTEGRATION_ROOT_FOLDER}\\TestOpenapiYamls\\test_1.json";
+        var namespaceValue = "\\com\\kbalazsworks";
 
-        var inputFilePath = $"{currentDirectory}\\TestOpenapiYamls\\test_1.json";
-
-        var testOpenapiGeneratedFilesForDiff = $"{currentDirectory}\\TestOpenapiGeneratedFilesForDiff\\test_1";
+        var testOpenapiGeneratedFilesForDiff = $"{INTEGRATION_ROOT_FOLDER}\\TestOpenapiGeneratedFilesForDiff\\test_1";
         var interfacesForDiffPath =
-            $"{testOpenapiGeneratedFilesForDiff}\\com\\kbalazsworks\\stackjudge_aws_sdk\\schema_interfaces";
-        var valueObjectsForDiffPath =
-            $"{testOpenapiGeneratedFilesForDiff}\\com\\kbalazsworks\\stackjudge_aws_sdk\\schema_value_objects";
+            $"{testOpenapiGeneratedFilesForDiff}{namespaceValue}\\stackjudge_aws_sdk\\schema_interfaces";
+        var parameterObjectsForDiffPath =
+            $"{testOpenapiGeneratedFilesForDiff}{namespaceValue}\\stackjudge_aws_sdk\\schema_parameter_objects";
 
         var testFullAppOutput = TestOutputFolder;
-        var interfacesPath = $"{testFullAppOutput}\\com\\kbalazsworks\\stackjudge_aws_sdk\\schema_interfaces";
-        var valueObjectsPath = $"{testFullAppOutput}\\com\\kbalazsworks\\stackjudge_aws_sdk\\schema_value_objects";
+        var interfacesPath = $"{testFullAppOutput}{namespaceValue}\\stackjudge_aws_sdk\\schema_interfaces";
+        var parameterObjectsPath = $"{testFullAppOutput}{namespaceValue}\\stackjudge_aws_sdk\\schema_parameter_objects";
 
-        var services = GetServices(new ApplicationArgumentRegistry(inputFilePath, testFullAppOutput));
+        var services = GetServices(APP_ARGS_PRESET_JAVA(inputFilePath, TestOutputFolder + namespaceValue));
 
-        var expectedFileCompersion = new List<KeyValuePair<string, string>>
-        {
-            new(
-                $"{interfacesPath}\\IS3Upload.java",
-                $"{interfacesForDiffPath}\\IS3Upload.java"
-            ),
-            new(
-                $"{interfacesPath}\\IS3UploadWithReturn.java",
-                $"{interfacesForDiffPath}\\IS3UploadWithReturn.java"
-            ),
-            new(
-                $"{interfacesPath}\\ISesSendCompanyownemail.java",
-                $"{interfacesForDiffPath}\\ISesSendCompanyownemail.java"
-            ),
-            new(
-                $"{valueObjectsPath}\\ApiResponseDataCdnServicePutResponse.java",
-                $"{valueObjectsForDiffPath}\\ApiResponseDataCdnServicePutResponse.java"
-            ),
-            new(
-                $"{valueObjectsPath}\\CdnServicePutResponse.java",
-                $"{valueObjectsForDiffPath}\\CdnServicePutResponse.java"
-            ),
-            new(
-                $"{valueObjectsPath}\\PostCompanyOwnEmailRequest.java",
-                $"{valueObjectsForDiffPath}\\PostCompanyOwnEmailRequest.java"
-            ),
-            new(
-                $"{valueObjectsPath}\\PostUploadRequest.java",
-                $"{valueObjectsForDiffPath}\\PostUploadRequest.java"
-            ),
-        };
+        var expectedFilesForCompare = GetExpectedFilesForCompare(interfacesPath, interfacesForDiffPath, parameterObjectsPath, parameterObjectsForDiffPath);
 
         // Act
         services.GetService<ICliBootstrap>().Start();
 
         // Assert
         Directory
-            .GetFiles(testFullAppOutput, "*.*", SearchOption.AllDirectories)
+            .GetFiles(TestOutputFolder, "*.*", SearchOption.AllDirectories)
             .Length
             .Should()
-            .Be(expectedFileCompersion.Count);
-
-        foreach (var expectedFile in expectedFileCompersion)
+            .Be(expectedFilesForCompare.Count);
+        
+        foreach (var expectedFile in expectedFilesForCompare)
         {
             File(expectedFile.Key).Should().SameAs(expectedFile.Value);
         }
+    }
+
+    private static List<KeyValuePair<string, string>> GetExpectedFilesForCompare(string interfacesPath, string interfacesForDiffPath, string parameterObjectsPath, string parameterObjectsForDiffPath)
+    {
+        return new List<KeyValuePair<string, string>>
+        {
+            new(
+                $"{interfacesPath}\\IS3Upload.java",
+                $"{interfacesForDiffPath}\\IS3Upload.java"
+            ),
+            new(
+                $"{interfacesPath}\\ISesSendCompanyOwnEmail.java",
+                $"{interfacesForDiffPath}\\ISesSendCompanyOwnEmail.java"
+            ),
+            new(
+                $"{parameterObjectsPath}\\ApiResponseDataCdnServicePutResponse.java",
+                $"{parameterObjectsForDiffPath}\\ApiResponseDataCdnServicePutResponse.java"
+            ),
+            new(
+                $"{parameterObjectsPath}\\CdnServicePutResponse.java",
+                $"{parameterObjectsForDiffPath}\\CdnServicePutResponse.java"
+            ),
+            new(
+                $"{parameterObjectsPath}\\PostCompanyOwnEmailRequest.java",
+                $"{parameterObjectsForDiffPath}\\PostCompanyOwnEmailRequest.java"
+            ),
+            new(
+                $"{parameterObjectsPath}\\PostUploadRequest.java",
+                $"{parameterObjectsForDiffPath}\\PostUploadRequest.java"
+            ),
+        };
     }
 }

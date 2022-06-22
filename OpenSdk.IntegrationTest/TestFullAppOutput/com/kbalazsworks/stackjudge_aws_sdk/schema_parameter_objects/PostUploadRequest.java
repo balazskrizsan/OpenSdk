@@ -1,7 +1,7 @@
-package com.kbalazsworks.stackjudge_aws_sdk.schema_value_objects;
+package stackjudge_aws_sdk.schema_parameter_objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.kbalazsworks.stackjudge_aws_sdk.common.interfaces.IOpenSdkPostable;
+import stackjudge_aws_sdk.common.interfaces.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,26 +20,29 @@ import java.util.List;
 @Builder(access = AccessLevel.PUBLIC)
 @AllArgsConstructor
 @Getter
-public final class CdnServicePutResponse implements IOpenSdkPostable
+public final class PostUploadRequest implements IOpenSdkPostable
 {
-    @JsonProperty("path")
-    private final String path;
+    @JsonProperty("cdnNamespace")
+    private final String cdnNamespace;
+    @JsonProperty("subFolder")
+    private final String subFolder;
     @JsonProperty("fileName")
     private final String fileName;
-    @JsonProperty("s3eTag")
-    private final String s3eTag;
-    @JsonProperty("s3contentMd5")
-    private final String s3contentMd5;
+    @JsonProperty("fileExtension")
+    private final String fileExtension;
+    @JsonProperty("#/components/schemas/FileUpload")
+    private final HttpEntity<ByteArrayResource> content;
 
     @Override
     public MultiValueMap<String, Object> toOpenSdkPost()
     {
         return new LinkedMultiValueMap<>()
         {{
-            addAll("path", List.of(path));
+            addAll("cdnNamespace", List.of(cdnNamespace));
+            addAll("subFolder", List.of(subFolder));
             addAll("fileName", List.of(fileName));
-            addAll("s3eTag", List.of(s3eTag));
-            addAll("s3contentMd5", List.of(s3contentMd5));
+            addAll("fileExtension", List.of(fileExtension));
+            addAll("content", List.of(content));
         }};
     }
 }

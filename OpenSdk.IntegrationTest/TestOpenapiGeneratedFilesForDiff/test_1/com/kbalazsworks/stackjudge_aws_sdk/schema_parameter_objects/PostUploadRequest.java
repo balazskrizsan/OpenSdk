@@ -1,7 +1,7 @@
-package com.kbalazsworks.stackjudge_aws_sdk.schema_value_objects;
+package stackjudge_aws_sdk.schema_parameter_objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.kbalazsworks.stackjudge_aws_sdk.common.interfaces.IOpenSdkPostable;
+import stackjudge_aws_sdk.common.interfaces.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
