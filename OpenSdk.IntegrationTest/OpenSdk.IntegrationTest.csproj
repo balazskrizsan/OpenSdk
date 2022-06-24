@@ -76,6 +76,30 @@
       <Resource Include="TestOpenapiGeneratedFilesForDiff\test_1\com\kbalazsworks\stackjudge_aws_sdk\schema_interfaces\IS3Upload.java">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Resource>
+      <None Remove="TestOpenApiJsons\test_1.json" />
+      <Resource Include="TestOpenApiJsons\test_1_stackjudge_aws.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="TestOpenApiJsons\test_2.json" />
+      <Resource Include="TestOpenApiJsons\test_2_stackjudge_backend_to_frontend.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="TestOpenapiGeneratedFilesForDiff\test_2\src\stackjudge-frontend-sd\schema_interfaces\IAccountGetByReviewIdByReviewId.ts" />
+      <Resource Include="TestOpenapiGeneratedFilesForDiff\test_2\src\stackjudge-frontend-sdk\schema_interfaces\IAccountGetByReviewIdByReviewId.ts">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="TestOpenapiGeneratedFilesForDiff\test_2\src\stackjudge-frontend-sd\schema_parameter_objects\GetByReviewIdRequest.ts" />
+      <Resource Include="TestOpenapiGeneratedFilesForDiff\test_2\src\stackjudge-frontend-sdk\schema_parameter_objects\GetByReviewIdRequest.ts">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="TestOpenapiGeneratedFilesForDiff\test_2\src\stackjudge-frontend-sd\schema_parameter_objects\ResponseDataUser.ts" />
+      <Resource Include="TestOpenapiGeneratedFilesForDiff\test_2\src\stackjudge-frontend-sdk\schema_parameter_objects\ResponseDataUser.ts">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="TestOpenapiGeneratedFilesForDiff\test_2\src\stackjudge-frontend-sd\schema_parameter_objects\User.ts" />
+      <Resource Include="TestOpenapiGeneratedFilesForDiff\test_2\src\stackjudge-frontend-sdk\schema_parameter_objects\User.ts">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
     </ItemGroup>
 
 </Project>

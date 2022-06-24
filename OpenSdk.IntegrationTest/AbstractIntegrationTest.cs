@@ -17,6 +17,14 @@ public class AbstractIntegrationTest
             "Java"
         );
 
+    public static Func<string, string, ApplicationArgumentRegistry> APP_ARGS_PRESET_TYPESCRITP =
+        (inputFilePath, testFullAppOutput) => new ApplicationArgumentRegistry(
+            inputFilePath,
+            testFullAppOutput,
+            "stackjudge-frontend-sdk",
+            "TypeScript"
+        );
+
     public IServiceProvider GetServices(ApplicationArgumentRegistry applicationArgumentRegistry)
     {
         var host = Host.CreateDefaultBuilder()
