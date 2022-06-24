@@ -17,13 +17,13 @@ public class BootstrapStartTest : AbstractIntegrationTest
     public void Startup() => ClearTestFolder();
 
     [TestCleanup()]
-    public void Cleanup() => ClearTestFolder();
+    public void Cleanup() => ClearTestFolder(); 
 
     private void ClearTestFolder()
     {
         try
         {
-            // new DirectoryInfo(TestOutputFolder).Delete(true);
+            new DirectoryInfo(TestOutputFolder).Delete(true);
         }
         catch (Exception)
         {
