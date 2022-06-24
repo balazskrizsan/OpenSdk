@@ -53,29 +53,29 @@
 
     <ItemGroup>
       <None Remove="TestOpenapiGeneratedFilesForDiff\test_1\com\kbalazsworks\stackjudge_aws_sdk\schema_parameter_objects\PostUploadRequest.java" />
-      <Compile Include="TestOpenapiGeneratedFilesForDiff\test_1\com\kbalazsworks\stackjudge_aws_sdk\schema_parameter_objects\PostUploadRequest.java">
+      <Resource Include="TestOpenapiGeneratedFilesForDiff\test_1\com\kbalazsworks\stackjudge_aws_sdk\schema_parameter_objects\PostUploadRequest.java">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Compile>
+      </Resource>
       <None Remove="TestOpenapiGeneratedFilesForDiff\test_1\com\kbalazsworks\stackjudge_aws_sdk\schema_parameter_objects\PostCompanyOwnEmailRequest.java" />
-      <Compile Include="TestOpenapiGeneratedFilesForDiff\test_1\com\kbalazsworks\stackjudge_aws_sdk\schema_parameter_objects\PostCompanyOwnEmailRequest.java">
+      <Resource Include="TestOpenapiGeneratedFilesForDiff\test_1\com\kbalazsworks\stackjudge_aws_sdk\schema_parameter_objects\PostCompanyOwnEmailRequest.java">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Compile>
+      </Resource>
       <None Remove="TestOpenapiGeneratedFilesForDiff\test_1\com\kbalazsworks\stackjudge_aws_sdk\schema_parameter_objects\CdnServicePutResponse.java" />
-      <Compile Include="TestOpenapiGeneratedFilesForDiff\test_1\com\kbalazsworks\stackjudge_aws_sdk\schema_parameter_objects\CdnServicePutResponse.java">
+      <Resource Include="TestOpenapiGeneratedFilesForDiff\test_1\com\kbalazsworks\stackjudge_aws_sdk\schema_parameter_objects\CdnServicePutResponse.java">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Compile>
+      </Resource>
       <None Remove="TestOpenapiGeneratedFilesForDiff\test_1\com\kbalazsworks\stackjudge_aws_sdk\schema_parameter_objects\ApiResponseDataCdnServicePutResponse.java" />
-      <Compile Include="TestOpenapiGeneratedFilesForDiff\test_1\com\kbalazsworks\stackjudge_aws_sdk\schema_parameter_objects\ApiResponseDataCdnServicePutResponse.java">
+      <Resource Include="TestOpenapiGeneratedFilesForDiff\test_1\com\kbalazsworks\stackjudge_aws_sdk\schema_parameter_objects\ApiResponseDataCdnServicePutResponse.java">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Compile>
+      </Resource>
       <None Remove="TestOpenapiGeneratedFilesForDiff\test_1\com\kbalazsworks\stackjudge_aws_sdk\schema_interfaces\ISesSendCompanyownemail.java" />
-      <Compile Include="TestOpenapiGeneratedFilesForDiff\test_1\com\kbalazsworks\stackjudge_aws_sdk\schema_interfaces\ISesSendCompanyownemail.java">
+      <Resource Include="TestOpenapiGeneratedFilesForDiff\test_1\com\kbalazsworks\stackjudge_aws_sdk\schema_interfaces\ISesSendCompanyownemail.java">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Compile>
+      </Resource>
       <None Remove="TestOpenapiGeneratedFilesForDiff\test_1\com\kbalazsworks\stackjudge_aws_sdk\schema_interfaces\IS3Upload.java" />
-      <Compile Include="TestOpenapiGeneratedFilesForDiff\test_1\com\kbalazsworks\stackjudge_aws_sdk\schema_interfaces\IS3Upload.java">
+      <Resource Include="TestOpenapiGeneratedFilesForDiff\test_1\com\kbalazsworks\stackjudge_aws_sdk\schema_interfaces\IS3Upload.java">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Compile>
+      </Resource>
     </ItemGroup>
 
 </Project>
