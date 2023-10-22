@@ -57,12 +57,12 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
                     : null,
                 PostReturnType = hasPostMethod
                     ? !string.IsNullOrWhiteSpace(uriMethod.PostMethod.OkResponseValueObject)
-                        ? "StdResponse<" + uriMethod.PostMethod.OkResponseDataValueObject + ">"
+                        ? "StdResponse<" + uriMethod.PostMethod.OkResponseDataValueObjectOrType + ">"
                         : "void"
                     : null,
                 PostAsyncReturnType = hasPostMethod
                     ? !string.IsNullOrWhiteSpace(uriMethod.PostMethod.OkResponseValueObject)
-                        ? "Future<StdResponse<" + uriMethod.PostMethod.OkResponseDataValueObject + ">>"
+                        ? "Future<StdResponse<" + uriMethod.PostMethod.OkResponseDataValueObjectOrType + ">>"
                         : "void"
                     : null
             };
@@ -70,7 +70,7 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
 
             var generatedInterface = templateService.RenderTemplate(interfaceTemplatePath, context);
             files.Add(new File(destinationFolder, fileName, generatedInterface));
-            logger.LogInformation("    - {destinationFolder}/{fileName} ", destinationFolder, fileName);
+            logger.LogInformation("    - {destinationFolder}\\{fileName} ", destinationFolder, fileName);
         }
 
         return files;
@@ -92,8 +92,8 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
 
         switch (applicationArgumentRegistry.OutputLanguage)
         {
-            case "TypeScript": return "Observable<StdResponse<" + getMethod.OkResponseDataValueObject + ">>";
-            case "Java": return "StdResponse<" + getMethod.OkResponseDataValueObject + ">";
+            case "TypeScript": return "Observable<StdResponse<" + getMethod.OkResponseDataValueObjectOrType + ">>";
+            case "Java": return "StdResponse<" + getMethod.OkResponseDataValueObjectOrType + ">";
             default: throw new Exception("Language is not supported: " + language);
         }
     }

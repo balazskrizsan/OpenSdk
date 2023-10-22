@@ -31,6 +31,8 @@ public class MapperService : IMapperService
                 return GetLanguageSpecificType(language, OpenApiVariableConsts.BOOL);
             case OpenApiVariableConsts.INT:
                 return GetLanguageSpecificType(language, OpenApiVariableConsts.INT);
+            case OpenApiVariableConsts.ARRAY:
+                return GetLanguageSpecificType(language, OpenApiVariableConsts.ARRAY, OpenApiVariableConsts.STRING);
             case "#/components/schemas/FileUpload":
                 return "HttpEntity<ByteArrayResource>";
             default:
@@ -45,7 +47,7 @@ public class MapperService : IMapperService
         }
     }
 
-    private string GetLanguageSpecificType(string language, string type)
+    private string GetLanguageSpecificType(string language, string type, string generic = null)
     {
         if (LanguagesConsts.JAVA == language)
         {
@@ -54,6 +56,7 @@ public class MapperService : IMapperService
                 case OpenApiVariableConsts.STRING: return JavaVariableConsts.STRING;
                 case OpenApiVariableConsts.BOOL: return JavaVariableConsts.BOOL;
                 case OpenApiVariableConsts.INT: return JavaVariableConsts.INT;
+                case OpenApiVariableConsts.ARRAY: return JavaVariableConsts.LIST + TryGetGeneric(LanguagesConsts.JAVA, generic);
             }
         }
 
@@ -68,6 +71,19 @@ public class MapperService : IMapperService
         }
 
         return type;
+    }
+
+    private string TryGetGeneric(string lang, string generic)
+    {
+        if (lang == LanguagesConsts.JAVA)
+        {
+            switch (generic)
+            {
+                case OpenApiVariableConsts.STRING: return $"<{JavaVariableConsts.STRING}>";
+            }
+        }
+
+        throw new Exception($"lang+generic not found {lang} {generic}");
     }
 
     public string VarNameMapper(string varName)

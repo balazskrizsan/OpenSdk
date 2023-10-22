@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using OpenSdk.Services.GeneratorServices;
 using OpenSdk.ValueObjects;
+using OpenSdk.ValueObjects.Generator;
 
 namespace OpenSdk.Services
 {
@@ -32,11 +34,22 @@ namespace OpenSdk.Services
             logger.LogInformation("====== Generate API Interfaces");
             files.AddRange(interfaceGeneratorService.GetGenerateFiles(openapiValues.UriMethods));
 
-            logger.LogInformation("====== Generate Value Objects");
+            logger.LogInformation("====== Generate PropertyValue Objects");
             files.AddRange(valueObjectGeneratorService.GetGeneratedFiles(openapiValues.Schemas));
+
+            var customSchemas = openapiValues.UriMethods
+                .FindAll(m => m.GetMethod is { CustomSchema: not null })
+                .Select(m => Map(m.GetMethod.CustomSchema))
+                .ToList();
+            files.AddRange(valueObjectGeneratorService.GetGeneratedFiles(customSchemas));
 
             logger.LogInformation("====== Saving generated files");
             fileService.SaveFilesAsync(files);
+        }
+
+        private Schema Map(CustomSchema customSchema)
+        {
+            return new Schema(customSchema.ClassName, "custom", customSchema.Parameters, true, false);
         }
     }
 }

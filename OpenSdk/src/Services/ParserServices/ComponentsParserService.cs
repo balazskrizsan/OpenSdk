@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
+using OpenSdk.Constants;
 using OpenSdk.Services.Filters;
 using OpenSdk.ValueObjects;
 using OpenSdk.ValueObjects.Generator;
@@ -31,14 +31,11 @@ public class ComponentsParserService : IComponentsParserService
         foreach (var (componentType, componentTypeItems) in components)
         {
             // if componentType == schemas
-            logger.LogInformation("#component");
-            logger.LogInformation(componentType);
+            logger.LogInformation("#component componentType: {componentType}", componentType);
             foreach (var (schemaName, schema) in componentTypeItems)
             {
-                logger.LogInformation("    #schema");
-                logger.LogInformation("      " + schemaName);
-                logger.LogInformation("      " + schema.Type);
-                Dictionary<string, string> schemaParams = new Dictionary<string, string>();
+                logger.LogInformation("    #schema schemaName: {schemaName} schema.Type: {type}", schemaName, schema.Type);
+                Dictionary<string, Property> schemaParams = new Dictionary<string, Property>();
                 var properties = schema?.Properties;
 
                 if (null == properties)
@@ -48,18 +45,15 @@ public class ComponentsParserService : IComponentsParserService
 
                 foreach (var property in properties)
                 {
-                    logger.LogInformation("        #properties");
-                    logger.LogInformation("          " + property.Key);
-                    logger.LogInformation("          " + property.Value.Ref);
-                    logger.LogInformation("          " + property.Value.Type);
+                    logger.LogInformation("        #properties key: {key} $ref {ref} type: {type}", property.Key, property.Value.Ref, property.Value.Type);
 
                     if (property.Value.Ref == null)
                     {
-                        schemaParams.Add(property.Key, property.Value.Type);
+                        schemaParams.Add(property.Key, new Property(property.Key, property.Value.Type, PropertyValueType.TYPE));
                     }
                     else
                     {
-                        schemaParams.Add(property.Value.Ref, property.Value.Ref);
+                        schemaParams.Add(property.Key, new Property(property.Key, property.Value.Ref, PropertyValueType.REF));
                     }
                 }
 

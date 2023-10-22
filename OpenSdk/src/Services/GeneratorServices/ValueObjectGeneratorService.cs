@@ -45,10 +45,11 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
             foreach (var parameter in schema.Parameters)
             {
                 parameters.Add(new KeyValuePair<string, ValueObjectProperty>(
-                    mapperService.TypeMapper(parameter.Value),
+                    mapperService.TypeMapper(parameter.Value.PropertyValue),
                     new ValueObjectProperty(
                         mapperService.VarNameMapper(parameter.Key),
-                        GetJsonPropertyValue(parameter.Key, isResponseObject)
+                        GetJsonPropertyValue(parameter.Key, isResponseObject),
+                        parameter.Key
                     )
                 ));
             }
@@ -72,7 +73,7 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
 
             var generatedValueObject = templateService.RenderTemplate(templatePath, context);
             files.Add(new File(destinationFolder, fileName, generatedValueObject));
-            logger.LogInformation("    - {destinationFolder}/{fileName} ", destinationFolder, fileName);
+            logger.LogInformation("    - {destinationFolder}\\{fileName} ", destinationFolder, fileName);
         }
 
         return files;
@@ -127,22 +128,30 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
         }
     }
 
-    private string GetJsonPropertyValue(string parameterKey, bool isResponseObject)
+    private string GetJsonPropertyValue(
+        string parameterKey,
+        bool isResponseObject
+    )
     {
-        if (!isResponseObject)
+        if (!isResponseObject || ResponseEntityPropertyConsts.AsListWithoutData().Contains(parameterKey))
         {
-            return parameterKey;
-        }
-
-        if (ResponseEntityPropertyConsts.AsListWithoutData().Contains(parameterKey))
-        {
-            return parameterKey;
+            return ParameterKeyCleaner(parameterKey);
         }
 
         return ResponseEntityPropertyConsts.DATA;
     }
 
-    private bool IsResponseObject(Dictionary<string, string> schemaParameters)
+    private string ParameterKeyCleaner(string parameterKey)
+    {
+        if (parameterKey.StartsWith("#/components/schemas/"))
+        {
+            return StringService.LowercaseFirst(parameterKey.Replace("#/components/schemas/", ""));
+        }
+
+        return parameterKey;
+    }
+
+    private bool IsResponseObject(Dictionary<string, Property> schemaParameters)
     {
         var foundResponseEntityKeys = schemaParameters
             .Keys

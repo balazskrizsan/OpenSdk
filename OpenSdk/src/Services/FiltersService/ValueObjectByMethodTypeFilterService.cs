@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using OpenSdk.ValueObjects.Parser;
 
@@ -48,28 +47,25 @@ public class ValueObjectByMethodTypeFilterService : IValueObjectByMethodTypeFilt
                         }
                     }
                 }
+
                 if (methodType == "get")
                 {
                     foreach (var parameter in pathUriMethodMethodDetails.Parameters)
                     {
-                        // @todo: remove duplication
-                        foreach (var (schemaType, schemaValue) in parameter.Schema)
+                        if (parameter.Schema.Ref is not null)
                         {
-                            if (schemaType == "$ref")
+                            if (!valueObjectByMethodType.ContainsKey(parameter.Schema.Ref))
                             {
-                                if (!valueObjectByMethodType.ContainsKey(schemaValue))
-                                {
-                                    valueObjectByMethodType.Add(schemaValue, new List<string> { methodType });
+                                valueObjectByMethodType.Add(parameter.Schema.Ref, new List<string> { methodType });
 
-                                    continue;
-                                }
+                                continue;
+                            }
 
-                                valueObjectByMethodType.TryGetValue(schemaValue, out var relatedMethods);
-                                if (null != relatedMethods)
-                                {
-                                    relatedMethods.Add(methodType);
-                                    valueObjectByMethodType.TryAdd(schemaValue, relatedMethods);
-                                }
+                            valueObjectByMethodType.TryGetValue(parameter.Schema.Ref, out var relatedMethods);
+                            if (null != relatedMethods)
+                            {
+                                relatedMethods.Add(methodType);
+                                valueObjectByMethodType.TryAdd(parameter.Schema.Ref, relatedMethods);
                             }
                         }
                     }

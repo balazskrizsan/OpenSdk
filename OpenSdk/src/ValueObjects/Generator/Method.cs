@@ -10,7 +10,8 @@ namespace OpenSdk.ValueObjects.Generator
         public string ParamSchemaValue { get; }
         public string ParamObjectName { get; }
         public string OkResponseValueObject { get; }
-        public string OkResponseDataValueObject { get; }
+        public string OkResponseDataValueObjectOrType { get; }
+        public CustomSchema CustomSchema { get; }
 
         public Method(
             string uri,
@@ -21,7 +22,8 @@ namespace OpenSdk.ValueObjects.Generator
             string paramSchemaValue,
             string paramObjectName,
             string okResponseValueObject,
-            string okResponseDataValueObject
+            string okResponseDataValueObjectOrType,
+            CustomSchema customSchema = null
         )
         {
             Uri = uri;
@@ -32,7 +34,8 @@ namespace OpenSdk.ValueObjects.Generator
             ParamSchemaValue = paramSchemaValue;
             ParamObjectName = paramObjectName;
             OkResponseValueObject = okResponseValueObject;
-            OkResponseDataValueObject = okResponseDataValueObject;
+            OkResponseDataValueObjectOrType = okResponseDataValueObjectOrType;
+            CustomSchema = customSchema;
         }
     }
 }

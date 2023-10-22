@@ -24,6 +24,6 @@ namespace OpenSdk.ValueObjects.Parser
         public string Name { get; set; }
         public string In { get; set; }
         public bool Required { get; set; }
-        public Dictionary<string, string> Schema { get; set; }
+        public ComponentsSchemaItemProperty Schema { get; set; }
     }
 }
