@@ -75,10 +75,8 @@ namespace OpenSdk.Services.ParserServices
 
                     if (methods.Key == "get")
                     {
-                        //@todo: ParamClassName: Get[S3Upload]Params from GET:/s2/uploads
-                        String paramClassName = "GetS3UploadParams";
-                        String paramVarName = "getS3UploadParams";
-                        logger.LogInformation("         ######");
+                        String paramClassName = $"Get{CreateClassNameFromPath(pathUri)}Params";;
+                        String paramVarName = $"get{CreateClassNameFromPath(pathUri)}Params";
                         var parameters = new Dictionary<string, Property>();
                         foreach (var parameter in methods.Value.Parameters)
                         {
@@ -98,7 +96,7 @@ namespace OpenSdk.Services.ParserServices
 
                         getMethod = new Method(
                             pathUri,
-                            PathClassName(pathUri),
+                            CreateClassNameFromPath(pathUri),
                             pathMethod,
                             null,
                             "",
@@ -128,7 +126,7 @@ namespace OpenSdk.Services.ParserServices
                                         logger.LogInformation("                    #schema schema.Key: {key} schema.Value: {value}", schema.Key, schema.Value);
                                         postMethod = new Method(
                                             pathUri,
-                                            PathClassName(pathUri),
+                                            CreateClassNameFromPath(pathUri),
                                             pathMethod,
                                             pathContentType,
                                             schema.Key,
@@ -145,7 +143,7 @@ namespace OpenSdk.Services.ParserServices
                     }
                 }
 
-                generatorUriMethods.Add(new UriMethods(pathUri, PathClassName(pathUri), getMethod, postMethod));
+                generatorUriMethods.Add(new UriMethods(pathUri, CreateClassNameFromPath(pathUri), getMethod, postMethod));
             }
 
             return generatorUriMethods;
@@ -181,7 +179,7 @@ namespace OpenSdk.Services.ParserServices
             return null;
         }
 
-        private string PathClassName(string path)
+        private string CreateClassNameFromPath(string path)
         {
             path = path.Replace("-", "/");
             path = Regex.Replace(path, @"{([A-Za-z0-9])([A-Za-z0-9]*)}", "By___($1)___$2");
