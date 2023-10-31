@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using OpenSdk.Constants;
 using OpenSdk.Services.Filters;
@@ -49,7 +51,20 @@ public class ComponentsParserService : IComponentsParserService
 
                     if (property.Value.Ref == null)
                     {
-                        schemaParams.Add(property.Key, new Property(property.Key, property.Value.Type, PropertyValueType.TYPE));
+                        string parameterGeneric = null;
+                        if (property.Value.Type == "array")
+                        {
+                            try
+                            {
+                                parameterGeneric = property.Value.Items.First().Value.Split("/")[3];
+                            }
+                            catch (Exception)
+                            {
+                                parameterGeneric = property.Value.Items.First().Value;
+                            }
+                        }
+
+                        schemaParams.Add(property.Key, new Property(property.Key, property.Value.Type, PropertyValueType.TYPE, parameterGeneric));
                     }
                     else
                     {
