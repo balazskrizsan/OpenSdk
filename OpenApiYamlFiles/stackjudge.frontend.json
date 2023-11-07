@@ -5,20 +5,48 @@
     "version" : "v0"
   },
   "servers" : [ {
-    "url" : "https://localhost:8181",
+    "url" : "https://localhost:41011",
     "description" : "Generated server url"
   } ],
   "paths" : {
-    "/account/get-by-review-id/{reviewId}" : {
+    "/company" : {
       "get" : {
-        "tags" : [ "get-by-review-id-action" ],
-        "operationId" : "action",
+        "tags" : [ "search-action" ],
+        "operationId" : "action_2",
         "parameters" : [ {
-          "name" : "request",
+          "name" : "seekId",
           "in" : "query",
           "required" : true,
           "schema" : {
-            "$ref" : "#/components/schemas/GetByReviewIdRequest"
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "requestRelationIds",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          }
+        }, {
+          "name" : "navigationId",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
           }
         } ],
         "responses" : {
@@ -27,7 +55,53 @@
             "content" : {
               "*/*" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/ResponseDataUser"
+                  "$ref" : "#/components/schemas/ResponseDataCompanySearchServiceResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "post-action" ],
+        "operationId" : "action",
+        "parameters" : [ {
+          "name" : "company",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "address",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "companyLogo" : {
+                    "type" : "string",
+                    "format" : "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResponseDataString"
                 }
               }
             }
@@ -38,21 +112,50 @@
   },
   "components" : {
     "schemas" : {
-      "GetByReviewIdRequest" : {
+      "Address" : {
         "type" : "object",
         "properties" : {
-          "reviewId" : {
-            "minimum" : 1,
+          "id" : {
             "type" : "integer",
             "format" : "int64"
+          },
+          "companyId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "fullAddress" : {
+            "type" : "string"
+          },
+          "markerLat" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "markerLng" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "manualMarkerLat" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "manualMarkerLng" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "createdBy" : {
+            "type" : "string"
           }
         }
       },
-      "ResponseDataUser" : {
+      "ResponseDataString" : {
         "type" : "object",
         "properties" : {
           "data" : {
-            "$ref" : "#/components/schemas/User"
+            "type" : "string"
           },
           "success" : {
             "type" : "boolean"
@@ -66,28 +169,338 @@
           }
         }
       },
-      "User" : {
+      "CompanySearchServiceResponse" : {
+        "type" : "object",
+        "properties" : {
+          "companies" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Company"
+            }
+          },
+          "companyGroups" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/RecursiveGroupTree"
+              }
+            }
+          },
+          "paginator" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/PaginatorItem"
+            }
+          },
+          "newSeekId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "companyStatistics" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/CompanyStatistic"
+            }
+          },
+          "companyAddresses" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/CompanyAddresses"
+            }
+          },
+          "companyAddressMaps" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "object",
+              "additionalProperties" : {
+                "type" : "object",
+                "additionalProperties" : {
+                  "$ref" : "#/components/schemas/StaticMapResponse"
+                }
+              }
+            }
+          },
+          "companyReviews" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "object",
+              "additionalProperties" : {
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/Review"
+                }
+              }
+            }
+          },
+          "companyOwners" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/CompanyOwners"
+            }
+          },
+          "companyUsers" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/IdsUser"
+            }
+          }
+        }
+      },
+      "CompanyStatistic" : {
+        "type" : "object",
+        "properties" : {
+          "companyId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "stackCount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "teamsCount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "reviewCount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "technologiesCount" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "Company" : {
         "type" : "object",
         "properties" : {
           "id" : {
             "type" : "integer",
             "format" : "int64"
           },
-          "isEmailUser" : {
-            "type" : "boolean"
-          },
-          "isFacebookUser" : {
-            "type" : "boolean"
-          },
-          "profilePictureUrl" : {
+          "name" : {
             "type" : "string"
           },
-          "username" : {
+          "domain" : {
             "type" : "string"
           },
-          "facebookId" : {
+          "companySizeId" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "itSizeId" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "logoPath" : {
+            "type" : "string"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "createdBy" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CompanyAddresses" : {
+        "type" : "object",
+        "properties" : {
+          "companyId" : {
             "type" : "integer",
             "format" : "int64"
+          },
+          "addresses" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Address"
+            }
+          }
+        }
+      },
+      "CompanyOwners" : {
+        "type" : "object",
+        "properties" : {
+          "companyId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "owners" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "IdsUser" : {
+        "type" : "object",
+        "properties" : {
+          "sub" : {
+            "type" : "string"
+          },
+          "userName" : {
+            "type" : "string"
+          },
+          "normalizedUserName" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "emailConfirmed" : {
+            "type" : "boolean"
+          },
+          "profileUrl" : {
+            "type" : "string"
+          }
+        }
+      },
+      "PaginatorItem" : {
+        "type" : "object",
+        "properties" : {
+          "typeId" : {
+            "type" : "string",
+            "enum" : [ "1", "2" ]
+          },
+          "pageNumber" : {
+            "type" : "string"
+          },
+          "navigation" : {
+            "type" : "string",
+            "enum" : [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" ]
+          },
+          "active" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "RecursiveGroup" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "typeId" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "companyId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "addressId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "parentId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "depth" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "path" : {
+            "type" : "string"
+          }
+        }
+      },
+      "RecursiveGroupTree" : {
+        "type" : "object",
+        "properties" : {
+          "recursiveGroup" : {
+            "$ref" : "#/components/schemas/RecursiveGroup"
+          },
+          "children" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RecursiveGroupTree"
+            }
+          }
+        }
+      },
+      "ResponseDataCompanySearchServiceResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/CompanySearchServiceResponse"
+          },
+          "success" : {
+            "type" : "boolean"
+          },
+          "errorCode" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "requestId" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Review" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "groupId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "visibility" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "rate" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "review" : {
+            "type" : "string"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "createdBy" : {
+            "type" : "string"
+          }
+        }
+      },
+      "StaticMapResponse" : {
+        "type" : "object",
+        "properties" : {
+          "location" : {
+            "type" : "string"
+          },
+          "mapPositionEnum" : {
+            "type" : "string",
+            "enum" : [ "0", "1", "2" ]
+          }
+        }
+      },
+      "GetRequest" : {
+        "type" : "object",
+        "properties" : {
+          "companyId" : {
+            "minimum" : 1,
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "requestRelationIds" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
           }
         }
       }
