@@ -38,6 +38,9 @@
       <None Update="templates\ValueObject.Java.Lombok.liquid">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="templates\ValueObject.TypeScript.DirectoryIndex.liquid">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

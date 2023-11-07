@@ -4,9 +4,9 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using OpenSdk.Constants;
 using OpenSdk.Services.Filters;
-using OpenSdk.ValueObjects;
-using OpenSdk.ValueObjects.Generator;
 using OpenSdk.ValueObjects.Parser;
+using OpenSdk.ValueObjects.Parser.Generator;
+using OpenSdk.ValueObjects.Parser.Parser;
 
 namespace OpenSdk.Services.ParserServices;
 
@@ -72,19 +72,18 @@ public class ComponentsParserService : IComponentsParserService
                     }
                 }
 
-                List<string> relatedMethodTypes;
-                valueObjectByMethodType.TryGetValue($"#/components/schemas/{schemaName}", out relatedMethodTypes);
+                var relatedMethods = valueObjectByMethodType.Where(v => v.Key == schemaName).SelectMany(i => i.Value).ToList();
 
                 var hasPost = false;
                 var hasGet = false;
-                if (null != relatedMethodTypes)
+                if (relatedMethods.Any())
                 {
-                    if (relatedMethodTypes.Contains("post"))
+                    if (relatedMethods.Contains("post"))
                     {
                         hasPost = true;
                     }
 
-                    if (relatedMethodTypes.Contains("get"))
+                    if (relatedMethods.Contains("get"))
                     {
                         hasGet = true;
                     }

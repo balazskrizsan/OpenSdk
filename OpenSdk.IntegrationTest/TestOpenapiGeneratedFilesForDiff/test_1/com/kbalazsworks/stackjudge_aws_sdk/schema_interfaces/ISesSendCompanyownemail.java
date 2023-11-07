@@ -7,6 +7,7 @@ import com.kbalazsworks.stackjudge_aws_sdk.schema_parameter_objects.*;
 import org.springframework.scheduling.annotation.Async;
 
 import javax.annotation.processing.Generated;
+import java.util.List;
 import java.util.concurrent.Future;
 
 @Generated("OpenSDK: https://github.com/balazskrizsan/OpenSdk")
@@ -17,10 +18,10 @@ public interface ISesSendCompanyOwnEmail
         return "/ses/send/company-own-email";
     }
 
-    void post(IOpenSdkPostable postCompanyOwnEmailRequest)
+    StdResponse<String> post(IOpenSdkPostable postCompanyOwnEmailRequest)
     throws ResponseException;
 
     @Async
-    void postAsync(IOpenSdkPostable postCompanyOwnEmailRequest)
+    Future<StdResponse<String>> postAsync(IOpenSdkPostable postCompanyOwnEmailRequest)
     throws ResponseException;
 }

@@ -1,24 +1,28 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
+using OpenSdk.Constants;
 using OpenSdk.Registries;
-using OpenSdk.ValueObjects;
-using OpenSdk.ValueObjects.Generator;
+using OpenSdk.ValueObjects.Parser;
+using OpenSdk.ValueObjects.Parser.Generator;
 
-namespace OpenSdk.Services.GeneratorServices;
+namespace OpenSdk.Services;
 
 public class InterfaceGeneratorService : IInterfaceGeneratorService
 {
+    private readonly IMapperService mapperService;
     private readonly ITemplateService templateService;
     private readonly IApplicationArgumentRegistry applicationArgumentRegistry;
     private readonly ILogger<InterfaceGeneratorService> logger;
 
     public InterfaceGeneratorService(
+        IMapperService mapperService,
         ITemplateService templateService,
         IApplicationArgumentRegistry applicationArgumentRegistry,
         ILogger<InterfaceGeneratorService> logger
     )
     {
+        this.mapperService = mapperService;
         this.templateService = templateService;
         this.applicationArgumentRegistry = applicationArgumentRegistry;
         this.logger = logger;
@@ -69,7 +73,7 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
             var fileName = interfaceName + GetFileExtension();
 
             var generatedInterface = templateService.RenderTemplate(interfaceTemplatePath, context);
-            files.Add(new File(destinationFolder, fileName, generatedInterface));
+            files.Add(new File(destinationFolder, fileName, interfaceName, generatedInterface, GeneratedFileTypeConsts.INTERFACE));
             logger.LogInformation("    - {destinationFolder}\\{fileName} ", destinationFolder, fileName);
         }
 
@@ -92,7 +96,10 @@ public class InterfaceGeneratorService : IInterfaceGeneratorService
 
         switch (applicationArgumentRegistry.OutputLanguage)
         {
-            case "TypeScript": return "Observable<StdResponse<" + getMethod.OkResponseDataValueObjectOrType + ">>";
+            case "TypeScript":
+                var c = mapperService.IsPrimitive(getMethod.OkResponseDataValueObjectOrType)? "" : "valueObject.";
+
+                return "Observable<StdResponse<" + c + getMethod.OkResponseDataValueObjectOrType + ">>";
             case "Java": return "StdResponse<" + getMethod.OkResponseDataValueObjectOrType + ">";
             default: throw new Exception("Language is not supported: " + language);
         }

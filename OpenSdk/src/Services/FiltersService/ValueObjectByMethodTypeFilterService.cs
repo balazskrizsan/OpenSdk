@@ -1,5 +1,6 @@
+using System;
 using System.Collections.Generic;
-using OpenSdk.ValueObjects.Parser;
+using OpenSdk.ValueObjects.Parser.Parser;
 
 namespace OpenSdk.Services.Filters;
 
@@ -21,26 +22,24 @@ public class ValueObjectByMethodTypeFilterService : IValueObjectByMethodTypeFilt
                     {
                         foreach (var (contentType, contentDetails) in content)
                         {
-                            foreach (var (schemaName, contentDetail) in contentDetails)
+                            foreach (var schemaItem in contentDetails.Values)
                             {
-                                foreach (var (schemaType, schemaValue) in contentDetail)
+                                if (schemaItem.Ref is not null)
                                 {
-                                    // @todo: if data is a ref, load the sub value object
-                                    if (schemaType == "$ref")
+                                    var paramObjectName = GetParamObjectNameFromRef(schemaItem.Ref);
+
+                                    if (!valueObjectByMethodType.ContainsKey(paramObjectName))
                                     {
-                                        if (!valueObjectByMethodType.ContainsKey(schemaValue))
-                                        {
-                                            valueObjectByMethodType.Add(schemaValue, new List<string> { methodType });
+                                        valueObjectByMethodType.Add(paramObjectName, new List<string> { methodType });
 
-                                            continue;
-                                        }
+                                        continue;
+                                    }
 
-                                        valueObjectByMethodType.TryGetValue(schemaValue, out var relatedMethods);
-                                        if (null != relatedMethods)
-                                        {
-                                            relatedMethods.Add(methodType);
-                                            valueObjectByMethodType.TryAdd(schemaValue, relatedMethods);
-                                        }
+                                    valueObjectByMethodType.TryGetValue(paramObjectName, out var relatedMethods);
+                                    if (null != relatedMethods)
+                                    {
+                                        relatedMethods.Add(methodType);
+                                        valueObjectByMethodType.TryAdd(paramObjectName, relatedMethods);
                                     }
                                 }
                             }
@@ -75,4 +74,17 @@ public class ValueObjectByMethodTypeFilterService : IValueObjectByMethodTypeFilt
 
         return valueObjectByMethodType;
     }
+
+    private string GetParamObjectNameFromRef(string value)
+    {
+        try
+        {
+            return value.Split("/")[3];
+        }
+        catch (Exception e)
+        {
+            throw new Exception("Reference parse error: " + value);
+        }
+    }
+
 }

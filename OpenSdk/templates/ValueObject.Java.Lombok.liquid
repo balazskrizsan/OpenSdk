@@ -45,12 +45,12 @@ public final class {{ ValueObjectName -}}
     {%- if IsGetable -%}
 
     @Override
-    public MultiValueMap<String, Object> toOpenSdkGet()
+    public MultiValueMap<String, String> toOpenSdkGet()
     {
         return new LinkedMultiValueMap<>()
         {{ "{{" }}
         {%- for parameter in parameters -%}
-            addAll("{{ parameter.Value.Value }}", List.of({{ parameter.Value.Value }}));
+            put("{{ parameter.Value.Value }}", {{ parameter.Value.Value }});
         {%- endfor -%}
         {{ "}}" }};
     }

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace OpenSdk.ValueObjects
+namespace OpenSdk.ValueObjects.Parser
 {
     public class ComponentsSchemaItem
     {

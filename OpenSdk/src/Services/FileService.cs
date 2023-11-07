@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using OpenSdk.Registries;
-using File = OpenSdk.ValueObjects.File;
+using File = OpenSdk.ValueObjects.Parser.File;
 
 namespace OpenSdk.Services;
 

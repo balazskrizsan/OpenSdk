@@ -1,17 +1,15 @@
 import {IOpenSdkGetable} from "../../common/intercaes/IOpenSdkGetable";
 import {IOpenSdkPostable} from "../../common/intercaes/IOpenSdkPostable";
-import {User} from "./User";
+import * as valueObject from "./index";
 
 /**
 * @Generated("OpenSDK: https://github.com/balazskrizsan/OpenSdk")
 */
-export class ResponseDataUser
+export class StaticMapResponse
 {
     public constructor(
-        private user: User,
-        private success: boolean,
-        private errorCode: number,
-        private requestId: string,
+        private location: string,
+        private mapPositionEnum: string,
     ) {
     }
 }

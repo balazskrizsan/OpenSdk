@@ -13,7 +13,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import javax.annotation.processing.Generated;
-import java.util.List;
+import java.util.*;
 
 @Generated("OpenSDK: https://github.com/balazskrizsan/OpenSdk")
 @Jacksonized
@@ -23,7 +23,7 @@ import java.util.List;
 public final class ApiResponseDataCdnServicePutResponse
 {
     @JsonProperty("data")
-    private final CdnServicePutResponse cdnServicePutResponse;
+    private final CdnServicePutResponse data;
     @JsonProperty("success")
     private final Boolean success;
     @JsonProperty("errorCode")

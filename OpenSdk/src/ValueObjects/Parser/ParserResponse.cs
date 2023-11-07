@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
-using OpenSdk.ValueObjects.Generator;
+using OpenSdk.ValueObjects.Parser.Generator;
 
-namespace OpenSdk.ValueObjects
+namespace OpenSdk.ValueObjects.Parser
 {
     public class ParserResponse
     {

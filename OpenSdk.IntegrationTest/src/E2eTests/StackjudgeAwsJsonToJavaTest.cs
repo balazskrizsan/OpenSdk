@@ -54,13 +54,20 @@ public class StackjudgeAwsJsonToJavaTest : AbstractIntegrationTest
         {
             "IS3Upload.java",
             "ISesSendCompanyOwnEmail.java",
+            "IV2S3Upload.java",
         };
         var expectedParameterObjectFilesForCompare = new List<string>
         {
             "ApiResponseDataCdnServicePutResponse.java",
+            "ApiResponseDataListRemoteFile.java",
+            "ApiResponseDataPutAndSaveResponse.java",
+            "ApiResponseDataString.java",
             "CdnServicePutResponse.java",
+            "GetS3UploadParams.java",
             "PostCompanyOwnEmailRequest.java",
             "PostUploadRequest.java",
+            "PutAndSaveResponse.java",
+            "RemoteFile.java",
         };
         var expectedFileNumber = expectedInterfaceFilesForCompare.Count + expectedParameterObjectFilesForCompare.Count;
 

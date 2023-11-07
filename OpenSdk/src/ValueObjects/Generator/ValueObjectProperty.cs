@@ -1,9 +1,9 @@
 #nullable enable
 using DotLiquid;
 
-namespace OpenSdk.ValueObjects.Generator;
+namespace OpenSdk.ValueObjects.Parser.Generator;
 
-public record ValueObjectProperty(string Value, string? JsonPropertyValue, string Key) : ILiquidizable
+public record ValueObjectProperty(string Value, string? JsonPropertyValue, string Key, bool IsValueObject) : ILiquidizable
 {
     public object ToLiquid()
     {
@@ -11,7 +11,8 @@ public record ValueObjectProperty(string Value, string? JsonPropertyValue, strin
         {
             Value = Value,
             JsonPropertyValue = JsonPropertyValue,
-            Key = Key
+            Key = Key,
+            IsValueObject = IsValueObject
         };
     }
 }

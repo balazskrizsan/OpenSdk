@@ -4,10 +4,10 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using OpenSdk.Constants;
 using OpenSdk.Registries;
-using OpenSdk.ValueObjects;
-using OpenSdk.ValueObjects.Generator;
+using OpenSdk.ValueObjects.Parser;
+using OpenSdk.ValueObjects.Parser.Generator;
 
-namespace OpenSdk.Services.GeneratorServices;
+namespace OpenSdk.Services;
 
 public class ValueObjectGeneratorService : IValueObjectGeneratorService
 {
@@ -45,11 +45,12 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
             foreach (var parameter in schema.Parameters)
             {
                 parameters.Add(new KeyValuePair<string, ValueObjectProperty>(
-                    mapperService.TypeMapper(parameter.Value.PropertyValue),
+                    mapperService.TypeMapper(parameter.Value.PropertyValue, parameter.Value.ParameterGeneric),
                     new ValueObjectProperty(
                         mapperService.VarNameMapper(parameter.Key),
                         GetJsonPropertyValue(parameter.Key, isResponseObject),
-                        parameter.Key
+                        parameter.Key,
+                        !mapperService.IsPrimitive(parameter.Value.PropertyValue)
                     )
                 ));
             }
@@ -72,7 +73,7 @@ public class ValueObjectGeneratorService : IValueObjectGeneratorService
             var fileName = valueObjectName + GetFileExtension();
 
             var generatedValueObject = templateService.RenderTemplate(templatePath, context);
-            files.Add(new File(destinationFolder, fileName, generatedValueObject));
+            files.Add(new File(destinationFolder, fileName, valueObjectName, generatedValueObject, GeneratedFileTypeConsts.VALUE_OBJECT));
             logger.LogInformation("    - {destinationFolder}\\{fileName} ", destinationFolder, fileName);
         }
 

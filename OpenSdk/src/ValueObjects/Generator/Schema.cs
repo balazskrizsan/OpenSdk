@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace OpenSdk.ValueObjects.Generator;
+namespace OpenSdk.ValueObjects.Parser.Generator;
 
 public class Schema
 {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using OpenSdk.ValueObjects;
-using OpenSdk.ValueObjects.Generator;
 using OpenSdk.ValueObjects.Parser;
+using OpenSdk.ValueObjects.Parser.Generator;
+using OpenSdk.ValueObjects.Parser.Parser;
 
 namespace OpenSdk.Services.ParserServices
 {

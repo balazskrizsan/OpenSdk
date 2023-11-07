@@ -2,9 +2,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OpenSdk.Factories;
 using OpenSdk.Registries;
-using OpenSdk.Services;
 using OpenSdk.Services.Filters;
-using OpenSdk.Services.GeneratorServices;
+using OpenSdk.Services;
 using OpenSdk.Services.ParserServices;
 using Serilog;
 
@@ -29,6 +28,7 @@ public static class ConfigureServicesHelperExtensions
                 .AddSingleton<IFileService, FileService>()
                 .AddSingleton<IInterfaceGeneratorService, InterfaceGeneratorService>()
                 .AddSingleton<IValueObjectGeneratorService, ValueObjectGeneratorService>()
+                .AddSingleton<ILanguageSpecificGeneratorService, LanguageSpecificGeneratorService>()
                 .AddSingleton<ITemplateService, TemplateService>()
                 .AddSingleton<IValueObjectByMethodTypeFilterService, ValueObjectByMethodTypeFilterService>()
                 .AddSingleton<IDotLiquidFactory, DotLiquidFactory>()

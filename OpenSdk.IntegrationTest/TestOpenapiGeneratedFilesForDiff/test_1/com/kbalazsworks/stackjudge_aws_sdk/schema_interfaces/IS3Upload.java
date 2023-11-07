@@ -7,6 +7,7 @@ import com.kbalazsworks.stackjudge_aws_sdk.schema_parameter_objects.*;
 import org.springframework.scheduling.annotation.Async;
 
 import javax.annotation.processing.Generated;
+import java.util.List;
 import java.util.concurrent.Future;
 
 @Generated("OpenSDK: https://github.com/balazskrizsan/OpenSdk")
@@ -16,6 +17,9 @@ public interface IS3Upload
     {
         return "/s3/upload";
     }
+
+    StdResponse<List<RemoteFile>> get(IOpenSdkGetable getS3UploadParams)
+    throws ResponseException;
 
     StdResponse<CdnServicePutResponse> post(IOpenSdkPostable postUploadRequest)
     throws ResponseException;

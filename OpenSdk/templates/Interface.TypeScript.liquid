@@ -1,6 +1,7 @@
 import {IOpenSdkGetable} from "../../common/intercaes/IOpenSdkGetable";
+import {IOpenSdkPostable} from "../../common/intercaes/IOpenSdkPostable";
 import {StdResponse} from "../../common/entities/StdResponse";
-import {User} from "../schema_parameter_objects/User";
+import * as valueObject from "./../schema_parameter_objects/index";
 import {Observable} from "rxjs";
 
 export const API_URL = "{{MethodUri}}"; 
@@ -10,7 +11,10 @@ export const API_URL = "{{MethodUri}}";
  */
 export interface {{InterfaceName}}
 {
-    {{- if HasGetMethod -}}
+    {%- if HasGetMethod -%}
     get({{GetParamObjectVarName}}: IOpenSdkGetable): {{GetReturnType}};
-    {{- endif -}}
+    {%- endif -%}
+    {%- if HasPostMethod -%}
+    Post({{PostParamObjectVarName}}: IOpenSdkPostable): {{PostReturnType}};
+    {%- endif -%}
 }

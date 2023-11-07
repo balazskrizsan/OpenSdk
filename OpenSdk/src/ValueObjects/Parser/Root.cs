@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using OpenSdk.ValueObjects.Parser;
+using OpenSdk.ValueObjects.Parser.Parser;
 
-namespace OpenSdk.ValueObjects
+namespace OpenSdk.ValueObjects.Parser
 {
     public class Root
     {

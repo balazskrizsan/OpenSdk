@@ -1,8 +1,6 @@
 import {IOpenSdkGetable} from "../../common/intercaes/IOpenSdkGetable";
 import {IOpenSdkPostable} from "../../common/intercaes/IOpenSdkPostable";
-{%- if ValueObjectName != "User" -%}
-import {User} from "./User";
-{%- endif -%}
+import * as valueObject from "./index";
 
 /**
 * @Generated("OpenSDK: https://github.com/balazskrizsan/OpenSdk")
@@ -14,7 +12,7 @@ export class {{ ValueObjectName -}}
 {
     public constructor(
         {%- for parameter in Parameters -%}
-        private {{ parameter.Value.Value }}: {{ parameter.Key }},
+        private {{ parameter.Value.Value }}: {% if (parameter.Value.IsValueObject == true) -%}valueObject.{%- endif -%}{{ parameter.Key }},
         {%- endfor -%}
     ) {
     }

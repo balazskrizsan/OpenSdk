@@ -3,7 +3,7 @@ using System.IO;
 using Microsoft.Extensions.Logging;
 using OpenSdk.Exceptions;
 using OpenSdk.Services.ParserServices;
-using OpenSdk.ValueObjects;
+using OpenSdk.ValueObjects.Parser;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 using File = System.IO.File;

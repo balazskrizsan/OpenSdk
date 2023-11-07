@@ -1,11 +1,36 @@
 {
   "openapi" : "3.0.3",
   "info" : {
-    "title" : "stackjudge-aws API",
+    "title" : "stackjudge_aws API",
     "version" : "1.0-SNAPSHOT"
   },
   "paths" : {
     "/s3/upload" : {
+      "get" : {
+        "tags" : [ "Get Upload Action" ],
+        "parameters" : [ {
+          "name" : "ids",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponseDataListRemoteFile"
+                }
+              }
+            }
+          }
+        }
+      },
       "post" : {
         "tags" : [ "Post Upload Action" ],
         "requestBody" : {
@@ -44,8 +69,41 @@
           }
         },
         "responses" : {
-          "201" : {
-            "description" : "Created"
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponseDataString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/s3/upload" : {
+      "post" : {
+        "tags" : [ "Post V 2 Upload Action" ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PostUploadRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponseDataPutAndSaveResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -58,6 +116,63 @@
         "properties" : {
           "data" : {
             "$ref" : "#/components/schemas/CdnServicePutResponse"
+          },
+          "success" : {
+            "type" : "boolean"
+          },
+          "errorCode" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "requestId" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ApiResponseDataListRemoteFile" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RemoteFile"
+            }
+          },
+          "success" : {
+            "type" : "boolean"
+          },
+          "errorCode" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "requestId" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ApiResponseDataPutAndSaveResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/PutAndSaveResponse"
+          },
+          "success" : {
+            "type" : "boolean"
+          },
+          "errorCode" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "requestId" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ApiResponseDataString" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "string"
           },
           "success" : {
             "type" : "boolean"
@@ -124,6 +239,46 @@
             "$ref" : "#/components/schemas/FileUpload"
           }
         }
+      },
+      "PutAndSaveResponse" : {
+        "type" : "object",
+        "properties" : {
+          "remoteFile" : {
+            "$ref" : "#/components/schemas/RemoteFile"
+          }
+        }
+      },
+      "RemoteFile" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "$ref" : "#/components/schemas/UUID"
+          },
+          "path" : {
+            "type" : "string"
+          },
+          "filename" : {
+            "type" : "string"
+          },
+          "s3ETag" : {
+            "type" : "string"
+          },
+          "s3ContentMd5" : {
+            "type" : "string"
+          }
+        }
+      },
+      "UUID" : {
+        "format" : "uuid",
+        "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+        "type" : "string"
+      }
+    },
+    "securitySchemes" : {
+      "SecurityScheme" : {
+        "type" : "http",
+        "description" : "Authentication",
+        "scheme" : "basic"
       }
     }
   }

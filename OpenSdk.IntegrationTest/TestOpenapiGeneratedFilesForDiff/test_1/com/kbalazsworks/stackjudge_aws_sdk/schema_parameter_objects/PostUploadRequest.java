@@ -13,7 +13,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import javax.annotation.processing.Generated;
-import java.util.List;
+import java.util.*;
 
 @Generated("OpenSDK: https://github.com/balazskrizsan/OpenSdk")
 @Jacksonized
@@ -30,7 +30,7 @@ public final class PostUploadRequest implements IOpenSdkPostable
     private final String fileName;
     @JsonProperty("fileExtension")
     private final String fileExtension;
-    @JsonProperty("#/components/schemas/FileUpload")
+    @JsonProperty("content")
     private final HttpEntity<ByteArrayResource> content;
 
     @Override

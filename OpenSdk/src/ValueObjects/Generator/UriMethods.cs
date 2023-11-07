@@ -1,4 +1,4 @@
-namespace OpenSdk.ValueObjects.Generator;
+namespace OpenSdk.ValueObjects.Parser.Generator;
 
 public class UriMethods
 {

@@ -52,13 +52,28 @@ public class StackjudgeBackendToFrontendToTs : AbstractIntegrationTest
 
         var expectedInterfaceFilesForCompare = new List<string>
         {
-            "IAccountGetByReviewIdByReviewId.ts",
+            "ICompany.ts",
         };
         var expectedParameterObjectFilesForCompare = new List<string>
         {
-            "GetByReviewIdRequest.ts",
-            "ResponseDataUser.ts",
-            "User.ts",
+            "Address.ts",
+            "Company.ts",
+            "CompanyAddresses.ts",
+            "CompanyOwners.ts",
+            "CompanySearchServiceResponse.ts",
+            "CompanyStatistic.ts",
+            "GetCompanyParams.ts",
+            "GetRequest.ts",
+            "IdsUser.ts",
+            "index.ts",
+            "PaginatorItem.ts",
+            "PostCompany.ts",
+            "RecursiveGroup.ts",
+            "RecursiveGroupTree.ts",
+            "ResponseDataCompanySearchServiceResponse.ts",
+            "ResponseDataString.ts",
+            "Review.ts",
+            "StaticMapResponse.ts",
         };
         var expectedFileNumber = expectedInterfaceFilesForCompare.Count + expectedParameterObjectFilesForCompare.Count;
 

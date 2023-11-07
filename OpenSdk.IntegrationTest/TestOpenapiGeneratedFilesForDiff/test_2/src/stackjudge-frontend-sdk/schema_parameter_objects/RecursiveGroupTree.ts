@@ -1,18 +1,15 @@
 import {IOpenSdkGetable} from "../../common/intercaes/IOpenSdkGetable";
 import {IOpenSdkPostable} from "../../common/intercaes/IOpenSdkPostable";
+import * as valueObject from "./index";
 
 /**
 * @Generated("OpenSDK: https://github.com/balazskrizsan/OpenSdk")
 */
-export class User
+export class RecursiveGroupTree
 {
     public constructor(
-        private id: number,
-        private isEmailUser: boolean,
-        private isFacebookUser: boolean,
-        private profilePictureUrl: string,
-        private username: string,
-        private facebookId: number,
+        private recursiveGroup: valueObject.RecursiveGroup,
+        private children: valueObject.RecursiveGroupTree[],
     ) {
     }
 }

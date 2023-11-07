@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using YamlDotNet.Serialization;
 
-namespace OpenSdk.ValueObjects;
+namespace OpenSdk.ValueObjects.Parser;
 
 public class ComponentsSchemaItemProperty
 {

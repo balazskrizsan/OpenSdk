@@ -1,4 +1,4 @@
-namespace OpenSdk.ValueObjects
+namespace OpenSdk.ValueObjects.Parser
 {
     public class Info
     {

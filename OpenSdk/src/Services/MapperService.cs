@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using OpenSdk.Constants;
 using OpenSdk.Registries;
 
-namespace OpenSdk.Services.GeneratorServices;
+namespace OpenSdk.Services;
 
 public class MapperService : IMapperService
 {
@@ -19,7 +19,7 @@ public class MapperService : IMapperService
         this.applicationArgumentRegistry = applicationArgumentRegistry;
     }
 
-    public string TypeMapper(string openapiType)
+    public string TypeMapper(string openapiType, string generic = null)
     {
         var language = applicationArgumentRegistry.OutputLanguage;
 
@@ -32,7 +32,11 @@ public class MapperService : IMapperService
             case OpenApiVariableConsts.INT:
                 return GetLanguageSpecificType(language, OpenApiVariableConsts.INT);
             case OpenApiVariableConsts.ARRAY:
-                return GetLanguageSpecificType(language, OpenApiVariableConsts.ARRAY, OpenApiVariableConsts.STRING);
+                return GetLanguageSpecificType(language, OpenApiVariableConsts.ARRAY, generic);
+            case OpenApiVariableConsts.NUMBER:
+                return GetLanguageSpecificType(language, OpenApiVariableConsts.NUMBER);
+            case OpenApiVariableConsts.OBJECT:
+                return GetLanguageSpecificType(language, openapiType);
             case "#/components/schemas/FileUpload":
                 return "HttpEntity<ByteArrayResource>";
             default:
@@ -67,6 +71,9 @@ public class MapperService : IMapperService
                 case OpenApiVariableConsts.STRING: return TypeScriptVariableConsts.STRING;
                 case OpenApiVariableConsts.BOOL: return TypeScriptVariableConsts.BOOL;
                 case OpenApiVariableConsts.INT: return TypeScriptVariableConsts.NUMBER;
+                case OpenApiVariableConsts.NUMBER: return TypeScriptVariableConsts.NUMBER;
+                case OpenApiVariableConsts.OBJECT: return TypeScriptVariableConsts.OBJECT;
+                case OpenApiVariableConsts.ARRAY: return TryGetGeneric(LanguagesConsts.TYPE_SCRIPT, GetLanguageSpecificType(language, generic)) + "[]";
             }
         }
 
@@ -81,9 +88,16 @@ public class MapperService : IMapperService
             {
                 case OpenApiVariableConsts.STRING: return $"<{JavaVariableConsts.STRING}>";
             }
+
+            return $"<{generic}>";
         }
 
-        throw new Exception($"lang+generic not found {lang} {generic}");
+        if (IsPrimitive(generic))
+        {
+            return generic;
+        }
+
+        return "valueObject." + generic;
     }
 
     public string VarNameMapper(string varName)
@@ -101,6 +115,22 @@ public class MapperService : IMapperService
                 {
                     return varName;
                 }
+        }
+    }
+
+    public bool IsPrimitive(string openapiType)
+    {
+        switch (openapiType)
+        {
+            case OpenApiVariableConsts.STRING:
+            case OpenApiVariableConsts.BOOL:
+            case OpenApiVariableConsts.INT:
+            case OpenApiVariableConsts.ARRAY:
+            case OpenApiVariableConsts.NUMBER:
+            case OpenApiVariableConsts.OBJECT:
+                return true;
+            default:
+                return false;
         }
     }
 }

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using OpenSdk.ValueObjects;
-using OpenSdk.ValueObjects.Generator;
+using OpenSdk.ValueObjects.Parser;
+using OpenSdk.ValueObjects.Parser.Generator;
 
-namespace OpenSdk.Services.GeneratorServices;
+namespace OpenSdk.Services;
 
 public interface IInterfaceGeneratorService
 {

@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
-using OpenSdk.Services.GeneratorServices;
-using OpenSdk.ValueObjects;
-using OpenSdk.ValueObjects.Generator;
 using OpenSdk.ValueObjects.Parser;
+using OpenSdk.ValueObjects.Parser.Generator;
+using OpenSdk.ValueObjects.Parser.Parser;
 
 namespace OpenSdk.Services.ParserServices
 {
@@ -75,24 +74,8 @@ namespace OpenSdk.Services.ParserServices
 
                     if (methods.Key == "get")
                     {
-                        String paramClassName = $"Get{CreateClassNameFromPath(pathUri)}Params";;
+                        String paramClassName = $"Get{CreateClassNameFromPath(pathUri)}Params";
                         String paramVarName = $"get{CreateClassNameFromPath(pathUri)}Params";
-                        var parameters = new Dictionary<string, Property>();
-                        foreach (var parameter in methods.Value.Parameters)
-                        {
-                            logger.LogInformation("         #parameters name: {name} schema.ref: {ref} schema.type {type}",
-                                parameter.Name,
-                                parameter.Schema.Ref,
-                                parameter.Schema.Type
-                            );
-
-                            parameters.Add(parameter.Name, new Property(
-                                "",
-                                parameter.Schema.Type,
-                                "",
-                                parameter.Schema.Type == "array" ? parameter.Schema.Items.First().Value : null
-                            ));
-                        }
 
                         getMethod = new Method(
                             pathUri,
@@ -104,7 +87,7 @@ namespace OpenSdk.Services.ParserServices
                             paramVarName,
                             okResponseValueObject,
                             okResponseDataValueObjectOrType,
-                            new CustomSchema(paramClassName, parameters)
+                            new CustomSchema(paramClassName, GenerateParameters(methods.Value.Parameters))
                         );
                         generatorMethods.Add(getMethod);
                     }
@@ -118,25 +101,45 @@ namespace OpenSdk.Services.ParserServices
                             {
                                 logger.LogInformation("            #content content.Key: {key}", content.Key);
                                 var pathContentType = content.Key;
-                                foreach (var contentType in content.Value)
+                                foreach (var schemaItem in content.Value)
                                 {
-                                    logger.LogInformation("                #content type contentType.Key: {key}", contentType.Key);
-                                    foreach (var schema in contentType.Value)
+                                    logger.LogInformation("                #content type contentType.Key: {key}", schemaItem.Key);
+
+                                    var reference = schemaItem.Value.Ref;
+                                    if (reference is not null)
                                     {
-                                        logger.LogInformation("                    #schema schema.Key: {key} schema.Value: {value}", schema.Key, schema.Value);
+                                        logger.LogInformation("                    #schema - reference schema: {reference}", reference);
                                         postMethod = new Method(
                                             pathUri,
                                             CreateClassNameFromPath(pathUri),
                                             pathMethod,
                                             pathContentType,
-                                            schema.Key,
-                                            schema.Value,
-                                            GetParamObjectName(schema.Key, schema.Value),
+                                            "$ref",
+                                            reference,
+                                            GetParamObjectName("$ref", reference),
                                             okResponseValueObject,
                                             okResponseDataValueObjectOrType
                                         );
                                         generatorMethods.Add(postMethod);
+                                        
+                                        continue;
                                     }
+
+                                    var customName = "Post" + CreateClassNameFromPath(pathUri);
+                                    logger.LogInformation("                    #schema  - custom schema: {customName}", customName);
+                                    postMethod = new Method(
+                                        pathUri,
+                                        CreateClassNameFromPath(pathUri),
+                                        pathMethod,
+                                        pathContentType,
+                                        "custom",
+                                        customName,
+                                        customName,
+                                        okResponseValueObject,
+                                        okResponseDataValueObjectOrType,
+                                        new CustomSchema(customName, GenerateParameters(methods.Value.Parameters))
+                                    );
+                                    generatorMethods.Add(postMethod);
                                 }
                             }
                         }
@@ -147,6 +150,28 @@ namespace OpenSdk.Services.ParserServices
             }
 
             return generatorUriMethods;
+        }
+
+        private Dictionary<string, Property> GenerateParameters(List<Parameter> rawParameters)
+        {
+            var parameters = new Dictionary<string, Property>();
+            foreach (var parameter in rawParameters)
+            {
+                logger.LogInformation("         #parameters name: {name} schema.ref: {ref} schema.type {type}",
+                    parameter.Name,
+                    parameter.Schema.Ref,
+                    parameter.Schema.Type
+                );
+
+                parameters.Add(parameter.Name, new Property(
+                    "",
+                    parameter.Schema.Type,
+                    "",
+                    parameter.Schema.Type == "array" ? parameter.Schema.Items.First().Value : null
+                ));
+            }
+            
+            return parameters;
         }
 
         private string GetResponseDataValueObjectOrPrimitive(
@@ -164,9 +189,15 @@ namespace OpenSdk.Services.ParserServices
                 .First()
                 .First();
 
+            string generic = null;
+            if (componentsSchemaItemProperty.Type == "array")
+            {
+                generic = componentsSchemaItemProperty.Items.First().Value.Split("/")[3];
+            }
+
             return null != componentsSchemaItemProperty.Ref
                 ? componentsSchemaItemProperty.Ref.Split("/")[3]
-                : mapperService.TypeMapper(componentsSchemaItemProperty.Type);
+                : mapperService.TypeMapper(componentsSchemaItemProperty.Type, generic);
         }
 
         private string GetParamObjectName(string type, string value)
@@ -208,8 +239,10 @@ namespace OpenSdk.Services.ParserServices
                 }
             }
 
-            return slashCleanPathParts.Aggregate(
-                (x, y) => StringService.UppercaseFirst(x) + StringService.UppercaseFirst(y)
+            return StringService.UppercaseFirst(
+                slashCleanPathParts.Aggregate(
+                    (x, y) => StringService.UppercaseFirst(x) + StringService.UppercaseFirst(y)
+                )
             );
         }
     }
