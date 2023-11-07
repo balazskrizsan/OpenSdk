@@ -1,0 +1,9 @@
+{%- for ClassName in ClassNames -%}
+import { {{ ClassName }} } from "./{{ ClassName }}";
+{%- endfor -%}
+
+export {
+{%- for ClassName in ClassNames -%}
+    {{ ClassName }},
+{%- endfor -%}
+}
