@@ -36,7 +36,9 @@ public class MapperService : IMapperService
             case OpenApiVariableConsts.NUMBER:
                 return GetLanguageSpecificType(language, OpenApiVariableConsts.NUMBER);
             case OpenApiVariableConsts.OBJECT:
-                return GetLanguageSpecificType(language, openapiType);
+                return GetLanguageSpecificType(language, OpenApiVariableConsts.OBJECT);
+            case OpenApiVariableConsts.BINARY:
+                return GetLanguageSpecificType(language, OpenApiVariableConsts.BINARY);
             case "#/components/schemas/FileUpload":
                 return "HttpEntity<ByteArrayResource>";
             default:
@@ -73,6 +75,7 @@ public class MapperService : IMapperService
                 case OpenApiVariableConsts.INT: return TypeScriptVariableConsts.NUMBER;
                 case OpenApiVariableConsts.NUMBER: return TypeScriptVariableConsts.NUMBER;
                 case OpenApiVariableConsts.OBJECT: return TypeScriptVariableConsts.OBJECT;
+                case OpenApiVariableConsts.BINARY: return TypeScriptVariableConsts.STRING;
                 case OpenApiVariableConsts.ARRAY: return TryGetGeneric(LanguagesConsts.TYPE_SCRIPT, GetLanguageSpecificType(language, generic)) + "[]";
             }
         }
@@ -128,6 +131,7 @@ public class MapperService : IMapperService
             case OpenApiVariableConsts.ARRAY:
             case OpenApiVariableConsts.NUMBER:
             case OpenApiVariableConsts.OBJECT:
+            case OpenApiVariableConsts.BINARY:
                 return true;
             default:
                 return false;

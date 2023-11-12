@@ -30,13 +30,14 @@ namespace OpenSdk.ValueObjects.Parser.Parser
     {
         public string Type { get; set; }
         public Dictionary<string, SchemaItemsPropertyItem> Properties { get; set; }
-        [YamlMember(Alias = "$ref")] public string Ref { get; set; }
+        [YamlMember(Alias = "$ref")] public string Ref { get; set; } // do we need it? or do not? what a question!
     }
 
     public class SchemaItemsPropertyItem
     {
         public string Type { get; set; }
         public string Format { get; set; }
+        [YamlMember(Alias = "$ref")] public string Ref { get; set; }
     }
 
     public class Parameter

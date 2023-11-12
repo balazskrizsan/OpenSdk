@@ -121,7 +121,7 @@ namespace OpenSdk.Services.ParserServices
                                             okResponseDataValueObjectOrType
                                         );
                                         generatorMethods.Add(postMethod);
-                                        
+
                                         continue;
                                     }
 
@@ -137,7 +137,9 @@ namespace OpenSdk.Services.ParserServices
                                         customName,
                                         okResponseValueObject,
                                         okResponseDataValueObjectOrType,
-                                        new CustomSchema(customName, GenerateParameters(methods.Value.Parameters))
+                                        schemaItem.Value.Properties is null
+                                            ? null
+                                            : new CustomSchema(customName, GenerateParameters2(schemaItem.Value.Properties))
                                     );
                                     generatorMethods.Add(postMethod);
                                 }
@@ -150,6 +152,22 @@ namespace OpenSdk.Services.ParserServices
             }
 
             return generatorUriMethods;
+        }
+
+        private Dictionary<string, Property> GenerateParameters2(Dictionary<string, SchemaItemsPropertyItem> rawParameters)
+        {
+            var parameters = new Dictionary<string, Property>();
+            foreach (var parameter in rawParameters)
+            {
+                parameters.Add(parameter.Key, new Property(
+                    "",
+                    parameter.Value.Ref == null ? parameter.Value.Format : parameter.Value.Ref,
+                    "",
+                    null
+                ));
+            }
+
+            return parameters;
         }
 
         private Dictionary<string, Property> GenerateParameters(List<Parameter> rawParameters)
