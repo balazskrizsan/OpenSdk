@@ -12,5 +12,5 @@ export const API_URL = "/company";
 export interface ICompany
 {
     get(getCompanyParams: IOpenSdkGetable): Observable<StdResponse<valueObject.CompanySearchServiceResponse>>;
-    Post(postCompany: IOpenSdkPostable): StdResponse<string>;
+    post(postCompany: IOpenSdkPostable): StdResponse<string>;
 }

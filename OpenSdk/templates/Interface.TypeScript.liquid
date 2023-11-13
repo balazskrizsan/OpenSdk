@@ -15,6 +15,6 @@ export interface {{InterfaceName}}
     get({{GetParamObjectVarName}}: IOpenSdkGetable): {{GetReturnType}};
     {%- endif -%}
     {%- if HasPostMethod -%}
-    Post({{PostParamObjectVarName}}: IOpenSdkPostable): {{PostReturnType}};
+    post({{PostParamObjectVarName}}: IOpenSdkPostable): {{PostReturnType}};
     {%- endif -%}
 }
