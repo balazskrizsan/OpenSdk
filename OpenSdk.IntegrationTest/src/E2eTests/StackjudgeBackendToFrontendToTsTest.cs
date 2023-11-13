@@ -57,8 +57,10 @@ public class StackjudgeBackendToFrontendToTs : AbstractIntegrationTest
         var expectedParameterObjectFilesForCompare = new List<string>
         {
             "Address.ts",
+            "AddressCreateRequest.ts",
             "Company.ts",
             "CompanyAddresses.ts",
+            "CompanyCreateRequest.ts",
             "CompanyOwners.ts",
             "CompanySearchServiceResponse.ts",
             "CompanyStatistic.ts",

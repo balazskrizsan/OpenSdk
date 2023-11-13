@@ -65,27 +65,18 @@
       "post" : {
         "tags" : [ "post-action" ],
         "operationId" : "action",
-        "parameters" : [ {
-          "name" : "company",
-          "in" : "query",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "address",
-          "in" : "query",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        } ],
         "requestBody" : {
           "content" : {
             "multipart/form-data" : {
               "schema" : {
                 "type" : "object",
                 "properties" : {
+                  "company" : {
+                    "$ref" : "#/components/schemas/CompanyCreateRequest"
+                  },
+                  "address" : {
+                    "$ref" : "#/components/schemas/AddressCreateRequest"
+                  },
                   "companyLogo" : {
                     "type" : "string",
                     "format" : "binary"
@@ -112,6 +103,59 @@
   },
   "components" : {
     "schemas" : {
+      "CompanyCreateRequest" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "maxLength" : 255,
+            "minLength" : 2,
+            "type" : "string"
+          },
+          "domain" : {
+            "maxLength" : 255,
+            "minLength" : 3,
+            "type" : "string"
+          },
+          "companySizeId" : {
+            "maximum" : 5,
+            "minimum" : 1,
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "itSizeId" : {
+            "maximum" : 5,
+            "minimum" : 1,
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "AddressCreateRequest" : {
+        "type" : "object",
+        "properties" : {
+          "fullAddress" : {
+            "maxLength" : 255,
+            "minLength" : 10,
+            "type" : "string"
+          },
+          "markerLat" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "markerLng" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "manualMarkerLat" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "manualMarkerLng" : {
+            "type" : "number",
+            "format" : "double"
+          }
+        }
+      },
       "Address" : {
         "type" : "object",
         "properties" : {

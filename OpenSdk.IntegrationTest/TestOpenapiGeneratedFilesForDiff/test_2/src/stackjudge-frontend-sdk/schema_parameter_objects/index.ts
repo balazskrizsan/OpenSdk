@@ -1,3 +1,5 @@
+import { CompanyCreateRequest } from "./CompanyCreateRequest";
+import { AddressCreateRequest } from "./AddressCreateRequest";
 import { Address } from "./Address";
 import { ResponseDataString } from "./ResponseDataString";
 import { CompanySearchServiceResponse } from "./CompanySearchServiceResponse";
@@ -17,6 +19,8 @@ import { PostCompany } from "./PostCompany";
 import { GetCompanyParams } from "./GetCompanyParams";
 
 export {
+    CompanyCreateRequest,
+    AddressCreateRequest,
     Address,
     ResponseDataString,
     CompanySearchServiceResponse,

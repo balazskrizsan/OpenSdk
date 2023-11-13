@@ -8,8 +8,9 @@ import * as valueObject from "./index";
 export class PostCompany implements IOpenSdkPostable
 {
     public constructor(
-        private company: string,
-        private address: string,
+        private company: valueObject.CompanyCreateRequest,
+        private address: valueObject.AddressCreateRequest,
+        private companyLogo: string,
     ) {
     }
 
@@ -18,6 +19,7 @@ export class PostCompany implements IOpenSdkPostable
         return {
             "company": this.company,
             "address": this.address,
+            "companyLogo": this.companyLogo,
         }
     }
 }
